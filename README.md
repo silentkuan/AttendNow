@@ -8,14 +8,13 @@ Although there are many platforms, such as Zoom, Team, Google Form, and Google M
 
 ## Features
 
-- Organize an Activity [including Manage Activities Features]
-- View a list of users retrieved from the Web API
-- View details of a single user retrieved from the Web API
-- Edit an existing user
-- Delete a user
+Checkout in Youtube: https://youtu.be/HXduedKEZ_k
 
 ## Technologies Used
 
-- ASP.NET Core 8.0
-- Razor views
-- ASP.NET Core Web API (for data retrieval)
+- ASP.NET 4.5
+- ASP.NET MVC
+- HTML, CSS, JavaScript
+- Bootstrap
+- Ajax and JQuery
+- MS SQL
