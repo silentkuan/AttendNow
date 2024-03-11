@@ -1,0 +1,1056 @@
+﻿@model AttendNow.Models.SP_GetMeetings_Result
+@using AttendNow.Models
+@{
+
+    var meetingAccess = ViewBag.meetingAccess as sys_setting_role_permission;
+
+
+    if (ViewBag.Title == "Add Activity")
+
+    {
+        if (meetingAccess?.status != true || (meetingAccess?.addFunction != true))
+        {
+
+            <script>
+                window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+
+        }
+
+
+    }
+
+
+    else
+
+
+
+    {
+
+        if (meetingAccess?.status != true || (meetingAccess?.editFunction != true && meetingAccess?.viewFunction != true))
+
+        {
+
+            <script>
+                window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+
+        }
+
+
+
+    }
+
+
+}
+
+<div class="modal fade" id="updateMeeting" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clearModel();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to modify the information? All the Participants will be notified via email.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn" onclick="clearModel();">Cancel</button>
+                <button class="btn ladda-button btn-primary" data-style="zoom-in" onclick="funcAddorEdit('Edit')">Yes (No Send Email)</button>
+                <section class="progress-demo ">
+                    <button class="btn ladda-button btn-primary" data-style="zoom-in" onclick="funcAddorEdit('Edit','Y')">Yes</button>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "form" }))
+
+
+
+{
+
+    if ((ViewBag.Title == "View Activity" || ViewBag.Title == "Edit Activity" ))
+
+    {
+        <div class="form-group  row">
+            <label class="col-sm-2 col-form-label">Activity ID <span class="text-danger">*</span></label>
+
+
+            <div class="col-sm-10">
+
+                <label class="col-form-label">@Model.meeting_code.ToUpper()</label>
+                @Html.EditorFor(model => model.meeting_code, new
+                {
+                    htmlAttributes = new
+                    {
+                        @class = "form-control",
+                        id =
+        "meeting_code",
+                        type = "hidden"
+                    }
+                })
+
+
+
+            </div>
+        </div>
+
+    }
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Title <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+
+            {
+                <label class="col-form-label">@Model.title</label>
+
+            }
+
+
+            else
+
+
+            {
+                @Html.EditorFor(model => model.title, new
+        {
+        htmlAttributes = new
+        {
+        @class = "form-control",
+        id = "title",
+
+        }
+        })
+                <span id="title_error" class="text-danger"></span>
+
+            }
+
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Details / Purpose <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+                @Html.Raw(Model.detail)
+
+            }
+
+
+            else
+
+
+            {
+                @Html.TextAreaFor(model => model.detail, new { @class = "summernote form-control", id = "details" })
+
+                <span id="details_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Type <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+
+
+                if (Model.meeting_type == "M")
+
+
+
+                {
+                    <label class="col-form-label">Activity</label>
+
+                }
+
+
+                else if (Model.meeting_type == "E")
+
+
+                {
+                    <label class="col-form-label">Event</label>
+
+
+                }
+
+
+                else if (Model.meeting_type == "T")
+
+
+                {
+                    <label class="col-form-label">Traning</label>
+
+                }
+
+            }
+
+            else
+
+            {
+                @Html.DropDownList("meeting_type", new List<SelectListItem>
+        {
+        new SelectListItem { Text = "Select Type"},
+        new SelectListItem { Text = "Meeting / Discussion", Value = "M", Selected = Model?.meeting_type == "M" },
+        new SelectListItem { Text = "Training", Value = "T", Selected = Model?.meeting_type == "T" },
+        new SelectListItem { Text = "Event", Value = "E", Selected = Model?.meeting_type == "E" }
+        }, new { @class = "form-control", id = "meeting_type" })
+                <span id="meeting_type_error" class="text-danger"></span>
+
+            }
+
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            Start Time <span class="text-danger">*</span>
+
+        </label>
+
+        <div class="col-sm-10">
+
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+                <label class="col-form-label" id="startDateShow"></label>
+                <input type="hidden" id="startDate" value="@Model.startDate" />
+
+            }
+            else
+
+
+            {
+
+                string startTimeValue = Model != null ? Model.startDate.Value.ToString("yyyy-MM-ddTHH:mm:ss") : string.Empty;
+
+                <input class="form-control" type="datetime-local" id="startDate" value="@startTimeValue"
+                       min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                       onchange="validateDateTime('startDate','Start Time cannot select passed date time.')">
+
+                <span id="startDate_error" class="text-danger"></span>
+
+            }
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">
+            End Time <span class="text-danger">*</span>
+        </label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+
+            {
+                <label class="col-form-label" id="endDateShow"></label>
+                <input type="hidden" id="endDate" value="@Model.endDate" />
+
+
+            }
+
+
+
+            else
+
+
+            {
+
+
+                string endTimeValue = Model != null ? Model.endDate.Value.ToString("yyyy-MM-ddTHH:mm:ss") : string.Empty;
+
+                <input class="form-control" type="datetime-local" id="endDate" value="@endTimeValue"
+                       min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                       onchange="validateDateTime('endDate','End Time cannot select passed date time.')">
+
+                <span id="endDate_error" class="text-danger"></span>
+
+
+            }
+
+
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Presenter <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+
+            {
+                <label class="col-form-label">@Model.organizer</label>
+
+
+            }
+
+            else
+
+            {
+                @Html.EditorFor(model => model.organizer, new
+        {
+        htmlAttributes = new
+        {
+        @class = "form-control",
+        id = "organizer",
+
+        }
+        })
+                <span id="organizer_error" class="text-danger"></span>
+
+            }
+
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Presenter's<br /> Department <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+                <label class="col-form-label">@Model.DepartmentName (@Model.department.ToUpper())</label>
+
+
+            }
+
+
+            else
+            {
+                @Html.DropDownList("department", ViewBag.department_code as SelectList, "Select Department", htmlAttributes: new
+        { @class = "form-control" })
+                <span id="department_error" class="text-danger"></span>
+
+            }
+
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Presenter's<br /> Factory <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+                <label class="col-form-label">@Model.factoryName (@Model.factory.ToUpper())</label>
+
+
+            }
+
+
+            else
+
+
+            {
+                @Html.DropDownList("factory", ViewBag.factory_id as SelectList, "Select Factory", htmlAttributes: new
+                {
+                    @class =
+        "form-control",
+                    onChange = "getLocation(this)"
+                })
+                <span id="factory_error" class="text-danger"></span>
+
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Presenter's<br /> Location <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+                <label class="col-form-label">@Model.LocationName (@Model.location.ToUpper())</label>
+
+
+            }
+
+            else
+
+            {
+                @Html.DropDownList("location", ViewBag.location_code as SelectList, "Select Location", htmlAttributes: new
+                {
+        @class = "form-control"
+                })
+                <span id="location_error" class="text-danger"></span>
+
+            }
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Certificate Generatetion<span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+                <label class="col-form-label">
+                    @(Model.certificate.HasValue && Model.certificate == true ? "Yes" : "No")
+                </label>
+
+
+            }
+
+            else
+
+            {
+                @Html.DropDownList("certificate", new List<SelectListItem>
+        {
+        new SelectListItem { Text = "Select an Option"},
+        new SelectListItem { Text = "Yes", Value = "true", Selected = Model?.type == true },
+        new SelectListItem { Text = "No", Value = "false", Selected = Model?.type == false }
+        }, new { @class = "form-control", id = "certificate" })
+                <span id="certificate_error" class="text-danger"></span>
+
+            }
+
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Activity Limit Status <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+
+            {
+                <label class="col-form-label">
+                    @(Model.limit_status == true ? "Yes" : "No")
+                </label>
+
+            }
+
+
+            else
+
+
+            {
+                @Html.DropDownList("limit_status", new List<SelectListItem>
+        {
+        new SelectListItem { Text = "Select Limit Status"},
+        new SelectListItem { Text = "Yes", Value = "true", Selected = Model?.limit_status == true },
+        new SelectListItem { Text = "No", Value = "false", Selected = Model?.limit_status == false }
+
+        }, new { @class = "form-control", id = "limit_status", onChange = "limitFormView()" })
+                <span id="limit_status_error" class="text-danger"></span>
+
+            }
+
+
+        </div>
+    </div>
+
+    <div class="form-group row" id="limit-form" style="display:none;">
+        <label class="col-sm-2 col-form-label">Limit Number of Participant <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+
+            @Html.EditorFor(model => model.limit, new
+        {
+        htmlAttributes = new
+        {
+        @class = "form-control",
+        id = "limit",
+
+        }
+        })
+            <span id="limit_error" class="text-danger"></span>
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Activity Privacy Option <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+                <label class="col-form-label">
+                    @(Model.type.HasValue && Model.type == true ? "Private" : "Public")
+                </label>
+
+            }
+
+
+            else
+
+            {
+                @Html.DropDownList("type", new List<SelectListItem>
+        {
+        new SelectListItem { Text = "Select Privacy Option"},
+        new SelectListItem { Text = "Public", Value = "false", Selected = Model?.type == false },
+        new SelectListItem { Text = "Private", Value = "true", Selected = Model?.type == true }
+
+        }, new { @class = "form-control", id = "type", onChange = "passwordView()" })
+                <span id="type_error" class="text-danger"></span>
+
+            }
+
+
+        </div>
+    </div>
+
+
+    if (ViewBag.Title != "View Activity" || Model?.condition == "E")
+
+    {
+        <div class="form-group row" id="password-form" style="display:none;">
+            <label class="col-sm-2 col-form-label">Activity Password <span class="text-danger">*</span></label>
+            <div class="col-sm-10">
+                <div class="input-group" id="show_hide_password">
+                    @Html.EditorFor(model => model.password, new
+                    {
+                        htmlAttributes = new
+                        {
+                            @class = "form-control",
+                            @type =
+            "password",
+                            id = "password"
+                        }
+                    })
+                    <div class="input-group-addon">
+                        <a id="showPassword"><i id="showPassword-icon" class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <span id="password_error" class="text-danger"></span>
+            </div>
+        </div>
+
+    }
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Venue </label>
+        <div class="col-sm-10">
+
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+                <label class="col-form-label">@Model.placeName (@Model.place.ToUpper())</label>
+
+            }
+
+
+            else
+
+            {
+
+                @Html.DropDownList("place", ViewBag.place_code as SelectList, "Select Venue", htmlAttributes: new
+                {
+                    @class =
+        "form-control"
+                })
+                <span class="text-warning">*Online Activity URL or Venue required. </span>
+                <span id="place_error" class="text-danger"></span><br />
+
+
+
+
+            }
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Online <br />Activity URL </label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+
+            {
+
+                if (Model.remark != null && !string.IsNullOrEmpty(Model.remark))
+
+                {
+                    <div class="bg-muted p-2">@Html.Raw(Model.link)</div>
+
+                }
+
+                else
+
+
+                {
+                    <span class="text-danger">No Data</span>
+
+
+                }
+
+
+
+            }
+
+            else
+
+            {
+                @Html.TextAreaFor(model => model.link, new { @class = "summernote form-control", id = "link" })
+                <span class="text-warning">*Online Activity URL or Venue required. </span>
+                <span id="link_error" class="text-danger"></span><br />
+
+
+
+            }
+
+
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Remark </label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Activity" || Model?.condition == "E")
+
+            {
+
+
+                if (Model.remark != null && !string.IsNullOrEmpty(Model.remark))
+
+                {
+                    <div class="bg-muted p-2">@Html.Raw(Model.remark)</div>
+
+                }
+
+
+                else
+
+                {
+                    <span class="text-danger">No Data</span>
+
+
+                }
+
+
+            }
+
+
+            else
+
+
+
+
+            {
+                @Html.TextAreaFor(model => model.remark, new { @class = "summernote form-control", id = "remark" })
+                <span class="text-warning">*Only registered users can view</span>
+
+
+            }
+
+
+        </div>
+    </div>
+
+
+
+}
+<div class="form-group row">
+    <div class="col-sm-4 col-sm-offset-2">
+        @if (ViewBag.Title == "Add Activity" && ViewBag.ErrorMessage == null)
+
+
+        {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary" data-style="zoom-in"
+                        onclick="confirmation('Create')">
+                    Add
+                </button>
+            </section>
+
+
+        }
+
+
+        else if (ViewBag.Title == "Edit Activity" && ViewBag.ErrorMessage == null && Model?.condition != "E")
+
+        {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary" data-style="zoom-in"
+                        onclick="confirmation('Edit')">
+                    Update
+                </button>
+            </section>
+
+
+        }
+
+    </div>
+</div>
+
+<script>
+    var returnMessage;
+    $(document).ready(function () {
+        Ladda.bind('.progress-demo .ladda-button', {
+            callback: function (instance) {
+
+                var interval = setInterval(function () {
+
+                    if (returnMessage != "") {
+                        instance.stop();
+                        clearInterval(interval);
+                        returnMessage = "";
+                    }
+                }, 200);
+            }
+        });
+
+
+        $('.summernote').summernote();
+        if ($("#type").val() === 'true') {
+            $("#password-form").show();
+        } else {
+            $("#password-form").hide();
+            $("#password").val('');
+
+        }
+
+        if ($("#limit_status").val() === 'true') {
+            $("#limit-form").show();
+        } else {
+            $("#limit-form").hide();
+
+        }
+    });
+    function passwordView() {
+        if ($("#type").val() === 'true') {
+            $("#password-form").show();
+        } else {
+            $("#password-form").hide();
+
+        }
+    }
+
+    function limitFormView() {
+        if ($("#limit_status").val() === 'true') {
+            $("#limit-form").show();
+        } else {
+            $("#limit-form").hide();
+
+        }
+    }
+    function confirmation(action) {
+        if (action == "Edit") {
+            $('#updateMeeting').modal('show');
+        } else {
+            funcAddorEdit(action);
+        }
+        
+    }
+
+    function funcAddorEdit(action, sendEmail) {
+       
+        var isValid = true; // Flag to check overall form validity
+        
+
+            if (!validateField("title", "Title field is required.")) {
+                isValid = false;
+            }
+            if (!validateField("details", "Details field is required.")) {
+                isValid = false;
+            }
+            if (!validateField("startDate", "Start Time field is required.")) {
+                isValid = false;
+            }
+
+            if (!validateField("endDate", "End Time field is required.")) {
+                isValid = false;
+            }
+            if (!validateField("organizer", "Presenter field is required.")) {
+                isValid = false;
+            }
+            console.log(isValid);
+
+           @* if (!validateDropdown("place", "Place") && !validateField("link", "")) {
+                !validateDropdown("place", "PlaceMessage")
+                !validateField("link", "Please provide either an Venue or an Online Activity URL.")
+                isValid = false;
+            } else {
+                $("#place").parent().removeClass("has-error");
+                $("#link").parent().removeClass("has-error");
+            }*@
+            if (!validateDropdown("meeting_type", "Select Type")) {
+                isValid = false;
+            }
+            if (!validateDropdown("department", "Select a Activity")) {
+                isValid = false;
+            }
+            if (!validateDropdown("factory", "Select a Factory")) {
+                isValid = false;
+            }
+
+            if (!validateDropdown("certificate", "Select an Option")) {
+                isValid = false;
+            }
+            if (!validateDropdown("limit_status", "Select Limit Status")) {
+                isValid = false;
+            }
+            if (!validateDropdown("location", "Select Location")) {
+                isValid = false;
+            }
+
+
+
+            if (!validateDropdown("type", "Select Privacy Option")) {
+                isValid = false;
+            }
+
+            if ($("#type").val() === 'true') {
+                if (!validateField("password", "Password field is required.")) {
+                    isValid = false;
+                }
+            }
+
+            
+            if (!isValid) {
+                errorMessage("Please make sure all required fields is filled");
+                returnMessage = "Please make sure all required fields is filled";
+                return; // Prevent form submission if validation fails
+            }
+            if ($("#startDate").val() > $("#endDate").val()) {
+                $("#startDate").parent().addClass("has-error");
+                $("#endDate").parent().addClass("has-error");
+                errorMessage("End Date cannot earlier than Start Date");
+                isValid = false;
+                return
+            } else {
+                $("#startDate").parent().removeClass("has-error");
+                console.log("b");
+                $("#endDate").parent().removeClass("has-error");
+               
+            }
+
+        
+        
+
+
+        var formData = new FormData();
+
+        
+        var getStartDate='';
+        var getEndDate='';
+        if ($('#timezone').val() == "V") { //CONVERT TIME FROM VIETNAM
+            console.log($("#startDate").val());
+            console.log($("#endDate").val());
+            // Parse the datetime string assuming it's in Vietnam timezone
+            const vietnamStartDateTime = moment.tz($("#startDate").val(), "Asia/Ho_Chi_Minh");
+            const utcStartTime = moment.utc(vietnamStartDateTime); // Explicitly convert to UTC
+            // Convert to Server timezone
+            const serverStartDateTime = utcStartTime.clone().utcOffset('+08:00');
+            // Parse the datetime string assuming it's in Vietnam timezone
+
+
+            const vietnamEndDateTime = moment.tz($("#endDate").val(), "Asia/Ho_Chi_Minh");
+            const utcEndTime = moment.utc(vietnamEndDateTime); // Explicitly convert to UTC
+            // Convert to Server timezone
+            const serverEndDateTime = utcEndTime.clone().utcOffset('+08:00');
+
+
+            getStartDate = serverStartDateTime.format("YYYY-MM-DDTHH:mm");
+            getEndDate = serverEndDateTime.format("YYYY-MM-DDTHH:mm");
+
+        }else if ($('#timezone').val() == "J"){ // CONVERT TIME FROM JORDAN
+            const jordanStartDateTime = moment.tz($("#startDate").val(), 'Europe/Moscow'); //Use this timezone because cannot find jordan timezone format
+
+            // Convert to UTC
+            const utcStartTime = jordanStartDateTime.clone().utc();
+
+            // Convert to Server timezone with the correct offset (+5 hours)
+            const serverStartTime = utcStartTime.clone().utcOffset('+08:00');
+
+            const jordanEndDateTime = moment.tz($("#endDate").val(), 'Europe/Moscow');
+
+            // Convert to UTC
+            const utcEndTime = jordanEndDateTime.clone().utc();
+
+            // Convert to Server timezone with the correct offset (+5 hours)
+            const serverEndTime = utcEndTime.clone().utcOffset('+08:00');
+
+            getStartDate = serverStartTime.format("YYYY-MM-DDTHH:mm");
+            getEndDate = serverEndTime.format("YYYY-MM-DDTHH:mm");
+
+
+
+
+
+        }else if($('#timezone').val() == "M"){ //convert time from malaysia
+             // Parse the datetime string assuming it's in Vietnam timezone
+            const malaysiaStartDateTime = moment.tz($("#startDate").val(), "Asia/Kuala_Lumpur");
+            const utcStartTime = malaysiaStartDateTime.clone().utc();
+            // Convert to Server timezone with the correct offset (+5 hours)
+            const serverStartTime = utcStartTime.clone().utcOffset('+08:00');
+
+
+            // Parse the datetime string assuming it's in Vietnam timezone
+            const malaysiaEndDateTime = moment.tz($("#endDate").val(), "Asia/Kuala_Lumpur");
+            const utcEndTime = malaysiaEndDateTime.clone().utc();
+            // Convert to Server timezone with the correct offset (+5 hours)
+            const serverEndTime = utcEndTime.clone().utcOffset('+08:00');
+
+
+
+            getStartDate = serverStartTime.format("YYYY-MM-DDTHH:mm");
+            getEndDate = serverEndTime.format("YYYY-MM-DDTHH:mm");
+        }
+
+        // Meeting Data
+        formData.append("meetingData.meeting_code", $("#meeting_code").val());
+        formData.append("meetingData.meeting_type", $("#meeting_type").val());
+        formData.append("meetingData.title", $("#title").val());
+        formData.append("meetingData.detail", $("#details").val());
+        formData.append("meetingData.organizer", $("#organizer").val());
+        formData.append("meetingData.place", $("#place").val());
+        formData.append("meetingData.link", $("#link").val());
+        formData.append("meetingData.startDate", getStartDate);
+        formData.append("meetingData.endDate", getEndDate);
+        formData.append("meetingData.department", $("#department").val());
+        formData.append("meetingData.certificate", $("#certificate").val());
+        formData.append("meetingData.location", $("#location").val());
+        formData.append("meetingData.factory_id", $("#factory").val());
+        formData.append("meetingData.type", $("#type").val());
+        formData.append("meetingData.password", $("#password").val());
+        formData.append("meetingData.remark", $("#remark").val());
+        formData.append("meetingData.limit_status", $("#limit_status").val());
+        formData.append("meetingData.limit", $("#limit").val());
+        formData.append("sendEmail", sendEmail);
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Meeting/" + action, // Replace with the actual URL
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.success) {
+                    window.location.href = '@Url.Action("MainForm", "Meeting", new { id = "" })' + "/" + data.id;
+                    successMessage(data.successMessage);
+                    returnMessage = data.successMessage;
+                } else {
+                    errorMessage(data.error_message);
+                    returnMessage = data.error_message;
+
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+
+    function getLocation(factory) {
+
+        $.ajax({
+            type: 'POST',
+            url: '/Meeting/GetLocation', // Replace with your controller and action
+            data: { factory_id: factory.value }, // Send the department ID to add to the database
+            success: function (data) {
+                if (data.success) {
+    @* successMessage(data.message);*@
+                    if (data.activePlace) { //after select factory it will filter the PLACE based on factory id
+                        $('#place').empty();
+                        var defaultOption = $('<option>', {
+                            value: 'null',
+                            text: 'Select an option',
+                            disabled: true,
+                            selected: true
+                        });
+
+                        $('#place').append(defaultOption);
+
+
+                        data.activePlace.forEach(function (place) { //after select factory it will filter the place based on factory id
+                            // Create a new option element
+                            var newPlace = $('<option>', {
+                                value: place.place_code,
+                                text: place.factory + "-" + place.name
+                            });
+
+                            // Append the new option to the select element
+                            $('#place').append(newPlace);
+                        });
+
+                    }
+
+                    if (data.activeLocation) {
+                        $('#location').empty();
+                        var defaultOption = $('<option>', {
+                            value: 'null',
+                            text: 'Select an option',
+                            disabled: true,
+                            selected: true
+                        });
+
+                        $('#location').append(defaultOption);
+
+
+                        data.activeLocation.forEach(function (location) {
+                            // Create a new option element
+                            var newLocation = $('<option>', {
+                                value: location.location_code,
+                                text: location.factory + "-" + location.name
+                            });
+
+                            // Append the new option to the select element
+                            $('#location').append(newLocation);
+                        });
+
+                    }
+                    // Department added successfully to the database
+                } else {
+                    errorMessage(data.error_message);
+
+                }
+
+
+
+
+
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+
+            }
+        });
+    }
+    function validateDateTime(fieldId, errorMessage) {
+            var errorId = fieldId + "_error";
+            var parentField = $("#" + fieldId).parent();
+            var currentDate="";
+            var date="";
+            if ($('#timezone').val() == "V") { //when is Vietnam timezone
+                 date = moment($('#' + fieldId).val()).format("YYYY-MM-DDTHH:mm"); // Select Vietnam time
+
+                // Get the current date and time in Vietnam timezone
+                 currentDate = moment().tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DDTHH:mm");
+
+
+            }else if($('#timezone').val() == "J"){ //when is jordan timezone
+                  date = moment($('#' + fieldId).val()).format("YYYY-MM-DDTHH:mm"); // Select Jordan time
+
+                // Get the current date and time in Vietnam timezone
+                 currentDate = moment().tz("Asia/Amman").format("YYYY-MM-DDTHH:mm");
+
+
+            }else if($('#timezone').val() == "M"){ //when is malaysia timezone
+                    date = moment($('#' + fieldId).val()).format("YYYY-MM-DDTHH:mm"); // Select Malaysia time
+                    currentDate = moment().tz("Asia/Kuala_Lumpur").format("YYYY-MM-DDTHH:mm");
+            }
+            // Compare the dates
+                if (new Date(currentDate).toISOString() > new Date(date).toISOString()) {
+
+                    $("#" + errorId).text(errorMessage);
+                    parentField.addClass("has-error");
+                    $('#' + fieldId).val('');
+                } else {
+                    $("#" + errorId).text(""); // Clear any existing error message
+                    parentField.removeClass("has-error")
+                }
+
+        }
+
+</script>

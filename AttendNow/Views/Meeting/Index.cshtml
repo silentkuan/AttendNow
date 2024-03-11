@@ -1,0 +1,1810 @@
+﻿@using AttendNow.Models.ViewModel
+@using AttendNow.Models
+
+
+@model MeetingData
+@{ var meetingAccess = ViewBag.meetingAccess as sys_setting_role_permission;
+List<sys_setting_define_table> defineTableList = ViewBag.DefineTable as List<sys_setting_define_table>;
+                if (meetingAccess?.status != true)
+                {
+
+    <script>
+
+        window.location.href = '@Url.Action("Logout", "User")';
+    </script> } }
+<div class="modal fade" id="filter-model" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="confirmationModalLabel">Filter</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+
+                        <h4>Activity Condition</h4>
+                        <div class="checkbox" id="conditionCheckboxes">
+                            <h5 class="mr-3">
+                                <input type="checkbox" class="selectAllCheckbox" onchange="selectAllCheckboxes(this,'conditionFilter')"> Select All
+                            </h5>
+                            <label class="mr-3">
+                                <input type="checkbox" name="conditionFilter" value="P" onchange="handleCheckboxChange(this.name)"> Pending
+                            </label>
+
+                            <label class="mr-3">
+                                <input type="checkbox" name="conditionFilter" value="E" onchange="handleCheckboxChange(this.name)"> Expired
+                            </label>
+
+                            <label class="mr-3">
+                                <input type="checkbox" name="conditionFilter" value="S" onchange="handleCheckboxChange(this.name)"> Started
+                            </label>
+                        </div>
+                      
+
+
+                    </div>
+                </div>
+
+                <hr />
+                <div class="col-md-12">
+                    <div class="form-group">
+
+
+                        <h4>Option</h4>
+                        <select id="searchCriteria" class="form-control">
+                            <option value="null" selected>Select an option</option>
+                            <!-- Add your options here -->
+                        </select>
+                        <input type="text" id="searchInput" class="form-control mt-1" placeholder="Type to search..." disabled>
+
+
+
+
+                    </div>
+                </div>
+                <hr />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <h4>Activity Date</h4>
+
+
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-3 col-form-label">Start Date:</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="meetingStartDate" class="form-control mt-1">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="endDate" class="col-sm-3 col-form-label">End Date:</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="meetingEndDate" class="form-control mt-1">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr />
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <h4>Date</h4>
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-3 col-form-label">Option:</label>
+                            <div class="col-sm-9">
+                                <select id="searchType" class="form-control">
+                                    <option value="null" selected>Select an option</option>
+                                    <option value="createDate">Created Date</option>
+
+                                    <option value="editDate">Edited Date</option>-->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-3 col-form-label">Start Date:</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="startDate" class="form-control mt-1" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="endDate" class="col-sm-3 col-form-label">End Date:</label>
+                            <div class="col-sm-9">
+                                <input type="date" id="endDate" class="form-control mt-1" disabled>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-w-m" onclick="clearFilter()">Clear </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="searchAll('Meeting','','','Activity Report','Activities','@Session["timezone"].ToString()')">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="define-table" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Set Up Your Custom Table Fields</h5>
+              
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+
+
+                        <div class="row">
+                            <div class="col-6">
+                                 <input type="checkbox"  onclick="checkAllDefineTable(this)"> <b class="mt-1">Select All</b> <br /><br />
+                                <input type="checkbox" class="user-define" name="meeting_code" @(defineTableList.Any(dt => dt.field == "meeting_code" && dt.status == "A") ? "checked" : "")> Activity ID
+                                <br>
+                                <input type="checkbox" class="user-define" name="title" @(defineTableList.Any(dt => dt.field == "title" && dt.status == "A") ? "checked" : "")> Title
+                                <br>
+                                <input type="checkbox" class="user-define" name="meeting_type" @(defineTableList.Any(dt => dt.field == "meeting_type" && dt.status == "A") ? "checked" : "")> Type
+                                <br>
+                                <input type="checkbox" class="user-define" name="factory" @(defineTableList.Any(dt => dt.field == "factory" && dt.status == "A") ? "checked" : "")> Factory
+                                <br>
+                                <input type="checkbox" class="user-define" name="location" @(defineTableList.Any(dt => dt.field == "location" && dt.status == "A") ? "checked" : "")> Location
+                                <br>
+                                <input type="checkbox" class="user-define" name="department" @(defineTableList.Any(dt => dt.field == "department" && dt.status == "A") ? "checked" : "")> Department
+                                <br>
+                                <input type="checkbox" class="user-define" name="meetingStartDate" @(defineTableList.Any(dt => dt.field == "meetingStartDate" && dt.status == "A") ? "checked" : "")> Start Date
+                                <br>
+                                <input type="checkbox" class="user-define" name="meetingEndDate" @(defineTableList.Any(dt => dt.field == "meetingEndDate" && dt.status == "A") ? "checked" : "")> End Date
+                                <br>
+                                <input type="checkbox" class="user-define" name="organizer" @(defineTableList.Any(dt => dt.field == "organizer" && dt.status == "A") ? "checked" : "")> Presentor
+                                <br>
+                                <input type="checkbox" class="user-define" name="place" @(defineTableList.Any(dt => dt.field == "place" && dt.status == "A") ? "checked" : "")> Venue
+
+                            </div>
+
+                            <div class="col-6">
+                                <br /><br />
+                                <input type="checkbox" class="user-define" name="type" @(defineTableList.Any(dt => dt.field == "type" && dt.status == "A") ? "checked" : "")> Privacy Option
+                                <br>
+                                <input type="checkbox" class="user-define" name="certificate" @(defineTableList.Any(dt => dt.field == "certificate" && dt.status == "A") ? "checked" : "")> Certificate Option
+                                <br>
+                                <input type="checkbox" class="user-define" name="createBy" @(defineTableList.Any(dt => dt.field == "createBy" && dt.status == "A") ? "checked" : "")> Created By
+                                <br>
+                                <input type="checkbox" class="user-define" name="createDate" @(defineTableList.Any(dt => dt.field == "createDate" && dt.status == "A") ? "checked" : "")> Created Date
+                                <br>
+
+                                <input type="checkbox" class="user-define" name="editBy" @(defineTableList.Any(dt => dt.field == "editBy" && dt.status == "A") ? "checked" : "")> Edited By
+                                <br>
+                                <input type="checkbox" class="user-define" name="editDate" @(defineTableList.Any(dt => dt.field == "editDate" && dt.status == "A") ? "checked" : "")> Edited Date
+
+                                <br>
+                                <input type="checkbox" class="user-define" name="condition" @(defineTableList.Any(dt => dt.field == "condition" && dt.status == "A") ? "checked" : "")> Condition
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                @if (defineTableList != null && defineTableList.Count == 0)
+                {
+
+
+    <button type="button" class="btn btn-primary" onclick="defineTable('meeting','AddUserDefine')">Define</button> }
+                else
+                {
+    <button type="button" class="btn btn-primary" onclick="defineTable('meeting','EditUserDefine')">Define</button>}
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bottomBtn">
+    <button class="btn btn-primary btn-circle btn-lg noprint" type="button" onclick="goFilter()" data-toggle="tooltip" data-placement="left" title="Filter">
+        <i class="fa fa-filter"></i>
+    </button>
+</div>
+
+<div class="row wrapper border-bottom white-bg page-heading noprint">
+    <div class="col-lg-10">
+        <h2>Activity Management</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a>Activity</a>
+            </li>
+            <li class=" breadcrumb-item">
+                <strong><a href="@Url.Action("Index", "Meeting")">Activity List</a></strong>
+
+            </li>
+        </ol>
+        @if ((meetingAccess?.status == true && meetingAccess?.addFunction == true))
+        {
+<a class="btn btn-primary mt-2" href="@Url.Action("MainForm", "Meeting")">Add Activity</a>}
+        <div class="col-md-6 p-0 mt-3 mb-0">
+            <div class="form-group mb-0 d-flex align-items-center">
+                <h4 class="mr-2 mb-0" style="width:220px;">Activity Type Filter:</h4>
+                <select id="meeting_type" class="form-control mt-2" onchange="searchAll('Meeting','','','Activity Report','Activities','@Session["timezone"].ToString()')">
+                    <option value="" selected>Select All Activities</option>
+                    <option value="M">Meeting / Discussion</option>
+                    <option value="E">Event</option>
+                    <option value="T">Training</option>
+                </select>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+</div>
+
+@if (ViewBag.ErrorMessage == null)
+{
+<div class="wrapper wrapper-content animated fadeInRight ecommerce no-border no-padding-print">
+
+    <div class="row">
+
+        <div class="col-lg-12 no-padding-print">
+            <div class="tabs-container" id="report">
+                <ul class="nav nav-tabs noprint ">
+
+                    <li><a class=" nav-link active " data-toggle="tab" href="#tab-activityList">Activity List </a></li>
+                    <li>
+                        <a class=" nav-link " id="meetingGraf" data-toggle="tab" href="#activityReport" onclick="showGraf
+                            ('meeting',@ViewBag.meetingCodeTop3,@ViewBag.meetingTotalTop3,@ViewBag.meetingTop3BasedDate,'doughnut','Number of Participants')"> Organized Activity Report </a>
+                    </li>
+                    <li>
+                        <a class=" nav-link " id="meetingTypeGraf" data-toggle="tab" href="#meetingTypeReport" onclick="showGraf
+                            ('meetingType',@ViewBag.meetingTypeName,@ViewBag.meetingTypeTotal,@ViewBag.meetingTypeBasedDate,'doughnut','Number of Activitys Organized')"> Activity Type Report </a>
+                    </li>
+                    <li>
+                        <a class=" nav-link " id="locationGraf" data-toggle="tab" href="#regionalReport" onclick="showGraf
+                            ('location',@ViewBag.locationNameTop3,@ViewBag.locationTotalTop3,@ViewBag.locationTop3BasedDate,'doughnut','Number of Activitys Organized')"> Regional Organized Report </a>
+                    </li>
+                    <li>
+                        <a class=" nav-link " id="placeGraf" data-toggle="tab" href="#reportPlace" onclick="showGraf
+                            ('place',@ViewBag.placeNameTop3,@ViewBag.placeTotalTop3,@ViewBag.placeTop3BasedDate,'doughnut','Number of Activitys Organized')"> Venue Organized Report </a>
+                    </li>
+                    <li>
+                        <a class=" nav-link " id="typeGraf" data-toggle="tab" href="#privacyReport" onclick="showGraf
+                            ('type',@ViewBag.typeName,@ViewBag.typeTotal,@ViewBag.typeBasedDate,'doughnut','Number of Activitys Organized')"> Activity Privacy Option Report </a>
+                    </li>
+                    <li>
+                        <a class=" nav-link " id="modeGraf" data-toggle="tab" href="#modeReport" onclick="showGraf
+                            ('mode',@ViewBag.modeName,@ViewBag.modeTotal,@ViewBag.modeBasedDate,'doughnut','Number of Activitys Organized')"> Activity Mode Report </a>
+                    </li>
+                    <li>
+                        <a class=" nav-link " id="certificateGraf" data-toggle="tab" href="#certificateReport" onclick="showGraf
+                            ('certificate',@ViewBag.certificateName,@ViewBag.certificateTotal,@ViewBag.certificateBasedDate,'doughnut','Number of Activitys Organized')"> Activity Certificate Options Report </a>
+                    </li>
+                    <li>
+                        <a class=" nav-link " id="conditionGraf" data-toggle="tab" href="#conditionReport" onclick="showGraf
+                            ('condition',@ViewBag.conditionName,@ViewBag.conditionTotal,@ViewBag.conditionBasedDate,'doughnut','Number of Activitys')"> Activity Condition Report </a>
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div id="tab-activityList" class="tab-pane active">
+
+                        <div class="row animated fadeInDown" id="filter">
+                            <div class="col-lg-12">
+
+
+                                <div class="ibox ">
+                                    <div class="ibox-title pr-3">
+                                        <button class="btn btn-primary btn-sm mr-2 mb-1" type="button" onclick="$('#define-table').modal('show');">
+                                            <i class="fa fa-sliders"></i>
+                                        </button>
+                                        <h5>
+                                            Activity List
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+                                        <div class="mt-3">
+
+                                            <div class="checkbox">
+
+                                                <label class="mr-3">
+                                                    <input type="checkbox" name="statusFilter" value="A" onchange="filterStatus(this.name)"> Active
+                                                </label>
+
+                                                @if (meetingAccess.deleteFunction == true)
+                                                {
+                                    <label class="mr-3">
+                                        <input type="checkbox" name="statusFilter" value="V" onchange="filterStatus(this.name); "> Inactive
+                                    </label>}
+
+
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+
+
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example statusAsc dataTable" id="DataTables_Table_1" aria-describedby="DataTables_Table_1_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            @if (defineTableList.Any(dt => dt.field == "meeting_code" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="meeting_code"> Activity ID </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "title" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="title"> Title </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "meeting_type" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="meeting_type"> Type </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "factory" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="factory"> Factory </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "location" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="location"> Location </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "department" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="department"> Department </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "meetingStartDate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="meetingStartDate"> Start Date </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "meetingEndDate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="meetingEndDate"> End Date </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "organizer" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="organizer"> Presenter </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "place" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="place"> Venue </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "type" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="type"> Privacy Option </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "certificate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="certificate"> Certificate Option </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "createBy" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="createBy"> Created By </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "createDate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="createDate"> Created Date </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "editBy" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="editBy"> Edited By </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "editDate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="editDate"> Edited Date </th>
+                                                            }
+
+                                                            @if (defineTableList.Any(dt => dt.field == "condition" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                                            {
+                                                                <th data-column-name="condition"> Condition </th>
+                                                            }
+                                                            @if ((meetingAccess?.status == true && meetingAccess?.deleteFunction == true))
+                                                            {
+                                                                <th data-column-name="status"> Status </th>
+}
+                                                            @if ((meetingAccess?.status == true && meetingAccess?.editFunction == true)
+                                                           )
+                                                            {
+                                                                <th>Upload</th>
+}
+                                                            @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true)
+                                                             || (meetingAccess?.status == true && meetingAccess?.editFunction == true)
+                                                             || (meetingAccess?.status == true && meetingAccess?.deleteFunction == true))
+                                                            {
+                                                                <th>Action</th>
+}
+
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.MeetingList)
+                                                        {
+                                        <tr>
+
+                                            @if (defineTableList.Any(dt => dt.field == "meeting_code" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+
+                                                @item.meeting_code.ToUpper()
+                                            </td>
+                                            }
+
+
+                                            @if (defineTableList.Any(dt => dt.field == "title" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @Html.DisplayFor(modelItem => item.title)
+                                            </td>
+                                            }
+                                            @if (defineTableList.Any(dt => dt.field == "meeting_type" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @if (item.meeting_type == "M")
+                                                {
+
+
+                                                <span>Meeting / Discussion</span> }
+                                            else if (item.meeting_type == "E")
+                                            {
+                                                <span>Event</span> }
+                                            else if (item.meeting_type == "T")
+                                            {
+                                                <span>Training</span>}
+                                            </td>
+                                            }
+
+
+                                            @if (defineTableList.Any(dt => dt.field == "factory" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @Html.DisplayFor(modelItem => item.factoryName) (@item.factory.ToUpper())
+                                            </td>
+                                            }
+                                            @if (defineTableList.Any(dt => dt.field == "location" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @Html.DisplayFor(modelItem => item.LocationName) (@item.location.ToUpper())
+                                            </td>
+                                            }
+                                            @if (defineTableList.Any(dt => dt.field == "department" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @Html.DisplayFor(modelItem => item.DepartmentName) (@item.department.ToUpper())
+                                            </td>
+                                            }
+
+
+                                            @if (defineTableList.Any(dt => dt.field == "meetingStartDate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                <span class="startDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", item.startDate)</span>
+                                            </td>
+                                            }
+
+                                            @if (defineTableList.Any(dt => dt.field == "meetingEndDate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                <span class="endDate"> @string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", item.endDate)</span>
+                                            </td>
+                                            }
+
+                                            @if (defineTableList.Any(dt => dt.field == "organizer" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @Html.DisplayFor(modelItem => item.organizer) (@Html.DisplayFor(modelItem => item.department),@Html.DisplayFor(modelItem => item.location))
+
+                                            </td>
+                                            }
+
+                                            @if (defineTableList.Any(dt => dt.field == "place" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @if (item.place != null && !string.IsNullOrEmpty(item.place) && item.link != null && !string.IsNullOrEmpty(item.link))
+                                                {
+                                                <span>
+                                                    @item.placeName <br /><b>OR</b> <br />Online
+                                                </span> }
+                                                else if (item.link != null && !string.IsNullOrEmpty(item.link))
+                                                {
+                                                <span>Online</span> }
+                                                else if (item.place != null && !string.IsNullOrEmpty(item.place))
+                                                {
+                                                    <span>
+                                                        @item.placeName
+                                                    </span>}
+
+                                            </td>
+                                            }
+
+                                            @if (defineTableList.Any(dt => dt.field == "type" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @if (item.type == true)
+                                                {
+                            <span>Private</span> }
+                        else
+                        {
+            <span>Public</span>}
+                                            </td>
+                                            }
+
+                                            @if (defineTableList.Any(dt => dt.field == "certificate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @if (item.certificate == true)
+                                                {
+                            <span>Certificate Provided</span> }
+                        else
+                        {
+            <span>No Certificate</span>}
+                                            </td>
+                                            }
+
+                                          @if (defineTableList.Any(dt => dt.field == "createBy" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                          {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @Html.DisplayFor(modelItem => item.CreateByName) (@item.createBy.ToUpper())
+                                            </td>
+                                          }
+
+                                            @if (defineTableList.Any(dt => dt.field == "createDate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                <span class="createDate"> @string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", item.createDate)</span>
+
+                                            </td>
+                                            }
+
+                                            @if (defineTableList.Any(dt => dt.field == "editBy" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @if (item.editBy != null && !string.IsNullOrEmpty(item.editBy))
+                                                {
+                            @Html.DisplayFor(modelItem => item.EditByName) <span>(@item.editBy.ToUpper())</span> }
+                        else
+                        {
+            <span class="text-danger">No Data</span>}
+                                            </td>
+                                            }
+
+                                            @if (defineTableList.Any(dt => dt.field == "editDate" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @if (item.editDate != null)
+                                                {
+                            <span class="editDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", item.editDate)</span> }
+                        else
+                        {
+            <span class="editDate text-danger">No Data</span>}
+                                            </td>
+                                            }
+                                            @if (defineTableList.Any(dt => dt.field == "condition" && dt.status == "A") || (defineTableList != null && defineTableList.Count == 0))
+                                            {
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                                                @if (item.condition == "P")
+                                                {
+
+
+                            <span class="text-primary">Pending</span> }
+                        else if (item.condition == "S")
+                        {
+            <span class="text-primary">Started</span> }
+
+        else
+        {<span class="text-danger">Expired</span>}
+
+                                            </td>
+                                            }
+                                            @if ((meetingAccess?.status == true && meetingAccess?.deleteFunction == true))
+                                            {
+                        <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+                            @if (item.status == "A")
+                            {
+
+
+            <span class="text-primary">Active</span> }
+
+        else
+        {<span class="text-danger">Inactive</span>}
+
+                        </td>} @if ((meetingAccess?.status == true && meetingAccess?.editFunction == true)
+                                                            )
+                                                            {
+
+
+                                        <td>
+                                            @if (item.condition == "E")
+                                            {
+                                                <input name="attachments" id="attachments_@item.meeting_code" type="file" multiple="" style="width: 160px;">
+
+                                                <section class="progress-demo mt-2">
+                                                    <button class="ladda-button btn btn-primary btn-block" data-style="zoom-in"
+                                                            onclick="uploadImg('@item.meeting_code')">
+                                                        Upload
+                                                    </button>
+                                                </section>
+                                            }
+
+                                        </td>                 }
+                                            @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true)
+                                           || (meetingAccess?.status == true && meetingAccess?.editFunction == true)
+                                           || (meetingAccess?.status == true && meetingAccess?.deleteFunction == true))
+                                            {
+<td class="centered-cell nowrap-cell">
+                            @if ((meetingAccess?.status == true && meetingAccess?.editFunction == true))
+
+                            {
+            @Html.ActionLink("Edit", "MainForm", new { id = item.meeting_code }, new { @class = "btn btn-primary" }) }
+        else if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true))
+        {
+            @Html.ActionLink("View", "MainForm", new { id = item.meeting_code }, new { @class = "btn btn-primary" })}
+
+                            @if ((meetingAccess?.status == true && meetingAccess?.deleteFunction == true))
+                            {
+                                if (item.status == "A")
+                                {
+            <button onclick="updateStatus('Meeting', '@item.meeting_code', '@item.status','','Activity Report','Activities','@Session["timezone"].ToString()')" style="width:6em;" class="btn btn-danger" data-user-id="@item.meeting_code" data-status="@item.status">
+                Inactive
+            </button> }
+        else
+        {
+            <button onclick="updateStatus('Meeting', '@item.meeting_code', '@item.status','','Activity Report','Activities','@Session["timezone"].ToString()')" style="width:6em;" class="btn btn-info" data-user-id="@item.meeting_code" data-status="@item.status">
+                Reactive
+            </button>}
+    }
+                        </td>}
+                                        </tr>}
+
+                                                    </tbody>
+
+                                                </table>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="activityReport" class="tab-pane ">
+                        <div class="text-left print-logo " style="display:none;">
+
+
+                            <h2>
+                                <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                <span class="pl-3">Organized Activity Report for AttendNow</span>
+                            </h2>
+                            <hr />
+                        </div>
+                        <div class="row animated fadeInDown">
+
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title no-border no-top-padding-print">
+                                        <h5>
+                                            Statistical Analysis Report on Organized Activity @if (ViewBag.MeetingTitle != null)
+                                            {
+                            <em> <small>From @ViewBag.MeetingTitle</small></em>}
+
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+
+                                        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="printReportNGraf('Organized Activitys', '.reportMeeting', 'Organized Activity Report')">Export as PDF</a>
+
+
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row set-row ">
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2">
+
+                                                <h5 class="text-center print-text-small"><b>Top 3 Most Frequently Registered  Activitys</b></h5>
+                                                @if (ViewBag.meetingCodeTop3 == "[]" || ViewBag.meetingTotalTop3 == "[]")
+                                                {
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+            <div class="chart-container" style="height:85%">
+
+                <canvas id="meetingReportChart"></canvas>
+            </div>}
+                                            </div>
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2 ">
+                                                <h5 class="text-center print-text-small">
+                                                    <b>
+                                                        Top 3 Activitys Registration Trend
+                                                    </b>
+                                                </h5>
+
+                                                @if (ViewBag.meetingTop3BasedDate == "[]")
+                                                {
+
+
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+            <canvas id="meetingReportMultipleChart"></canvas>}
+
+                                            </div>
+                                        </div>
+
+                                        <hr />
+                                        <h5 class="pb-3">Organized Activitys Report List</h5>
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example dataTable reportMeeting totalDesc " id="DataTables_Table_2" aria-describedby="DataTables_Table_2_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-column-name="meeting_code"> Activity Code </th>
+                                                            <th data-column-name="meeting_title"> Activity Title </th>
+                                                            <th data-column-name="factory"> Factory </th>
+                                                            <th data-column-name="location"> Location </th>
+
+                                                            <th data-column-name="department"> Department </th>
+                                                            <th data-column-name="total"> Total Participant Count </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.MeetingReport)
+                                                        {
+                                        <tr>
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+
+                                                @item.meeting_code
+                                            </td>
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+
+                                                @item.meeting
+                                            </td>
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+
+                                                @item.factory
+                                            </td>
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+
+                                                @item.location
+                                            </td>
+
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+
+                                                @item.department
+                                            </td>
+                                            <td @if ((meetingAccess?.status == true && meetingAccess?.viewFunction == true) || (meetingAccess?.status == true && meetingAccess?.editFunction == true)) { <text> class="clickable-row" data-href="@Url.Action("MainForm", "Meeting", new { id = item.meeting_code })" </text>  } else { <text></text> }>
+
+                                                @item.total
+                                            </td>
+
+                                        </tr>
+}
+
+                                                    </tbody>
+
+                                                </table>
+                                                @if (ViewBag.MeetingTitle != null)
+                                                {
+                                <a href="@Url.Action("MainForm", "Meeting",new { id =@ViewBag.MeetingCode})" class="btn btn-white mt-2"><i class="fa fa-arrow-left"></i> Back</a>}
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="meetingTypeReport" class="tab-pane ">
+                        <div class="text-left print-logo " style="display:none;">
+
+
+                            <h2>
+                                <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                <span class="pl-3">Activity Type Report for AttendNow</span>
+                            </h2>
+                            <hr />
+                        </div>
+                        <div class="row animated fadeInDown">
+
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title no-border no-top-padding-print">
+                                        <h5>
+                                            Statistical Analysis Report on Activity Type
+
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+
+                                        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="printReportNGraf('Activity Type', '.reportMeetingType','Activity Type Report')">Export as PDF</a>
+
+
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row set-row ">
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2">
+
+                                                <h5 class="text-center print-text-small"><b>Activity Types</b></h5>
+                                                @if (ViewBag.meetingTypeName == "[]" || ViewBag.meetingTypeTotal == "[]")
+                                                {
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+            <div class="chart-container" style="height:85%">
+                <canvas id="meetingTypeReportChart"></canvas>
+            </div>}
+                                            </div>
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2 ">
+                                                <h5 class="text-center print-text-small"><b>Activity Type Trend</b></h5>
+                                                @if (ViewBag.meetingTypeBasedDate == "[]")
+                                                {
+
+
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+
+            <canvas id="meetingTypeReportMultipleChart"></canvas>}
+
+                                            </div>
+                                        </div>
+
+                                        <hr />
+                                        <h5 class="pb-3">Activity Type Report List</h5>
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_3_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example dataTable reportMeetingType totalDesc " id="DataTables_Table_3" aria-describedby="DataTables_Table_3_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-column-name="type"> Activity Type </th>
+
+                                                            <th data-column-name="total"> Total Organized Count </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.MeetingTypeReport)
+                                                        {
+                                        <tr>
+                                            <td>
+                                                @item.meeting_type
+                                            </td>
+
+
+                                            <td>
+                                                @item.total
+                                            </td>
+
+                                        </tr>}
+
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="regionalReport" class="tab-pane ">
+                        <div class="text-left print-logo " style="display:none;">
+
+
+                            <h2>
+                                <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                <span class="pl-3">Regional Organized Report for AttendNow</span>
+                            </h2>
+                            <hr />
+                        </div>
+                        <div class="row animated fadeInDown">
+
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title no-border no-top-padding-print">
+                                        <h5>
+                                            Statistical Analysis Report on Regional Organized
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+
+                                        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="printReportNGraf('Regional Organized ', '.reportMeetingLocation', 'Regional Organized Report')">Export as PDF</a>
+
+                                    </div>
+                                    <div class="ibox-content">
+
+                                        <div class="row set-row ">
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2">
+
+                                                <h5 class="text-center print-text-small"><b>Top 3 Most Frequently Organized Regional</b></h5>
+                                                @if (ViewBag.locationNameTop3 == "[]" || ViewBag.locationTotalTop3 == "[]")
+                                                {
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <div class="chart-container" style="height:85%">
+                        <canvas id="locationReportChart"></canvas>
+
+                    </div>}
+                                            </div>
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2 ">
+                                                <h5 class="text-center print-text-small"><b>Top 3 Regional Organized Trend</b></h5>
+
+                                                @if (ViewBag.locationTop3BasedDate == "[]")
+                                                {
+
+
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <canvas id="locationReportMultipleChart"></canvas>}
+
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <h5 class="pb-3">Regional Organized Report List</h5>
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_4_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example dataTable reportMeetingLocation totalDesc " id="DataTables_Table_4" aria-describedby="DataTables_Table_4_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-column-name="location"> Location </th>
+                                                            <th data-column-name="factory"> Factory </th>
+                                                            <th data-column-name="department"> Department </th>
+                                                            <th data-column-name="total"> Total Organized Count </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.LocationReport)
+                                                        {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.location)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.factory)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.department)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.total)
+                                            </td>
+
+
+                                        </tr>
+}
+
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="reportPlace" class="tab-pane ">
+                        <div class="text-left print-logo " style="display:none;">
+
+
+                            <h2>
+                                <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                <span class="pl-3">Venue Organization Report</span>
+                            </h2>
+                            <hr />
+                        </div>
+                        <div class="row animated fadeInDown">
+
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title no-border no-top-padding-print">
+                                        <h5>
+                                            Venue Organized Report
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+
+                                        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="printReportNGraf('Venue Organized','.reportPlace','Venue Organized Report')">Export as PDF</a>
+
+                                    </div>
+                                    <div class="ibox-content">
+
+                                        <div class="row set-row ">
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2">
+
+                                                <h5 class="text-center print-text-small"><b>Venue Organization</b></h5>
+                                                @if (ViewBag.placeName == "[]" || ViewBag.placeTotal == "[]")
+                                                {
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <div class="chart-container" style="height:85%">
+                        <canvas id="placeReportChart"></canvas>
+
+                    </div>}
+                                            </div>
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2 ">
+                                                <h5 class="text-center print-text-small"><b>Venue Organization Trend</b></h5>
+
+                                                @if (ViewBag.placeBasedDate == "[]")
+                                                {
+
+
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <canvas id="placeReportMultipleChart"></canvas>}
+
+
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <h5 class="pb-3">Venue Organized Report</h5>
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_10_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example dataTable reportPlace totalDesc " id="DataTables_Table_10" aria-describedby="DataTables_Table_10_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-column-name="status">Place </th>
+
+                                                            <th data-column-name="total"> Total Organization Count </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.PlaceReport)
+                                                        {
+                                        <tr>
+                                            <td>
+                                                @item.place
+                                            </td>
+
+                                            <td>
+                                                @item.total
+
+                                            </td>
+
+
+
+                                        </tr>}
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="privacyReport" class="tab-pane ">
+                        <div class="text-left print-logo " style="display:none;">
+
+
+                            <h2>
+                                <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                <span class="pl-3">Activity Privacy Option Report for AttendNow</span>
+                            </h2>
+                            <hr />
+                        </div>
+                        <div class="row animated fadeInDown">
+
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title no-border no-top-padding-print">
+                                        <h5>
+                                            Statistical Analysis Report on Activity Privacy Option
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+
+                                        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="printReportNGraf('Activity Privacy Option', '.reportType','Activity Privacy Option Report')">Export as PDF</a>
+
+
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row set-row ">
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2">
+
+                                                <h5 class="text-center print-text-small"><b>Activity Privacy Option</b></h5>
+
+                                                @if (ViewBag.typeName == "[]" || ViewBag.typeTotal == "[]")
+                                                {
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <div class="chart-container" style="height:85%">
+                        <canvas id="typeReportChart"></canvas>
+                    </div>}
+                                            </div>
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2 ">
+                                                <h5 class="text-center print-text-small"><b>Activity Privacy Option Trend</b></h5>
+                                                @if (ViewBag.typeBasedDate == "[]")
+                                                {
+
+
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+
+                    <canvas id="typeReportMultipleChart"></canvas>}
+
+                                            </div>
+                                        </div>
+
+                                        <hr />
+                                        <h5 class="pb-3">Activity Privacy Option Report List</h5>
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_5_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example dataTable reportType totalDesc " id="DataTables_Table_5" aria-describedby="DataTables_Table_5_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-column-name="type"> Activity Privacy Option </th>
+                                                            <th data-column-name="total"> Total Organized Count </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.TypeReport)
+                                                        {
+                                        <tr>
+                                            <td>
+                                                @item.type
+                                            </td>
+
+
+                                            <td>
+                                                @item.total
+                                            </td>
+
+                                        </tr>
+}
+
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="modeReport" class="tab-pane ">
+                        <div class="text-left print-logo " style="display:none;">
+
+
+                            <h2>
+                                <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                <span class="pl-3">Activity Mode Report for AttendNow</span>
+                            </h2>
+                            <hr />
+                        </div>
+                        <div class="row animated fadeInDown">
+
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title no-border no-top-padding-print">
+                                        <h5>
+                                            Statistical Analysis Report on Activity Mode
+
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+
+                                        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="printReportNGraf('Activity Modes', '.reportMode','Activity Modes Report')">Export as PDF</a>
+
+
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row set-row ">
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2">
+
+                                                <h5 class="text-center print-text-small"><b>Activity Modes</b></h5>
+                                                @if (ViewBag.modeName == "[]" || ViewBag.modeTotal == "[]")
+                                                {
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <div class="chart-container" style="height:85%">
+                        <canvas id="modeReportChart"></canvas>
+                    </div>}
+                                            </div>
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2 ">
+                                                <h5 class="text-center print-text-small"><b>Activity Mode Trend</b></h5>
+                                                @if (ViewBag.modeBasedDate == "[]")
+                                                {
+
+
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+
+                    <canvas id="modeReportMultipleChart"></canvas>}
+
+                                            </div>
+                                        </div>
+
+                                        <hr />
+                                        <h5 class="pb-3">Activity Mode Report List</h5>
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_6_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example dataTable reportMode totalDesc " id="DataTables_Table_6" aria-describedby="DataTables_Table_6_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-column-name="mode"> Activity Mode </th>
+
+                                                            <th data-column-name="total"> Total Organized Count </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.ModeReport)
+                                                        {
+                                        <tr>
+                                            <td>
+                                                @item.mode
+                                            </td>
+
+
+                                            <td>
+                                                @item.total
+                                            </td>
+
+                                        </tr>
+}
+
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="certificateReport" class="tab-pane ">
+                        <div class="text-left print-logo " style="display:none;">
+
+
+                            <h2>
+                                <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                <span class="pl-3">Activity Certificate Option Report for AttendNow</span>
+                            </h2>
+                            <hr />
+                        </div>
+                        <div class="row animated fadeInDown">
+
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title no-border no-top-padding-print">
+                                        <h5>
+                                            Statistical Analysis Report on Activity Certificate Option
+
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+
+                                        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="printReportNGraf('Activity Certificate Options', '.reportCertificate','Activity Certificate Option Report')">Export as PDF</a>
+
+
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row set-row ">
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2">
+
+                                                <h5 class="text-center print-text-small"><b>Activity Certificate Option</b></h5>
+                                                @if (ViewBag.certificateName == "[]" || ViewBag.certificateTotal == "[]")
+                                                {
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <div class="chart-container" style="height:85%">
+                        <canvas id="certificateReportChart"></canvas>
+                    </div>}
+                                            </div>
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2 ">
+                                                <h5 class="text-center print-text-small"><b>Activity Certificate Option Trend</b></h5>
+
+                                                @if (ViewBag.certificateBasedDate == "[]")
+                                                {
+
+
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <canvas id="certificateReportMultipleChart"></canvas>}
+
+                                            </div>
+                                        </div>
+
+                                        <hr />
+                                        <h5 class="pb-3">Activity Certificate Report List</h5>
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_7_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example dataTable reportCertificate totalDesc " id="DataTables_Table_7" aria-describedby="DataTables_Table_7_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-column-name="mode"> Activity Certification </th>
+
+                                                            <th data-column-name="total"> Total Organized Count </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.CertificateReport)
+                                                        {
+                                        <tr>
+                                            <td>
+                                                @item.certificate
+                                            </td>
+
+
+                                            <td>
+                                                @item.total
+                                            </td>
+
+                                        </tr>
+}
+
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="conditionReport" class="tab-pane ">
+                        <div class="text-left print-logo " style="display:none;">
+
+
+                            <h2>
+                                <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                <span class="pl-3">Activity Condition Report for AttendNow</span>
+                            </h2>
+                            <hr />
+                        </div>
+                        <div class="row animated fadeInDown">
+
+                            <div class="col-lg-12">
+                                <div class="ibox ">
+                                    <div class="ibox-title no-border no-top-padding-print">
+                                        <h5>
+                                            Statistical Analysis Report on Activity Condition
+
+                                        </h5>
+                                        <br />
+                                        <h3 class="dataDate m-0 text-black"><b>(Activity Date: @ViewBag.dataDate)</b></h3>
+
+                                        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="printReportNGraf('Activity Condition', '.reportCondition', 'Activity Condition Report')">Export as PDF</a>
+
+
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row set-row ">
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2">
+
+                                                <h5 class="text-center print-text-small"><b>Activity Condition</b></h5>
+                                                @if (ViewBag.conditionName == "[]" || ViewBag.conditionTotal == "[]")
+                                                {
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+                    <div class="chart-container" style="height:85%">
+                        <canvas id="conditionReportChart"></canvas>
+                    </div>}
+                                            </div>
+
+                                            <div class="col-lg-6 d-flex flex-column align-items-center pt-2 ">
+                                                <h5 class="text-center print-text-small"><b>Activity Condition Trend</b></h5>
+                                                @if (ViewBag.conditionBasedDate == "[]")
+                                                {
+
+
+
+
+                                <div class="p-lg text-center">
+                                    <div class="m-b-md">
+                                        <i class="fa fa-warning fa-4x text-warning "></i>
+                                        <h1 class="m-xs text-danger">No Data</h1>
+
+                                    </div>
+                                </div> }
+                            else
+                            {
+
+                    <canvas id="conditionReportMultipleChart"></canvas>}
+
+                                            </div>
+                                        </div>
+
+                                        <hr />
+                                        <h5 class="pb-3">Activity Condition Report List</h5>
+                                        <div class="table-responsive">
+                                            <div id="DataTables_Table_8_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                                <table class="table table-striped table-bordered table-hover dataTables-example dataTable reportCondition totalDesc " id="DataTables_Table_8" aria-describedby="DataTables_Table_8_info" role="grid">
+                                                    <thead>
+                                                        <tr>
+                                                            <th data-column-name="condition"> Activity Condition </th>
+
+                                                            <th data-column-name="total"> Total Organized Count </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.ConditionReport)
+                                                        {
+                                        <tr>
+                                            <td>
+                                                @item.condition
+                                            </td>
+
+
+                                            <td>
+                                                @item.total
+                                            </td>
+
+                                        </tr>
+}
+
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div> }
+            else
+            {
+@Html.Partial("~/Views/Home/_Error.cshtml")}
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/dataTables/dataTablesStyles")
+
+}
+<script src="/Scripts/plugins/chartJs/Chart.js"></script>
+<script src="/Scripts/plugins/chartJs/chartjs-adapter-date-fns.js"></script>
+@section Scripts {
+    @Scripts.Render("~/plugins/dataTables")
+    @Scripts.Render("~/main")
+<script type="text/javascript">
+     function uploadImg(meeting_code) {
+
+
+        var formData = new FormData();
+
+        // Attachments
+
+         var attachmentsInput = $("#attachments"+"_"+meeting_code)[0];
+
+         if (attachmentsInput && attachmentsInput.files && attachmentsInput.files.length > 0) {
+             var attachments = attachmentsInput.files;
+
+             for (var i = 0; i < attachments.length; i++) {
+                 formData.append("Attachment", attachments[i]);
+             }
+         }
+        // Meeting Data
+        formData.append("meetingData.meeting_code", meeting_code);
+         formData.append("type", "Index");
+
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Meeting/UploadGallery" , // Replace with the actual URL
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.success) {
+                    @*window.location.href = '@Url.Action("MainForm", "Meeting", new { id = "" })' + "/" + data.id;*@
+                    successMessage(data.successMessage);
+                    $("#attachments_MT00026").val(null);
+                    returnMessage = data.successMessage;
+                } else {
+                    errorMessage(data.error_message);
+                    returnMessage = data.error_message;
+
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+        function filterStatus(val) {
+            handleCheckboxChange(val);
+            searchAll('Meeting', '', '@ViewBag.MeetingCode', 'Activity Report', 'Activities', '@Session["timezone"].ToString()');
+
+        }
+        function showCheckboxes() {
+            var checkboxOption = $('#checkboxOption').val();
+
+            switch (checkboxOption) {
+                case 'status':
+                    uncheckAllCheckboxes('typeFilter');
+                    uncheckAllCheckboxes('conditionFilter');
+                    $('#statusCheckboxes').show();
+                    $('#conditionCheckboxes').hide();
+                    $('#typeCheckboxes').hide();
+                    break;
+                case 'condition':
+                    uncheckAllCheckboxes('typeFilter');
+                    uncheckAllCheckboxes('statusFilter');
+                    $('#statusCheckboxes').hide();
+                    $('#conditionCheckboxes').show();
+                    $('#typeCheckboxes').hide();
+                    break;
+                case 'type':
+                    uncheckAllCheckboxes('conditionFilter');
+                    uncheckAllCheckboxes('statusFilter');
+                    $('#statusCheckboxes').hide();
+                    $('#conditionCheckboxes').hide();
+                    $('#typeCheckboxes').show();
+                    break;
+            }
+
+
+        }
+
+
+        var selectedOptions = {};
+        $(document).ready(function () {
+            var url = new URL(window.location.href);
+            var activeParam = url.searchParams.get('active');
+            if (activeParam === 'meeting_report') {
+                $("#meetingGraf").click();
+            }
+            convertTableTimeZone('@Session["timezone"].ToString()');
+            initializeDataTable('Activitys', '.statusAsc','Activity Report');
+            initializeDataTable('Regional Organized ', '.reportMeetingLocation', 'Regional Organized Report');
+            initializeDataTable('Venue Organized ', '.reportPlace', 'Venue Organized Report');
+            initializeDataTable('Activity Privacy Options', '.reportType','Activity Privacy Option Report');
+            initializeDataTable('Activity Modes', '.reportMode', 'Activity Mode Report');
+            initializeDataTable('Activity Types', '.reportMeetingType', 'Activity Type Report');
+            initializeDataTable('Activity Certificate Options', '.reportCertificate','Activity Certificate Option Report');
+            initializeDataTable('Activity Condition', '.reportCondition', 'Activity Condition Report');
+            initializeDataTable('Organized Activitys', '.reportMeeting', 'Organized Activity Report');
+            statusAsc();
+            totalAsc('.reportMeetingLocation ');
+            totalAsc('.reportType');
+            totalAsc('.reportMode');
+            totalAsc('.reportPlace');
+            totalAsc('.reportMeetingType');
+            totalAsc('.reportCertificate');
+            totalAsc('.reportCondition');
+            totalAsc('.reportMeeting');
+            successMessage('@TempData["SuccessMessage"]');
+            errorMessage('@ViewBag.ErrorMessage');
+        });
+
+</script>
+}

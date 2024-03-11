@@ -1,0 +1,347 @@
+﻿@model AttendNow.Models.SP_GetMeetings_Result
+@using AttendNow.Models
+@{
+    var meetingAccess = ViewBag.meetingAccess as sys_setting_role_permission;
+    var participantAccess = ViewBag.participantAccess as sys_setting_role_permission;
+    if (ViewBag.Title == "Add Activity")
+    {
+        if (meetingAccess?.status != true || (meetingAccess?.addFunction != true))
+        {
+
+            <script>
+                    window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+    else
+    {
+        if (meetingAccess?.status != true || (meetingAccess?.editFunction != true && meetingAccess?.viewFunction != true))
+        {
+
+            <script>
+                     window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+
+
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Activity Management</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a>Activity</a>
+            </li>
+            <li class=" breadcrumb-item">
+                <strong>@ViewBag.Title</strong>
+
+            </li>
+        </ol>
+        <!-- Add a primary button -->
+        <a class="btn-sm btn btn-primary mt-2" href="@Url.Action("Index", "Meeting")">Activity List</a>
+        @if ((meetingAccess?.status == true && meetingAccess?.addFunction == true))
+        {
+            <a class="btn-sm btn btn-primary mt-2" href="/Meeting/Mainform">Add New Activity</a>
+        }
+
+    </div>
+</div>
+@if (ViewBag.ErrorMessage == null)
+{
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5 id="titleAction">@ViewBag.Title</h5>
+                        <input type="hidden" id="timezone" value="@Session["timezone"].ToString()"/>
+
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div id="formPartial">
+                            @Html.Partial("_Form")
+                        </div>
+
+
+                        @if (ViewBag.Title != "Add Activity" && ViewBag.ErrorMessage == null)
+
+                        {
+                            <hr />
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">URL<span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <a href="@($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Action("InviteMeeting", new { id = Model.meeting_code })}")" target="_blank">
+                                        @($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Action("InviteMeeting", new { id = Model.meeting_code })}")
+                                    </a>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">QR Code<span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.QrCode)" alt="QR Code for Inviting Activity's Link'" width="150" height="150" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Created Date <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <label class="col-form-label" id="createDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.createDate)</label>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Created By <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <label class="col-form-label">@Model.CreateByName (@Model.createBy.ToUpper())</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Edited Date </label>
+                                <div class="col-sm-10">
+                                    @if (Model.editDate != null)
+                                    {
+                                        <label class="col-form-label" id="editDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.editDate)</label>
+
+                                    }
+                                    else
+                                    {
+                                        <label class="text-danger col-form-label" id="editDate">No Data</label>
+                                    }
+
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Edited By </label>
+                                <div class="col-sm-10">
+                                    @if (Model.editBy != null && !string.IsNullOrEmpty(Model.editBy))
+                                    {
+                                        <label class="col-form-label" id="editBy">@Model.EditByName (@Model.editBy.ToUpper())</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="text-danger col-form-label" id="editBy">No Data</label>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Condition </label>
+                                <div class="col-sm-10">
+                                    <label class="p-xs label @(Model?.condition == "P" ? "label-primary" : (Model.condition == "S" ? "label-warning" : "label-danger"))" id="conditionText">
+                                        @(Model.condition == "P" ? "Pending" : (Model.condition == "S" ? "Started":"Expired"))
+
+                                    </label>
+                                </div>
+                            </div>
+                            if ((meetingAccess?.status == true && meetingAccess?.deleteFunction == true))
+                            {
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Status </label>
+                                    <div class="col-sm-10">
+
+                                        <label class="mt-1">
+                                            <input type="checkbox" id="statusCheckbox" @(Model?.status == "A" ? "checked" : "") class="js-switch" data-switchery="true" onchange="updateStatusWithChecked('Meeting','@Model.meeting_code',this,'','@Session["timezone"].ToString()')" />
+                                        </label><br />
+
+                                        <label class="p-xs label @(Model?.status == "A" ? "label-primary" : (Model.status == "D" ? "label-success" : "label-danger"))" id="statusText">
+                                            @(Model.status == "A" ? "Active" : "Inactive")
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                            if (participantAccess?.status == true)
+                            {
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Participant List </label>
+                                    <div class="col-sm-10">
+                                        @Html.ActionLink("Get Participant List", "Index", "Participant", new { id = Model.meeting_code }, new { @class = "btn btn-success" })
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                        @if (Model?.condition == "E")
+
+
+                        {
+                            <hr />
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Upload Activity Gallery </label>
+                            <div class="col-sm-10">
+                                
+                                        <input name="attachments" id="attachments" type="file" multiple />
+                                   
+                            </div>
+                        </div>
+
+                        <section class="progress-demo">
+                            <button class="ladda-button btn btn-primary" data-style="zoom-in"
+                                    onclick="uploadImg('@Model.meeting_code')">
+                                Upload
+                            </button>
+                        </section>
+
+                        }
+                        @if (ViewBag.meetingGallery != null && ViewBag.meetingGallery.Count > 0)
+                        {
+                            <div class="ibox-content border-0">
+                                <center><h3 class="pb-2">Activity Gallery</h3></center>
+                                <div class="row">
+                                    @foreach (var item in ViewBag.meetingGallery)
+                                    {
+                                        <div class="col-md-4 mb-4" id="@item.filename">
+                                            <div style="position: relative;">
+                                                <img src="@item.path@item.filename.@item.format" alt="@item.filename.@item.format" class="img-fluid gallery-image" style="max-width: 100%; height: auto; border-radius: 5px;">
+                                                <button type="button" class="btn btn-danger btn-sm delete-icon" style="position: absolute; top: 0; right: 0;" onclick="deleteImage('@item.filename', '@item.format', '@item.meeting_code')">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <a href="@Url.Action("Index", "Meeting")" class="btn btn-white mt-2"><i class="fa fa-arrow-left"></i> Back</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @Html.Partial("~/Views/Home/_Error.cshtml")
+}
+
+@section Styles {
+    @Styles.Render("~/plugins/summernoteStyles")
+    @Styles.Render("~/plugins/switcheryStyles")
+    @Styles.Render("~/plugins/tagInputsStyles")
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+    @Styles.Render("~/plugins/laddaStyles")
+
+   
+    @Styles.Render("~/plugins/jasnyBootstrapStyles")
+    @Styles.Render("~/plugins/codeEditorStyles")
+}
+
+@section Scripts {
+    
+    @Scripts.Render("~/plugins/ladda")
+    @Scripts.Render("~/plugins/summernote")
+    @Scripts.Render("~/plugins/switchery")
+    @Scripts.Render("~/plugins/tagInputs")
+    @Scripts.Render("~/main")
+    @Scripts.Render("~/plugins/iCheck")
+
+
+   
+    @Scripts.Render("~/plugins/jasnyBootstrap")
+    @Scripts.Render("~/plugins/codeEditor")
+
+<script type="text/javascript">
+    function uploadImg(meeting_code) {
+
+
+        var formData = new FormData();
+
+        // Attachments
+
+        var attachmentsInput = $("#attachments")[0];
+
+        if (attachmentsInput && attachmentsInput.files && attachmentsInput.files.length > 0) {
+            var attachments = attachmentsInput.files;
+
+            for (var i = 0; i < attachments.length; i++) {
+                formData.append("Attachment", attachments[i]);
+            }
+        }
+        
+        // Meeting Data
+        formData.append("meetingData.meeting_code", meeting_code);
+      
+
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Meeting/UploadGallery" , // Replace with the actual URL
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.success) {
+                    window.location.href = '@Url.Action("MainForm", "Meeting", new { id = "" })' + "/" + data.id;
+                    successMessage(data.successMessage);
+                    returnMessage = data.successMessage;
+                } else {
+                    errorMessage(data.error_message);
+                    returnMessage = data.error_message;
+
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+        function deleteImage(filename,format,meeting_code) {
+
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Meeting/DeleteImage", // Replace with the actual URL
+            data: JSON.stringify({ fileName: filename,format:format, meeting_code: meeting_code }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    successMessage(data.message);
+                    $('#' + filename).remove();
+
+                } else {
+                    errorMessage(data.error_message);
+                    returnMessage = data.error_message;
+
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+        }
+
+        $(document).ready(function () {
+            convertTimeZoneGeneral('@Session["timezone"].ToString()');
+        successMessage('@TempData["SuccessMessage"]');
+       errorMessage('@ViewBag.ErrorMessage');
+
+
+        });
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
+
+        var elem = document.querySelector('.js-switch');
+        var switchery = new Switchery(elem, { color: '#1AB394' });
+</script>
+
+
+
+}
+

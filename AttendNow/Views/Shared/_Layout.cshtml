@@ -1,0 +1,120 @@
+﻿@{
+    // Retrieve the title data from the hidden input field
+    var titleData = Request.Form["titleData"];
+}
+@if (Session["user_id"] == null)
+{
+    <script>
+       window.location.href = '@Url.Action("Logout", "User")';
+    </script>
+}
+
+<!DOCTYPE html>
+<html>
+
+@if (IsSectionDefined("Styles"))
+{@RenderSection("Styles", required: false)}
+@Html.Partial("~/Views/Shared/_Header.cshtml")
+
+
+<body>
+    
+
+    <div id="informMessage" class="alert alert-success animated bounceInRight noprint" style="display:none;"></div>
+    <div id="errorMessage" class="alert alert-danger animated shake noprint" style="display:none;"></div>
+
+    <!-- Wrapper-->
+    <!-- PageClass give you ability to specify custom style for specific view based on action -->
+    <div id="wrapper" class="">
+
+        <!-- Navigation -->
+        @* @Html.Partial("_Navigation")*@
+        @if (Session["user_id"] == null)
+        {
+            @Url.Action("Navigation", "Home")
+        }
+        else
+        {
+            @Html.Action("Navigation", "Home")
+        }
+        @*@Html.Action("Navigation", "Home")*@
+        <!-- Page wraper -->
+        <div id="page-wrapper" class="gray-bg @ViewBag.SpecialClass">
+
+            <!-- Top Navbar -->
+            @Html.Partial("_TopNavbar")
+
+            <!-- Main view  -->
+            @RenderBody()
+            <div class="modal fade" id="updateStatusConfirmation" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to change the status?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancel</button>
+                           
+                            <section class="progress-demo">
+                                <button class="btn btn-primary ladda-button" data-style="zoom-in" id="confirmChange">Yes</button>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            @Html.Partial("_Footer")
+
+        </div>
+        <!-- End page wrapper-->
+
+
+    </div>
+    <!-- End wrapper-->
+    <!-- Section for main scripts render -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/plugins/slimScroll")
+    @Scripts.Render("~/bundles/inspinia")
+    @Styles.Render("~/plugins/laddaStyles")
+    @Scripts.Render("~/plugins/ladda")
+    <script>$('[data-toggle="tooltip"]').tooltip()</script>
+
+    <!-- Skin config script - only for demo purpose-->
+    @Scripts.Render("~/bundles/skinConfig")
+
+    <!-- Handler for local scripts -->
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+<script type="text/javascript">
+     returnMessage="";
+    $(document).ready(function () {
+        
+            errorMessage('@TempData["ErrorMessage"]');
+        Ladda.bind('.progress-demo .ladda-button', {
+            callback: function (instance) {
+
+                var interval = setInterval(function () {
+                    console.log(returnMessage);
+          
+                    if (returnMessage!="") {
+                        instance.stop();
+                        clearInterval(interval);
+                        returnMessage = "";
+                    }
+                }, 200);
+            }
+        });
+    });
+
+</script>

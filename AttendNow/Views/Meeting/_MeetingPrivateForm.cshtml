@@ -1,0 +1,91 @@
+﻿@model AttendNow.Models.SP_GetMeetings_Result
+
+
+
+
+@using (Html.BeginForm("", "", FormMethod.Post))
+{
+
+
+    <div class="form-group">
+        <h4 class="text-danger">This is a private @(Model.meeting_type == "M" ? "meeting / discussion" : Model.meeting_type == "E" ? "event" : "training"). Please enter the password to access.</h4>
+        <input type="hidden" id="meeting_code" value="@Model.meeting_code" placeholder="Enter Password" />
+        <input id="password" name="password" type="password" class="form-control" placeholder="Enter Password"
+               onKeypress="if(event.keyCode === 13){funcAccessPrivate()}">
+        <span id="password_error" class="text-danger"></span>
+    </div>
+
+
+}
+<section class="progress-demo">
+    <button class="ladda-button btn btn-block btn-primary" data-style="zoom-in" onclick="funcAccessPrivate()">Enter Password</button>
+    </section>
+    @Scripts.Render("~/plugins/ladda")
+    @Styles.Render("~/plugins/laddaStyles")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/main")
+    <script>
+    $(document).ready(function () {
+        Ladda.bind('.progress-demo .ladda-button', {
+            callback: function (instance) {
+
+                var interval = setInterval(function () {
+
+                    if (returnMessage != "") {
+                        instance.stop();
+                        clearInterval(interval);
+                        returnMessage = "";
+                    }
+                }, 200);
+            }
+        });
+    });
+
+
+
+         function funcAccessPrivate() {
+
+                // Your validation and AJAX code here
+                var isValid = true; // Flag to check overall form validity
+
+
+                if (!validateField("password", "Password field is required.")) {
+                    isValid = false;
+                }
+                if (!isValid) {
+                    errorMessage("Please make sure all required fields are filled");
+                    returnMessage = "Please make sure all required fields is filled";
+                    return;
+                }
+                var meeting_code = $("#meeting_code").val();
+                var password = $("#password").val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AccessPrivateMeeting", "Meeting")',
+                    data: { meeting_code: meeting_code ,password:password},
+                    success: function (data) {
+                        if (data.success) {
+
+                            window.location.href = '@Url.Action("InviteMeeting", "Meeting", new { id = "" })' + "/" +meeting_code;
+                        } else {
+                            errorMessage(data.error_message);
+                            returnMessage = data.error_message;
+                            if (data.error_message) {
+                                $("#password").parent().addClass("has-error");
+                            } else {
+                                $("#password").parent().removeClass("has-error");
+                            }
+                        }
+                    },
+                    error: function (data) {
+                        errorMessage(data.error_message);
+                    }
+                });
+            }
+
+
+    </script>
+
+  

@@ -1,0 +1,511 @@
+﻿
+
+@model AttendNow.Models.SP_GetParticipants_Result
+@{
+    Layout = null;
+    ViewBag.Title = "Meeting History";
+}
+<!DOCTYPE html>
+<html>
+
+@Html.Partial("~/Views/Shared/_Header.cshtml")
+
+
+<body class="gray-bg">
+    <div id="informMessage" class="noprint alert alert-success animated bounceInRight" style="display:none;"></div>
+    <div id="errorMessage" class="noprint alert alert-danger animated shake" style="display:none;"></div>
+    @if (ViewBag.ErrorMessage == null)
+    {
+        if (Model.status == "P")
+        {
+<div class="wrapper wrapper-content  animated fadeInRight article short-padding certificate pl-5">
+
+    <div class="text-left  ">
+
+
+        <h2>
+            <img src="~/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+            <span class="pl-3">Thank you for joining <b>@Model.meeting_title</b></span>
+        </h2>
+    </div>
+    <div class="form-group alert alert-danger">
+        Registration unsuccessful due to full capacity or other specific cause, but your record has been saved in our system. If there are any changes, We will update you with any relevant information.
+    </div>
+    <a href="@Url.Action("InviteMeeting", "Meeting", new { id = Model.meeting_code }, Request.Url.Scheme)" class="btn btn-white mt-2"><i class="fa fa-arrow-left"></i> Back</a>
+</div> }
+        else
+        {
+
+<div class="modal fade" id="filter-model" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog print-certificate" role="document">
+        <div class="modal-content">
+            <div class="modal-header noprint">
+                <h4 class="modal-title" id="confirmationModalLabel">Certificate of Completion</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            @if (Model.meeting_condition != "E")
+                            {
+            <h2 class="text-danger">Certificate in Progress...</h2> }
+                            else
+                            {
+<div class="row text-center">
+    <div class="col-sm-12">
+
+        <img class="pull-right certificate-logo" src="~/Content/logo.png">
+
+    </div>
+    <div class="col-sm-12">
+
+        <p class="certificate-header m-0">CERTIFICATE </p>
+        <p class="certificate-sub-header m-0">OF COMPLETION</p>
+    </div>
+    <div class="col-sm-12 mt-5">
+        <p class="certificate-content">The Certificate is Proudly Presented to: </p>
+    </div>
+
+    <div class="col-sm-12">
+        <b class="certificate-participant-name">@Model.name</b>
+    </div>
+    <div class="col-sm-12 mt-3">
+        <b class="certificate-content">From </b>
+        <p class="certificate-content">@Model.DepartmentName, <br />@Model.LocationName</p>
+    </div>
+    <div class="col-sm-12 mt-3">
+        <p class="certificate-content"><b>For Joining</b></p>
+    </div>
+    <div class="col-sm-12 ">
+        <p class="certificate-title">@Model.meeting_title</p>
+    </div>
+    <div class="col-sm-12 mt-3">
+        <p class="certificate-content">Activity Code: <b>@Model.meeting</b></p>
+    </div>
+
+    <div class="col-sm-12 ">
+        <p class="certificate-content">Organizated By: <b>@Model.meeting_organizer</b> <br /><i>@Model.meeting_DepartmentName Department, @Model.meeting_LocationName</i></p>
+    </div>
+
+    <div class="col-sm-12 mt-3">
+        <p class="certificate-content"><b>@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.meeting_startDate) <br />to<br /> @string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.meeting_endDate)</b> </p>
+    </div>
+
+
+
+    <div class="col-sm-12 mt-3">
+        <p class="certificate-content">Certificate Registration No. <b>@Model.certificate_no</b></p>
+    </div>
+
+
+
+    @*<div class="col-sm-12 mt-2">
+            <img class="certificate-sign" src="~/Content/sign.png">
+        </div>*@
+
+</div>}
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer noprint">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                @if (Model.meeting_condition == "E")
+                {<button type="button" class="btn btn-success" onclick="exportCertificate()">Download</button>}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                <div class="wrapper wrapper-content  animated fadeInRight article short-padding certificate">
+
+                    <div class="row justify-content-md-center short-padding">
+
+                        <div class="col-lg-10 short-padding">
+                            <div class="ibox">
+
+                                <div class="ibox-content short-padding ">
+
+                                    <div class="text-left  ">
+
+
+                                        <h2>
+                                            <img src="~/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                            <span class="pl-3">Thank you for joining <b>@Model.meeting_title</b></span>
+                                        </h2>
+                                    </div>
+                                    <hr />
+
+                                    <h3>
+
+                                        Your Information
+
+                                    </h3>
+                                    <hr />
+
+
+                                    <div class="row pb-3">
+
+                                        <div class="col-lg-6">
+
+
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Staff No. : </b> </div>
+                                                <div class="col-sm-8 text-sm-left">@Model.staff_no.ToUpper() </div>
+                                            </div>
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Name : </b> </div>
+                                                <div class="col-sm-8 text-sm-left">@Model.name </div>
+                                            </div>
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Department :</b> </div>
+                                                <div class="col-sm-8 text-sm-left">@Model.DepartmentName (@Model.department.ToUpper())</div>
+                                            </div>
+
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Location :</b> </div>
+                                                <div class="col-sm-8 text-sm-left">@Model.LocationName (@Model.location.ToUpper())</div>
+                                            </div>
+
+
+
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Activity <br />Participation Record <br />QR Code :</b> </div>
+                                                <div class="col-sm-8 text-sm-left">
+                                                    <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.QR_MeetingHistory)" alt="QR Code for Activity History" width="150" height="150" />
+
+
+                                                </div>
+                                            </div>
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Activity <br />Participation Record <br />URL :</b> </div>
+                                                <div class="col-sm-8 text-sm-left text-hide-long ">
+                                                    <a href="@($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Action("MeetingHistory", new { id = Model.certificate_no })}")" target="_blank">
+                                                        @($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Action("MeetingHistory", new { id = Model.certificate_no })}")
+                                                    </a>
+
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                        <div class="col-lg-6" id="cluster_info">
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right">
+                                                    <dt>Email :</dt>
+                                                </div>
+                                                <div class="col-sm-8 text-sm-left">
+                                                    @if (Model.email != null && !string.IsNullOrEmpty(Model.email))
+                                                    {
+                                    @Model.email }
+                                                    else
+                                                    {
+                <span class="text-danger">No Data</span>}
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right">
+                                                    <dt>Mobile :</dt>
+                                                </div>
+                                                <div class="col-sm-8 text-sm-left">
+                                                    @if (Model.mobile != null && !string.IsNullOrEmpty(Model.mobile))
+                                                    {
+                                    @Model.mobile }
+                                                    else
+                                                    {
+                <span class="text-danger">No Data</span>}
+
+
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right">
+                                                    <dt>Remark :</dt>
+                                                </div>
+                                                <div class="col-sm-8 text-sm-left">
+                                                    @if (Model.remark != null && !string.IsNullOrEmpty(Model.remark))
+                                                    {
+                                    <div class="bg-muted p-2">@Html.Raw(Model.remark)</div> }
+                                                    else
+                                                    {
+                <span class="text-danger">No Data</span>}
+
+                                                </div>
+                                            </div>
+                                            @if (Model.meeting_certificate == true)
+                                            {
+                            <div class="row mb-0 p-1">
+                                <div class="col-sm-4 text-sm-right">
+                                    <dt>Certificate :</dt>
+                                </div>
+                                <div class="col-sm-8 text-sm-left">
+                                    @Model.certificate_no
+                                    <br />  <br />
+                                    @if (Model.meeting_condition != "E")
+                                    {
+
+
+                <button value="" class="btn btn-danger disabled noprint">Certificate in Progress</button> }
+                                    else
+                                    {
+<input type="button" onclick="goCertificate()" class="btn btn-success noprint" value="Get Certificate" />}
+
+                                </div>
+                            </div>}
+
+
+
+
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h3>
+
+                                        Joined Activity's Information
+
+                                    </h3>
+                                    <hr />
+                                    <div class="row pb-3">
+
+                                        <div class="col-lg-6">
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Activity Code : </b> </div>
+                                                <div class="col-sm-8 text-sm-left">@Model.meeting_code </div>
+                                            </div>
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Activity Title : </b> </div>
+                                                <div class="col-sm-8 text-sm-left">@Model.meeting_title </div>
+                                            </div>
+
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Activity Presenter :</b> </div>
+                                                <div class="col-sm-8 text-sm-left">@Model.meeting_organizer (@Model.meeting_DepartmentName Department, @Model.meeting_LocationName)</div>
+                                            </div>
+
+
+                                            @if (Model.meeting_place != null && !string.IsNullOrEmpty(Model.meeting_place) && Model.meeting_link != null && !string.IsNullOrEmpty(Model.meeting_link))
+                                            {
+                            <div class="row mb-0 p-1">
+                                <div class="col-sm-4 text-sm-right"><b>Activity Venue :</b> </div>
+                                <div class="col-sm-8 text-sm-left">@Model.meeting_place </div>
+                            </div>
+
+                                                <div class="row mb-0 p-1">
+                                                    <div class="col-sm-4 text-sm-right"><b>Online Activity<br /> URL :</b> </div>
+                                                    <div class="col-sm-8 text-sm-left p-0">
+                                                        <div class="bg-muted p-2">@Html.Raw(Model.meeting_link)</div>
+                                                    </div>
+                                                </div>
+                                                                    <div class="row mb-0 p-1">
+                                                                        <div class="col-sm-4 text-sm-right"><b>Online Activity<br /> QR Code :</b> </div>
+                                                                        <div class="col-sm-8 text-sm-left">
+
+                                                                            <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.QR_OnlineMeeting)" alt="QR Code for Online Meeting" width="150" height="150" />
+
+
+                                                                        </div>
+                                                                    </div> }
+                                            else if (Model.meeting_link != null && !string.IsNullOrEmpty(Model.meeting_link))
+                                            {
+                                                <div class="row mb-0 p-1">
+                                                    <div class="col-sm-4 text-sm-right"><b>Online Activity<br /> URL :</b> </div>
+                                                    <div class="col-sm-8 text-sm-left">
+                                                        <div class="bg-muted p-2">@Html.Raw(Model.meeting_link)</div>
+
+                                                    </div>
+                                                </div>
+
+                                                                    <div class="row mb-0 p-1">
+                                                                        <div class="col-sm-4 text-sm-right"><b>Online Activity <br />QR Code :</b> </div>
+                                                                        <div class="col-sm-8 text-sm-left">
+                                                                            <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.QR_OnlineMeeting)" alt="QR Code for Online Meeting" width="150" height="150" />
+
+
+                                                                        </div>
+                                                                    </div> }
+                                            else if (Model.meeting_place != null && !string.IsNullOrEmpty(Model.meeting_place))
+                                            {
+                                                <div class="row mb-0 p-1">
+                                                    <div class="col-sm-4 text-sm-right"><b>Activity Venue :</b> </div>
+                                                    <div class="col-sm-8 text-sm-left">@Model.meeting_PlaceName </div>
+                                                </div>}
+
+
+
+
+
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right">
+                                                    <b>Activity Invitation <br /> URL :</b>
+                                                </div>
+                                                <div class="col-sm-8 text-sm-left text-hide-long  ">
+                                                    <a href=" @Url.Action("InviteMeeting", "Meeting", new { id = Model.meeting_code }, Request.Url.Scheme)" target="_blank">
+                                                        @Url.Action("InviteMeeting", "Meeting", new { id = Model.meeting_code }, Request.Url.Scheme)
+
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-6" id="cluster_info">
+                                            @* <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"><b>Timezone : </b> </div>
+            <div class="col-sm-8 text-sm-left">
+                <select id="timezone" class="form-control" onchange="changeTimezone('@Model.meeting_startDate','@Model.meeting_endDate')" onselect="changeTimezone('@Model.meeting_startDate','@Model.meeting_endDate')">
+
+                    <option value="M" @(Model.meeting_timezone=="M"?"selected":"")> Malaysia / Singapore / China </option>
+                    <option value="V" @(Model.meeting_timezone=="V"?"selected":"")> Vietnam / Cambodia </option>
+                    <option value="J" @(Model.meeting_timezone=="J"?"selected":"")> Jordan </option>
+                </select>
+                <span class="text-warning noprint">*Choose timezone for local time.</span>
+            </div>
+        </div>
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"><b>Start Time : </b> </div>
+            <div class="col-sm-8 text-sm-left" id="startTime">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.meeting_startDate) </div>
+        </div>
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"><b>End Time : </b> </div>
+            <div class="col-sm-8 text-sm-left" id="endTime">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.meeting_endDate) </div>
+        </div>*@
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Timezone : </b> </div>
+                                                <div class="col-sm-8 text-sm-left">
+                                                    @(Model.meeting_timezone == "M" ? "Malaysia / Singapore / China" : Model.meeting_timezone == "V" ? "Vietnam / Cambodia" : Model.meeting_timezone == "J" ? "Jordan":"")
+
+                                                </div>
+                                            </div>
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>Start Time : </b> </div>
+                                                <div class="col-sm-8 text-sm-left" id="startTimeMeeting">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.meeting_startDate) </div>
+                                            </div>
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right"><b>End Time : </b> </div>
+                                                <div class="col-sm-8 text-sm-left" id="endTimeMeeting">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.meeting_endDate) </div>
+                                            </div>
+                                            <div class="row mb-0 p-1">
+                                                <div class="col-sm-4 text-sm-right">
+                                                    <dt>Type :</dt>
+                                                </div>
+                                                <div class="col-sm-8 text-sm-left">
+                                                    @(Model.meeting_type.HasValue && Model.meeting_type == true ? "Private" : "Public")
+                                                </div>
+                                            </div>
+                                            @if (Model.meeting_remark != null && !string.IsNullOrEmpty(Model.meeting_remark))
+                                            {
+                                                <div class="row mb-0 p-1">
+                                                    <div class="col-sm-4 text-sm-right">
+                                                        <dt>Remark :</dt>
+                                                    </div>
+                                                    <div class="col-sm-8 text-sm-left">
+                                                        <div class="bg-muted p-2">@Html.Raw(Model.meeting_remark)</div>
+
+                                                    </div>
+                                                </div>}
+
+
+                                            <div class="row mb-0 p-1 noprint">
+                                                <div class="col-sm-4 text-sm-right">
+                                                    <dt>Share:</dt>
+                                                </div>
+                                                <div class="col-sm-8 text-sm-left">
+                                                    <a href="mailto:?subject=Inviting%20You%20To%20Join%20Our%20Meeting&body=Hey%20there!%20I%20wanted%20to%20invite%20you%20to%20join%20our%20upcoming%20meeting.%20Here's%20the%20link:%20@($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Action("InviteMeeting", new { id = Model.meeting_code })}")" target="_blank">
+                                                        <i class="fa fa-2x fa-envelope p-1 text-body"></i>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                            <div class="row mb-0 p-1 noprint">
+                                                <div class="col-sm-4 text-sm-right">
+                                                    <dt>Add <br />Calendar:</dt>
+                                                </div>
+                                                <div class="col-sm-8 text-sm-left">
+                                                    <a href="@ViewBag.googleCalendarUrl" target="_blank">
+                                                        <i class="fa fa-2x fa-calendar p-1 text-body"></i>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+
+                                            
+                                            <div class="border ml-5 mt-3 p-2 noprint">
+                                                <b>Timezone Checking:</b>
+                                                <hr class="mt-2"/>
+                                                <div class="row mb-0 p-1">
+                                                    <div class="col-sm-4 text-sm-right"><b>Timezone : </b> </div>
+                                                    <div class="col-sm-8 text-sm-left">
+                                                        <select id="timezone" class="form-control" onchange="changeTimezone('@Model.meeting_startDate','@Model.meeting_endDate')" onselect="changeTimezone('@Model.meeting_startDate','@Model.meeting_endDate')">
+
+                                                            <option value="M" @(Model.meeting_timezone == "M" ? "selected" : "")> Malaysia / Singapore / China </option>
+                                                            <option value="V" @(Model.meeting_timezone == "V" ? "selected" : "")> Vietnam / Cambodia </option>
+                                                            <option value="J" @(Model.meeting_timezone == "J" ? "selected" : "")> Jordan </option>
+                                                        </select>
+                                                        <span class="text-warning noprint">*Choose timezone for local time.</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-0 p-1">
+                                                    <div class="col-sm-4 text-sm-right"><b>Start Time : </b> </div>
+                                                    <div class="col-sm-8 text-sm-left" id="startTime">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.meeting_startDate) </div>
+                                                </div>
+                                                <div class="row mb-0 p-1">
+                                                    <div class="col-sm-4 text-sm-right"><b>End Time : </b> </div>
+                                                    <div class="col-sm-8 text-sm-left" id="endTime">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.meeting_endDate) </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <input type="button" class="btn btn-danger mt-3 noprint btn-block" onclick="window.print();" value="Export as PDF">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+        }
+    }
+    else
+    {
+        @Html.Partial("~/Views/Home/_Error.cshtml")
+    }
+</body>
+</html>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+
+@if (ViewBag.ErrorMessage == null)
+{
+<script>
+          $(document).ready(function () {
+              //timezone checking
+     changeTimezone('@Model.meeting_startDate', '@Model.meeting_endDate');
+
+     //meeting timezone
+     checkTimeZone('@Model.meeting_timezone', '@Model.meeting_startDate', '@Model.meeting_endDate');
+            successMessage('@TempData["SuccessMessage"]');
+            errorMessage('@ViewBag.ErrorMessage');
+        });
+
+</script>
+
+}

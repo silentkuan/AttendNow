@@ -1,0 +1,236 @@
+﻿
+@model List<SP_GetParticipants_Result>
+@using AttendNow.Models
+
+
+@{
+
+    var participantAccess = ViewBag.participantAccess as sys_setting_role_permission;
+
+    if (participantAccess?.status != true)
+    {
+
+        <script>
+
+        window.location.href = '@Url.Action("Logout", "User")';
+        </script>
+    }
+    
+
+
+}
+<div class="row wrapper border-bottom white-bg page-heading noprint">
+    <div class="col-lg-10">
+        <h2>Participant Management</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a>Participant</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>View Participant Detail</strong>
+
+            </li>
+        </ol>
+        <!-- Add a primary button -->
+
+        @if ((participantAccess?.status == true && participantAccess?.addFunction == true))
+        {
+            <a class="btn-sm btn btn-primary mt-2 noprint" href="/Participant/Mainform">Add New Participant</a>
+        }
+        <a class="btn-sm btn btn-danger mt-2 text-white noprint" onclick="window.print();">Export as PDF</a>
+
+    </div>
+</div>
+<div class="text-left print-logo " style="display:none;">
+
+
+    <h2>
+        <img src="/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+        <span class="pl-3">Report of Participant</span>
+    </h2>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight short-padding">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title no-border ">
+                    <h5>Participant Detail</h5>
+
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up noprint"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content ">
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Staff No. </label>
+                        <div class="col-sm-10">
+                            <label class="col-form-label">@Model[0].staff_no.ToUpper()</label>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Name </label>
+                        <div class="col-sm-10">
+                            <label class="col-form-label">@Model[0].name</label>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Department</label>
+                        <div class="col-sm-10">
+                            <label class="col-form-label">@Model[0].DepartmentName (@Model[0].department.ToUpper())</label>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Location</label>
+                        <div class="col-sm-10">
+                            <label class="col-form-label">@Model[0].LocationName (@Model[0].location.ToUpper()) </label>
+
+                        </div>
+                    </div>
+                    <div class="ibox ">
+                        <div class="ibox-title border-0">
+                            <span class="float-right">Total: <strong>@Model.Count() Activities</strong></span>
+                            <h5>Participant's Activitys History</h5>
+                        </div>
+
+                        @foreach (var item in Model)
+                        {
+                            <div class="ibox-content">
+
+
+                                <div class="table-responsive">
+                                    <table class="table shoping-cart-table">
+
+                                        <tbody>
+                                            <tr>
+
+                                                <td class="desc">
+
+
+                                                    <h4><b class="text-monospace">@item.meeting_code </b></h4>
+
+                                                    
+                                                        <h3> @item.meeting_title </h3>
+                                                   
+
+
+                                                        <div class="m-t-sm">
+                                                            <p href="#" class="text-muted"><i class="fa fa-certificate mr-2"></i>  @item.certificate_no</p>
+                                                            <p href="#" class="text-muted"><i class="fa fa-clock-o mr-2"></i>  <span class="startDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", item.meeting_startDate)</span> to <span class="endDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", item.meeting_endDate)</span> </p>
+                                                            <p href="#" class="text-muted"><i class="fa fa-user mr-2"></i>  @item.meeting_organizer (@item.meeting_DepartmentName Department, @item.meeting_LocationName)</p>
+                                                            @if (item.meeting_place != null && !string.IsNullOrEmpty(item.meeting_place) && item.meeting_link != null && !string.IsNullOrEmpty(item.meeting_link))
+                                                            {
+                                                                <p href="#" class="text-muted"><i class="fa fa-thumb-tack mr-2"></i>  @item.meeting_PlaceName</p>
+                                                                <p href="#" class="text-muted"><i class="fa fa-globe mr-2"></i> Online: <div class="bg-muted p-2">@Html.Raw(item.meeting_link)</div> </p>
+                                                            }
+                                                            else if (item.meeting_link != null && !string.IsNullOrEmpty(item.meeting_link))
+                                                            {
+                                                                <p href="#" class="text-muted"><i class="fa fa-globe mr-2"></i> Online: <div class="bg-muted p-2">@Html.Raw(item.meeting_link)</div></p>
+                                                            }
+                                                            else if (item.meeting_place != null && !string.IsNullOrEmpty(item.meeting_place))
+                                                            {
+                                                                <p href="#" class="text-muted"><i class="fa fa-thumb-tack mr-2"></i>  @item.meeting_PlaceName</p>
+                                                            }
+
+
+                                                            <p href="#" class="text-muted"><i class="@(item.meeting_type.HasValue && item.meeting_type == true ? "fa fa-lock" : "fa fa-unlock") mr-2"></i>  @(item.meeting_type.HasValue && item.meeting_type == true ? "Private" : "Public")</p>
+
+                                                            @if (item.meeting_remark != null && !string.IsNullOrEmpty(item.meeting_remark))
+                                                            {
+                                                                <p href="#" class="text-muted"><i class="fa fa-clone mr-2"></i> Remark:<div class="bg-muted p-2">@Html.Raw(item.meeting_remark)</div> </p>
+                                                            }
+                                                           
+                                                            @if (item.createDate != null)
+                                                            {
+                                                        <p href="#" class="text-muted"><i class="fa fa-check-circle mr-2"></i>  <span class="createDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", item.createDate)</span></p>
+                                                            }
+
+                                                            <a class="btn-sm btn btn-success mt-2 noprint" href="@Url.Action("MainForm", "Participant",new { id =item.certificate_no})" target="_blank">Detail</a>
+
+                                                        </div>
+                                                </td>
+
+
+                                                <td>
+                                                    @if (item.meeting_certificate ==true) { 
+                                                if (item.meeting_condition != "E")
+                                                {
+
+
+                                                <a class="btn-sm btn btn-danger mt-2 noprint text-white disabled" style="width:160px;">Certificate in Progress</a> }
+                                                                    else
+                                                                    {
+                                                <a class="btn-sm btn btn-primary mt-2 noprint" style="width:160px;" href="@Url.Action("MeetingHistory", "Participant",new { id =item.certificate_no})" target="_blank">Get Certificate</a>}
+                                                
+                                                }
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        }
+                    <div class="ibox-content noprint">
+
+                        <a href="@Url.Action("Index", "Participant")" class="btn btn-white mt-2"><i class="fa fa-arrow-left"></i> Back</a>
+
+                    </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/plugins/summernoteStyles")
+    @Styles.Render("~/plugins/switcheryStyles")
+    @Styles.Render("~/plugins/tagInputsStyles")
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/summernote")
+    @Scripts.Render("~/plugins/switchery")
+    @Scripts.Render("~/plugins/tagInputs")
+    @Scripts.Render("~/main")
+    @Scripts.Render("~/plugins/iCheck")
+
+<script type="text/javascript">
+
+
+
+        $(document).ready(function () {
+        successMessage('@TempData["SuccessMessage"]');
+        errorMessage('@TempData["ErrorMessage"]');
+        convertTableTimeZone('@Session["timezone"].ToString()');
+        });
+
+
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
+
+        var elem = document.querySelector('.js-switch');
+        var switchery = new Switchery(elem, { color: '#1AB394' });
+</script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

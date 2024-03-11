@@ -1,0 +1,159 @@
+﻿@model AttendNow.Models.SP_GetMeetings_Result
+<h2>
+
+    <b>@(Model.meeting_type == "M" ? "Meeting / Discussion" : Model.meeting_type == "E" ? "Event" : "Training") Title:</b> @Model.title
+
+</h2>
+<hr />
+
+<div class="row pb-3">
+
+    <div class="col-lg-6">
+
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"><b>Activity Code : </b> </div>
+            <div class="col-sm-8 text-sm-left">@Model.meeting_code </div>
+        </div>
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"><b>Timezone : </b> </div>
+            <div class="col-sm-8 text-sm-left">
+                @(Model.meeting_timezone == "M" ? "Malaysia / Singapore / China" : Model.meeting_timezone == "V" ? "Vietnam / Cambodia" : Model.meeting_timezone == "J" ? "Jordan":"")
+               
+            </div>
+        </div>
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"><b>Start Time : </b> </div>
+            <div class="col-sm-8 text-sm-left" id="startTimeMeeting">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.startDate) </div>
+        </div>
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"><b>End Time : </b> </div>
+            <div class="col-sm-8 text-sm-left" id="endTimeMeeting">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.endDate) </div>
+        </div>
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"><b>Presenter :</b> </div>
+            <div class="col-sm-8 text-sm-left">@Model.organizer (@Model.DepartmentName Department, @Model.LocationName)</div>
+        </div>
+
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"> <b>Venue :</b></div>
+            <div class="col-sm-8 text-sm-left">
+
+                @if (Model.place != null && !string.IsNullOrEmpty(Model.place) && Model.link != null && !string.IsNullOrEmpty(Model.link))
+                {
+                    <span>
+                        @Model.placeName <br /><small>OR</small><br /> Online
+                    </span>
+                }
+                else if (Model.link != null && !string.IsNullOrEmpty(Model.link))
+                {
+                    <span>Online</span>
+                }
+                else if (Model.place != null && !string.IsNullOrEmpty(Model.place))
+                {
+                    <span>
+                        @Model.placeName
+                    </span>
+                }
+
+            </div>
+        </div>
+
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right">
+                <div><b>Invite Activity URL :</b></div>
+            </div>
+            <div class="col-sm-8 text-sm-left text-hide-long  ">
+                <a href="@($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Action("InviteMeeting", new { id = Model.meeting_code })}")" target="_blank">
+                    @($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Action("InviteMeeting", new { id = Model.meeting_code })}")
+                </a>
+            </div>
+        </div>
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right"> <b>Invite Activity <br />QR Code :</b></div>
+            <div class="col-sm-8 text-sm-left">
+                <img src="data:image/png;base64,@Convert.ToBase64String(ViewBag.QrCode)" alt="QR Code for Inviting Activity's Link'" width="150" height="150" />
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-lg-6" id="cluster_info">
+
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right">
+                <div><b>Type :</b></div>
+            </div>
+            <div class="col-sm-8 text-sm-left">
+                @(Model.meeting_type == "M" ? "Meeting / Discussion" : Model.meeting_type == "E" ? "Event" : "Training")
+            </div>
+        </div>
+
+        <div class="row mb-0 p-1">
+            <div class="col-sm-4 text-sm-right">
+                <div><b>Privacy Option :</b></div>
+            </div>
+            <div class="col-sm-8 text-sm-left">
+                @(Model.type.HasValue && Model.type == true ? "Private" : "Public")
+            </div>
+        </div>
+
+        <div class="row mb-0 p-1 noprint">
+            <div class="col-sm-4 text-sm-right">
+                <div><b>Share:</b></div>
+            </div>
+            <div class="col-sm-8 text-sm-left">
+                <a href="mailto:?subject=Join%20Our%20Meeting&body=Hey%20there!%20I%20wanted%20to%20invite%20you%20to%20join%20our%20upcoming%20meeting.%20Here's%20the%20link:%20@($"{Request.Url.Scheme}://{Request.Url.Authority}{Url.Action("InviteMeeting", new { id = Model.meeting_code })}")" target="_blank">
+                    <i class="fa fa-2x fa-envelope p-1 text-body"></i>
+                </a>
+
+            </div>
+        </div>
+        <div class="border ml-5 mt-3 p-2 noprint">
+            <b>Timezone Checking:</b>
+            <hr class="mt-2" />
+            <div class="row mb-0 p-1">
+                <div class="col-sm-4 text-sm-right"><b>Timezone : </b> </div>
+                <div class="col-sm-8 text-sm-left">
+                    <select id="timezone" class="form-control" onchange="changeTimezone('@Model.startDate','@Model.endDate')" onselect="changeTimezone('@Model.startDate','@Model.endDate')">
+
+                        <option value="M" @(Model.meeting_timezone == "M" ? "selected" : "")> Malaysia / Singapore / China </option>
+                        <option value="V" @(Model.meeting_timezone == "V" ? "selected" : "")> Vietnam / Cambodia </option>
+                        <option value="J" @(Model.meeting_timezone == "J" ? "selected" : "")> Jordan </option>
+                    </select>
+                    <span class="text-warning noprint">*Choose timezone for local time.</span>
+                </div>
+            </div>
+            <div class="row mb-0 p-1">
+                <div class="col-sm-4 text-sm-right"><b>Start Time : </b> </div>
+                <div class="col-sm-8 text-sm-left" id="startTime">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.startDate) </div>
+            </div>
+            <div class="row mb-0 p-1">
+                <div class="col-sm-4 text-sm-right"><b>End Time : </b> </div>
+                <div class="col-sm-8 text-sm-left" id="endTime">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.endDate) </div>
+            </div>
+        </div>
+
+        </div>
+</div>
+<hr />
+<h3>
+    <b>@(Model.meeting_type == "M" ? "Meeting / Discussion" : Model.meeting_type == "E" ? "Event" : "Training") Details / @(Model.meeting_type == "M" ? "Meeting / Discussion" : Model.meeting_type == "E" ? "Event" : "Training") Purpose</b>
+</h3>
+<hr />
+<p>
+    @Html.Raw(Model.detail)
+</p>
+@if (Model.condition != "S" && Model.condition != "E" && Model.status != "V")
+{
+   
+        <a class="btn btn-primary mt-2 btn-block noprint" href="@Url.Action("JoinMeeting", "Meeting", new { id = Model.meeting_code})">Register</a>
+
+    
+
+
+    <input type="button" class="btn btn-danger mt-3 noprint btn-block" onclick="window.print();" value="Export as PDF">
+}
+
+
+
+

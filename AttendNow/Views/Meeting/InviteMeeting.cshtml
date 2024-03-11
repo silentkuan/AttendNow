@@ -1,0 +1,125 @@
+﻿
+
+@model AttendNow.Models.SP_GetMeetings_Result
+@{
+    Layout = null;
+    ViewBag.Title = "Inviting Meeting";
+}
+@Html.Partial("~/Views/Shared/_Header.cshtml")
+<body class="gray-bg">
+    <div id="informMessage" class="noprint alert alert-success animated bounceInRight" style="display:none;"></div>
+    <div id="errorMessage" class="noprint alert alert-danger animated shake" style="display:none;"></div>
+
+
+    @if (ViewBag.ErrorMessage == null)
+    {
+
+        <div class="wrapper wrapper-content  animated fadeInRight article short-padding">
+
+            <div class="row justify-content-md-center short-padding">
+
+                <div class="col-lg-10 short-padding">
+                    <div class="ibox">
+
+                        <div class="ibox-content short-padding " id="abc">
+                            @if (Model.condition == "S")
+                            {
+                            <div class="form-group alert alert-danger">
+                                Cannot Join ! @(Model.meeting_type == "M" ? "Meeting / Discussion" : Model.meeting_type == "E" ? "Event" : "Training") has been started.
+                            </div>
+                            }
+                            else if (Model.condition == "E")
+                            {
+
+
+                        <div class="form-group alert alert-danger">
+                            Cannot Join ! @(Model.meeting_type == "M" ? "Meeting / Discussion" : Model.meeting_type == "E" ? "Event" : "Training") has expired.
+                        </div>
+                            }
+                            else if (Model.status == "V")
+                            {
+                        <div class="form-group alert alert-danger">
+                            Cannot Join ! @(Model.meeting_type == "M" ? "Meeting / Discussion" : Model.meeting_type == "E" ? "Event" : "Training") is not existing.
+                        </div>
+                            }
+
+
+
+                            <div class="text-left  ">
+
+
+                                <h2>
+                                    <img src="~/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                    <span class="pl-3">Welcome ! We are inviting you to join our @(Model.meeting_type == "M" ? "meeting / discussion" : Model.meeting_type == "E" ? "event" : "training").</span>
+                                </h2>
+                            </div>
+                            <hr />
+
+                            @if (Model.type == false || Session[Model.meeting_code]?.ToString() == "true")
+
+                            {
+                                @Html.Partial("_InviteMeetingDetails")
+                            }
+                            else
+                            {
+                                @Html.Partial("_MeetingPrivateForm")
+                            }
+                            @if (Session["user_id"] != null)
+                            {
+                                <a href="@Url.Action("MainForm", "Meeting", new { id = Model.meeting_code })" class="btn btn-white mt-2 noprint"><i class="fa fa-arrow-left"></i> Back</a>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    }
+    else
+    {
+        @Html.Partial("~/Views/Home/_Error.cshtml")
+    }
+</body>
+
+@section Styles {
+    @Styles.Render("~/plugins/laddaStyles")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/main")
+    @Scripts.Render("~/plugins/ladda")
+
+
+}
+<script type="text/javascript">
+
+
+
+        $(document).ready(function () {
+        successMessage('@TempData["SuccessMessage"]');
+            errorMessage('@ViewBag.ErrorMessage');
+
+            //timezone checking
+            changeTimezone('@Model.startDate', '@Model.endDate');
+            
+            //meeting timezone
+            checkTimeZone('@Model.meeting_timezone', '@Model.startDate', '@Model.endDate');
+
+
+
+        });
+
+
+
+    // Example usage
+
+
+</script>
+
+

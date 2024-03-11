@@ -1,0 +1,199 @@
+﻿@model AttendNow.Models.SP_GetFactorys_Result
+@using AttendNow.Models
+@{
+
+    var factoryAccess = ViewBag.factoryAccess as sys_setting_role_permission;
+
+
+    if (ViewBag.Title == "Add Factory")
+    {
+        if (factoryAccess?.status != true || (factoryAccess?.addFunction != true))
+        {
+
+            <script>
+                    window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+    else
+    {
+        if (factoryAccess?.status != true || (factoryAccess?.editFunction != true && factoryAccess?.viewFunction != true))
+        {
+
+            <script>
+                     window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+
+
+}
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Factory Management</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a>Factory</a>
+            </li>
+            <li class=" breadcrumb-item">
+
+                <strong>@ViewBag.Title</strong>
+
+            </li>
+        </ol>
+        <!-- Add a primary button -->
+        <a class="btn-sm btn btn-primary mt-2" href="@Url.Action("Index", "Factory")">Factory List</a>
+        @if ((factoryAccess?.status == true && factoryAccess?.addFunction == true))
+        {
+            <a class="btn-sm btn btn-primary mt-2" href="/Factory/Mainform">Add New Factory</a>
+        }
+
+    </div>
+</div>
+@if (ViewBag.ErrorMessage == null)
+{
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>@ViewBag.Title</h5>
+
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div id="formPartial">
+                            @Html.Partial("_Form")
+                        </div>
+
+
+                        @if (ViewBag.Title != "Add Factory" && ViewBag.ErrorMessage == null)
+
+                        {
+                            <hr />
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Created Date <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <label class="col-form-label" id="createDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.createDate)</label>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Created By <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <label class="col-form-label">@Model.CreateByName (@Model.createBy.ToUpper())</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Edited Date </label>
+                                <div class="col-sm-10">
+                                    @if (Model.editDate != null)
+                                    {
+                                        <label class="col-form-label" id="editDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.editDate)</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="text-danger col-form-label" id="editDate">No Data</label>
+                                    }
+
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Edited By </label>
+                                <div class="col-sm-10">
+                                    @if (Model.editBy != null && !string.IsNullOrEmpty(Model.editBy))
+                                    {
+                                        <label class="col-form-label" id="editBy">@Model.EditByName (@Model.editBy.ToUpper())</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="text-danger col-form-label" id="editBy">No Data</label>
+                                    }
+
+                                </div>
+                            </div>
+                            if ((factoryAccess?.status == true && factoryAccess?.deleteFunction == true))
+                            {
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Status </label>
+                                    <div class="col-sm-10">
+                                       
+                                            <label class="mt-1">
+                                                <input type="checkbox" id="statusCheckbox" @(Model?.status == "A" ? "checked" : "") class="js-switch" data-switchery="true" onchange="updateStatusWithChecked('Factory','@Model.factory_id',this,'','@Session["timezone"].ToString()')" />
+                                            </label><br />
+                                        
+                                        <label class="p-xs label @(Model?.status == "A" ? "label-primary" : (Model.status == "D" ? "label-success" : "label-danger"))" id="statusText">
+                                            @(Model.status == "A" ? "Active" : "Inactive")
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        }
+                            <a href="@Url.Action("Index", "Factory")" class="btn btn-white"><i class="fa fa-arrow-left"></i> Back</a>
+
+
+
+
+
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @Html.Partial("~/Views/Home/_Error.cshtml")
+}
+
+
+
+@section Styles {
+    @Styles.Render("~/plugins/switcheryStyles")
+    @Styles.Render("~/plugins/tagInputsStyles")
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+    @Styles.Render("~/plugins/laddaStyles")
+}
+
+@section Scripts {
+    @Scripts.Render("~/main")
+    @Scripts.Render("~/plugins/ladda")
+    @Scripts.Render("~/plugins/switchery")
+    @Scripts.Render("~/plugins/tagInputs")
+    @Scripts.Render("~/plugins/iCheck")
+
+<script type="text/javascript">
+
+
+
+        $(document).ready(function () {
+         convertTimeZoneGeneral('@Session["timezone"].ToString()');
+        successMessage('@TempData["SuccessMessage"]');
+        errorMessage('@ViewBag.ErrorMessage');
+            // Bind normal buttons
+
+
+
+
+
+
+        });
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
+
+        var elem = document.querySelector('.js-switch');
+        var switchery = new Switchery(elem, { color: '#1AB394' });
+</script>
+
+
+    }

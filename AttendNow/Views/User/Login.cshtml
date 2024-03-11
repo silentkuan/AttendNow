@@ -1,0 +1,32 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+
+@Html.Partial("~/Views/Shared/_Header.cshtml")
+<body class="gray-bg">
+    <div id="informMessage" class="alert alert-success animated bounceInRight" style="display:none;"></div>
+    <div id="errorMessage" class="alert alert-danger animated shake" style="display:none;"></div>
+    
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="middle-box loginscreen animated fadeInDown">
+                <div>
+                    <div class="text-center">
+                        <img src="~/Content/logo.png" alt="Your Logo" class="w-75">
+                    </div>
+                    <br />
+                    <h3 class="text-center ml-1">AttendNow</h3>
+                    <div id="LoginPartial">
+                        @Html.Partial("_LoginForm")
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+

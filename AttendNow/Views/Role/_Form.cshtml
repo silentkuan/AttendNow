@@ -1,0 +1,414 @@
+﻿
+
+@model AttendNow.Models.SP_GetRoles_Result
+@using AttendNow.Models
+@{
+
+    var roleAccess = ViewBag.roleAccess as sys_setting_role_permission;
+
+    if (ViewBag.Title == "Add Role")
+    {
+        if (roleAccess?.status != true || (roleAccess?.addFunction != true))
+        {
+
+            <script>
+                    window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+    else
+    {
+        if (roleAccess?.status != true || (roleAccess?.editFunction != true && roleAccess?.viewFunction != true))
+        {
+
+            <script>
+                     window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+
+
+}
+@using (Html.BeginForm("", "", FormMethod.Post))
+{
+
+    <div class="form-group  row">
+        <label class="col-sm-2 col-form-label">Role ID <span class="text-danger">*</span></label>
+
+
+        <div class="col-sm-10">
+            @if ((ViewBag.Title == "View Role" || ViewBag.Title == "Edit Role") && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label">@Model.role_code.ToUpper()</label>
+                @Html.EditorFor(model => model.role_code, new { htmlAttributes = new { @class = "form-control", id = "role_code", type = "hidden" } })
+            }
+            else
+            {
+                @Html.EditorFor(model => model.role_code, new { htmlAttributes = new { @class = "form-control", id = "role_code" } })
+                <span id="role_code_error" class="text-danger"></span>
+            }
+
+
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label">@Model.name</label>
+            }
+            else
+            {
+                @Html.EditorFor(model => model.name, new
+           {
+               htmlAttributes = new
+               {
+                   @class = "form-control",
+                   id = "name"
+                  
+               }
+           })
+                <span id="name_error" class="text-danger"></span>
+            }
+
+
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Permission </label>
+        <div class="col-sm-10 col-form-label">
+
+            @if (ViewBag.Title != "View Role")
+            {
+                <input class="m-2 " id="admin-favourite" type="checkbox" onchange="selectAllPermission(this)" /> <label>Select All (System Administrator)</label>
+               
+                <input class="m-2" id="creator-favourite" type="checkbox" onchange="selectCreatorPermission(this)" /> <label>Creator</label>
+               
+                <input class="m-2" id="editor-favourite" type="checkbox" onchange="selectEditorPermission(this)" /> <label>Editor</label>
+            }
+
+
+
+
+            <div class="table-responsive mt-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+
+                            <th>Status</th>
+                            <th>Modules </th>
+                            <th>View </th>
+                            <th>Add</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+
+                            <td>
+                                <input type="checkbox" class="i-checks" id="userStatus" name="userStatus" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionUser?.status == true ? "checked" : "")>
+                            </td>
+                            <td>User </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="userViewFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionUser?.viewFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="userAddFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionUser?.addFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="userEditFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionUser?.editFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="userDeleteFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionUser?.deleteFunction == true ? "checked" : "")>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="roleStatus" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionRole?.status == true ? "checked" : "")>
+                            </td>
+                            <td>Role </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="roleViewFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionRole?.viewFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="roleAddFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionRole?.addFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="roleEditFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionRole?.editFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="roleDeleteFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionRole?.deleteFunction == true ? "checked" : "")>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="factoryStatus" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionFactory?.status == true ? "checked" : "")>
+                            </td>
+                            <td>Factory </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="factoryViewFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionFactory?.viewFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="factoryAddFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionFactory?.addFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="factoryEditFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionFactory?.editFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="factoryDeleteFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionFactory?.deleteFunction == true ? "checked" : "")>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="locationStatus" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionLocation?.status == true ? "checked" : "")>
+                            </td>
+                            <td>Location </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="locationViewFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionLocation?.viewFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="locationAddFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionLocation?.addFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="locationEditFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionLocation?.editFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="locationDeleteFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionLocation?.deleteFunction == true ? "checked" : "")>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="departmentStatus" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionDepartment?.status == true ? "checked" : "")>
+                            </td>
+                            <td>Department </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="departmentViewFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionDepartment?.viewFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="departmentAddFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionDepartment?.addFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="departmentEditFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionDepartment?.editFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="departmentDeleteFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionDepartment?.deleteFunction == true ? "checked" : "")>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="participantStatus" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionParticipant?.status == true ? "checked" : "")>
+                            </td>
+                            <td>Participant </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="participantViewFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionParticipant?.viewFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="participantAddFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionParticipant?.addFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="participantEditFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionParticipant?.editFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="participantDeleteFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionParticipant?.deleteFunction == true ? "checked" : "")>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="meetingStatus" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionMeeting?.status == true ? "checked" : "")>
+                            </td>
+                            <td>Activity </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="meetingViewFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionMeeting?.viewFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="meetingAddFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionMeeting?.addFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="meetingEditFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionMeeting?.editFunction == true ? "checked" : "")>
+                            </td>
+                            <td>
+                                <input type="checkbox" class="i-checks" id="meetingDeleteFunction" @( (ViewBag.Title == "View Role" && ViewBag.ErrorMessage == null) ? "disabled" : "") @(ViewBag.RolePermissionMeeting?.deleteFunction == true ? "checked" : "")>
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+}
+<div class="form-group row">
+    <div class="col-sm-4 col-sm-offset-2">
+        @if (ViewBag.Title == "Add Role" && ViewBag.ErrorMessage == null)
+        {
+        <section class="progress-demo">
+            <button class="ladda-button btn btn-primary" data-style="zoom-in" onclick="funcAddorEdit('Create')">Add</button>
+            </section>
+            }
+            else if (ViewBag.Title == "Edit Role" && ViewBag.ErrorMessage == null)
+            {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary" data-style="zoom-in" onclick="funcAddorEdit('Edit')">Update</button>
+                </section>
+                }
+
+</div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/main")
+<script>
+    $(document).ready(function () {
+        Ladda.bind('.progress-demo .ladda-button', {
+            callback: function (instance) {
+
+                var interval = setInterval(function () {
+
+                    if (returnMessage != "") {
+                        instance.stop();
+                        clearInterval(interval);
+                        returnMessage = "";
+                    }
+                }, 200);
+            }
+        });
+    });
+    function funcAddorEdit(action) {
+        var isValid = true; // Flag to check overall form validity
+
+        if (!validateField("role_code", "Role field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateField("name", "Name field is required.")) {
+            isValid = false;
+        }
+
+
+        if (!isValid) {
+            errorMessage("Please make sure all required fields is filled");
+            returnMessage = "Please make sure all required fields is filled";
+            return;
+        }
+
+        var roleData = {
+            Role: {
+                role_code: $("#role_code").val(),
+                name: $("#name").val()
+            },
+            UserModule: {
+                module:"user",
+                status: $("#userStatus").is(":checked"),
+                viewFunction: $("#userViewFunction").is(":checked"),
+                addFunction: $("#userAddFunction").is(":checked"),
+                editFunction: $("#userEditFunction").is(":checked"),
+                deleteFunction: $("#userDeleteFunction").is(":checked"),
+                role: $("#role_code").val()
+            },
+            RoleModule: {
+                module:"role",
+                status: $("#roleStatus").is(":checked"),
+                viewFunction: $("#roleViewFunction").is(":checked"),
+                addFunction: $("#roleAddFunction").is(":checked"),
+                editFunction: $("#roleEditFunction").is(":checked"),
+                deleteFunction: $("#roleDeleteFunction").is(":checked"),
+                role: $("#role_code").val()
+            },
+            DepartmentModule: {
+                module:"department",
+                status: $("#departmentStatus").is(":checked"),
+                viewFunction: $("#departmentViewFunction").is(":checked"),
+                addFunction: $("#departmentAddFunction").is(":checked"),
+                editFunction: $("#departmentEditFunction").is(":checked"),
+                deleteFunction: $("#departmentDeleteFunction").is(":checked"),
+                role: $("#role_code").val()
+            },
+            FactoryModule: {
+                module: "factory",
+                status: $("#factoryStatus").is(":checked"),
+                viewFunction: $("#factoryViewFunction").is(":checked"),
+                addFunction: $("#factoryAddFunction").is(":checked"),
+                editFunction: $("#factoryEditFunction").is(":checked"),
+                deleteFunction: $("#factoryDeleteFunction").is(":checked"),
+                role: $("#role_code").val()
+            },
+            LocationModule: {
+                module:"location",
+                status: $("#locationStatus").is(":checked"),
+                viewFunction: $("#locationViewFunction").is(":checked"),
+                addFunction: $("#locationAddFunction").is(":checked"),
+                editFunction: $("#locationEditFunction").is(":checked"),
+                deleteFunction: $("#locationDeleteFunction").is(":checked"),
+                role: $("#role_code").val()
+            },
+            ParticipantModule: {
+                module:"participant",
+                status: $("#participantStatus").is(":checked"),
+                viewFunction: $("#participantViewFunction").is(":checked"),
+                addFunction: $("#participantAddFunction").is(":checked"),
+                editFunction: $("#participantEditFunction").is(":checked"),
+                deleteFunction: $("#participantDeleteFunction").is(":checked"),
+                role: $("#role_code").val()
+            },
+             MeetingModule: {
+                module: "meeting",
+                status: $("#meetingStatus").is(":checked"),
+                viewFunction: $("#meetingViewFunction").is(":checked"),
+                addFunction: $("#meetingAddFunction").is(":checked"),
+                editFunction: $("#meetingEditFunction").is(":checked"),
+                deleteFunction: $("#meetingDeleteFunction").is(":checked"),
+                role: $("#role_code").val()
+            }
+        }
+
+
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Role/"+action, // Replace with the actual URL
+            data: JSON.stringify({ RoleData: roleData }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    window.location.href = '@Url.Action("MainForm", "Role", new { id = "" })' + "/" + roleData.Role.role_code;
+                    successMessage(data.successMessage);
+
+                } else {
+                    errorMessage(data.error_message);
+                    returnMessage = data.error_message;
+                    if (data.idError) {
+                        $("#role_code").parent().addClass("has-error");
+                    } else {
+                        $("#role_code").parent().removeClass("has-error");
+                    }
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+
+</script>

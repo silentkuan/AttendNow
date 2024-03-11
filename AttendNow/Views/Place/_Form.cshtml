@@ -1,0 +1,173 @@
+﻿
+
+@model AttendNow.Models.SP_GetPlace_Result
+@using AttendNow.Models
+@{
+    var meetingAccess = ViewBag.meetingAccess as sys_setting_role_permission;
+
+
+
+    if (ViewBag.Title == "Add Venue")
+    {
+        if (meetingAccess?.status != true || (meetingAccess?.addFunction != true))
+        {
+
+            <script>
+                    window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+    else
+    {
+        if (meetingAccess?.status != true || (meetingAccess?.editFunction != true && meetingAccess?.viewFunction != true))
+        {
+
+            <script>
+                     window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+
+}
+@using (Html.BeginForm("", "", FormMethod.Post))
+{
+
+    <div class="form-group  row">
+        <label class="col-sm-2 col-form-label">Venue ID <span class="text-danger">*</span></label>
+
+
+        <div class="col-sm-10">
+            @if ((ViewBag.Title == "View Venue" || ViewBag.Title == "Edit Venue") && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label">@Model.place_code.ToUpper()</label>
+                @Html.EditorFor(model => model.place_code, new { htmlAttributes = new { @class = "form-control", id = "place_code", type = "hidden" } })
+            }
+            else
+            {
+                @Html.EditorFor(model => model.place_code, new { htmlAttributes = new { @class = "form-control", id = "place_code" } })
+                <span id="place_code_error" class="text-danger"></span>
+            }
+
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Venue" && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label">@Model.name</label>
+            }
+            else
+            {
+                @Html.EditorFor(model => model.name, new
+           {
+               htmlAttributes = new
+               {
+                   @class = "form-control",
+                   id = "name",
+                   onKeypress = Model != null ? "if(event.keyCode === 13) { funcAddorEdit('Edit') }" : "if(event.keyCode === 13) { funcAddorEdit('Create') }"
+               }
+           })
+                <span id="name_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+ 
+
+
+}
+<div class="form-group row">
+    <div class="col-sm-4 col-sm-offset-2">
+        @if (ViewBag.Title == "Add Venue" && ViewBag.ErrorMessage == null)
+        {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary" data-style="zoom-in" onclick="funcAddorEdit('Create')">Add</button>
+            </section>
+        }
+        else if (ViewBag.Title == "Edit Venue" && ViewBag.ErrorMessage == null)
+        {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary" data-style="zoom-in" onclick="funcAddorEdit('Edit')">Update</button>
+            </section>
+        }
+
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        Ladda.bind('.progress-demo .ladda-button', {
+            callback: function (instance) {
+
+                var interval = setInterval(function () {
+
+                    if (returnMessage != "") {
+                        instance.stop();
+                        clearInterval(interval);
+                        returnMessage = "";
+                    }
+                }, 200);
+            }
+        });
+    });
+    function funcAddorEdit(action) {
+        var isValid = true; // Flag to check overall form validity
+
+        if (!validateField("place_code", "Venue ID field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateField("name", "Name field is required.")) {
+            isValid = false;
+        }
+
+        
+
+
+        if (!isValid) {
+            errorMessage("Please make sure all required fields is filled");
+            returnMessage = "Please make sure all required fields is filled";
+            return;
+        }
+
+        var placeData = {
+            place_code: $("#place_code").val(),
+            name: $("#name").val()
+        }
+
+
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Place/"+action, // Replace with the actual URL
+            data: JSON.stringify({ PlaceData: placeData}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    window.location.href = '@Url.Action("MainForm", "Place", new { id = "" })' + "/" + placeData.place_code;
+                    successMessage(data.successMessage);
+
+
+                } else {
+                    errorMessage(data.error_message);
+                    returnMessage = data.error_message;
+                    if (data.idError) {
+                        $("#place_code").parent().addClass("has-error");
+                    } else {
+                        $("#place_code").parent().removeClass("has-error");
+                    }
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+
+</script>

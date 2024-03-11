@@ -1,0 +1,213 @@
+﻿/*Created by Kuan Jiun Ying*/
+
+#informMessage,
+#errorMessage {
+    position: fixed;
+    top: 10%;
+    right: 1.5%;
+    z-index: 9999; /* Adjust this value as needed */
+}
+
+.text-black{
+   color:#000 !important;
+}
+.text-black:hover {
+        text-decoration: underline; /* Add underline on hover */
+    }
+.text-grey {
+    color: #676a6c !important;
+}
+.nowrap-cell {
+    white-space: nowrap;
+}
+
+.centered-cell {
+    text-align: center; /* Center horizontally */
+    vertical-align: middle!important; /* Center vertically */
+}
+
+/*filter button*/
+.bottomBtn {
+    position: fixed;
+    bottom: 10%;
+    right: 1.5%;
+    z-index: 9999; /* Adjust this value as needed */
+}
+
+.clickable-row{
+    cursor:pointer;
+}
+
+/*.nav-header {
+    background: #000 !important;
+}
+
+body {
+    background: #000 !important;
+}*/
+
+.padding-no {
+    overflow: unset !important;
+        white-space: unset !important;
+        text-overflow: unset !important;
+}
+/*.nav > li > a {
+    color: #fff !important;
+}*/
+
+/*.gray-bg {
+    background-color: #f3f3f4 !important;
+}
+.navbar-default .nav > li > a:hover, .navbar-default .nav > li > a:focus {
+    background-color: #1ab394 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    
+}
+ul.nav-second-level {
+    background-color: #1ab394 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+}
+
+.nav-a-active {
+    background-color: #1ab394 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    font-size:14px !important;
+}
+.nav-a {
+    color: #fff !important;
+}
+
+.nav-active {
+    background-color: #1ab394 !important;
+    border-top: 1px solid #e7eaec;
+    border-bottom: 1px solid #e7eaec;
+}
+.nav.navbar-right > li > a {
+    color: #999c9e !important;
+}*/
+
+.graf-detail {
+    bottom: unset !important;
+    left: unset !important;
+    right: 3px !important;
+    color: #000 !important;
+    z-index: 2 !important;
+    pointer-events: none;
+    font-size: 10px !important;
+}
+.opacity-1 {
+    opacity: 0.1 !important;
+}
+
+
+
+/*Certificate*/
+.certificate-logo {
+    width: 16%;
+}
+
+.certificate-header {
+   
+    font-family: 'Open Sans';
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+.certificate-sub-header {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+
+.certificate-title {
+    font-size: 2rem;
+    font-family: fantasy;
+}
+.certificate-participant-name {
+    font-size: 2.8rem;
+    font-style: italic;
+}
+
+.certificate-sign{
+    width:40%;
+}
+
+/*.piechart {
+    height:85%!important;
+    width:85%!important;
+   
+}*/
+@media print {
+    .print-logo {
+        display: block !important;
+    }
+
+    h5 {
+        font-size: 1.2rem !important;
+    }
+
+    .no-border {
+        border: none !important;
+    }
+    .no-padding-print {
+        padding:0 !important;
+    }
+    .no-top-padding-print{
+        padding-top:0!important;
+    }
+    .set-row{
+        flex-wrap:nowrap!important;
+    }
+    a {
+        text-decoration: none !important;
+    }
+
+    .short-padding {
+        padding: 10px !important;
+        flex: none !important;
+        max-width: none !important;
+        border: none !important;
+    }
+
+    .text-hide-long {
+        overflow: unset !important;
+        white-space: unset !important;
+        text-overflow: unset !important;
+    }
+
+    .noprint {
+        display: none !important;
+    }
+
+    .print-certificate {
+        max-width: none !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+    }
+
+    .certificate-header {
+        font-size: 5rem !important;
+    }
+
+    .certificate-sub-header {
+        font-size: 2rem !important;
+    }
+
+    .certificate-content {
+        font-size: 1.5rem !important;
+    }
+
+    .certificate-title {
+        font-size: 3.5rem !important;
+    }
+
+    .certificate-participant-name {
+        font-size: 4.5rem !important;
+    }
+    .print-text-small {
+        font-size: 1rem !important;
+    }
+}

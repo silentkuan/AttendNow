@@ -1,0 +1,430 @@
+﻿
+
+@model AttendNow.Models.SP_GetUserProfiles_Result
+@using AttendNow.Models
+@{
+
+    var userAccess = ViewBag.userAccess as sys_setting_role_permission;
+
+    if (ViewBag.Title == "Add User")
+    {
+        if (userAccess?.status != true || (userAccess?.addFunction != true))
+        {
+
+            <script>
+                    window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+    else
+    {
+        if (userAccess?.status != true || (userAccess?.editFunction != true && userAccess?.viewFunction != true))
+        {
+
+            <script>
+                     window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+}
+@using (Html.BeginForm("", "", FormMethod.Post))
+{
+
+
+    <div class="form-group  row">
+        <label class="col-sm-2 col-form-label">Staff No <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if ((ViewBag.Title == "View User" || ViewBag.Title == "Edit User" || ViewBag.Title == "Your Personal Profile") && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label">@Model.staff_no.ToUpper()</label>
+                @Html.EditorFor(model => model.staff_no, new { htmlAttributes = new { @class = "form-control", id = "staff_no", type = "hidden" } })
+            }
+            else
+            {
+                @Html.EditorFor(model => model.staff_no, new { htmlAttributes = new { @class = "form-control", id = "staff_no" } })
+                <span id="staff_no_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View User" && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label">@Model.name</label>
+            }
+            else if (ViewBag.Title != "View User" || ViewBag.Title == "Your Personal Profile")
+            {
+                @Html.EditorFor(model => model.name, new
+           {
+               htmlAttributes = new
+               {
+                   @class = "form-control",
+                   id = "name"
+
+               }
+           })
+                <span id="name_error" class="text-danger"></span>
+            }
+
+
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Email <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View User" && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label">@Model.email</label>
+            }
+            else if (ViewBag.Title != "View User" || ViewBag.Title == "Your Personal Profile")
+            {
+                @Html.EditorFor(model => model.email, new
+           {
+               htmlAttributes = new
+               {
+                   @class = "form-control",
+                   id = "email"
+
+               }
+           })
+                <span id="email_error" class="text-danger"></span>
+            }
+
+
+
+        </div>
+    </div>
+    if (ViewBag.Title != "View User" || ViewBag.Title == "Your Personal Profile")
+
+    {
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Password <span class="text-danger">*</span></label>
+            <div class="col-sm-10">
+                <div class="input-group" id="show_hide_password">
+                    @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @type = "password", id = "password" } })
+                    <div class="input-group-addon">
+                        <a id="showPassword"><i id="showPassword-icon" class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <span id="password_error" class="text-danger"></span>
+
+            </div>
+        </div>
+    }
+
+
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Role <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View User" || ViewBag.Title == "Your Personal Profile")
+            {
+                <label class="col-form-label">@Model.RoleName (@Model.role.ToUpper())</label>
+                <input type="hidden" value="@Model.role" id="role" />
+            }
+            else
+            {
+                @Html.DropDownList("role", ViewBag.role_code as SelectList, "Select Role", htmlAttributes: new { @class = "form-control" })
+                <span id="role_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Department <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View User" || ViewBag.Title == "Your Personal Profile")
+            {
+                <label class="col-form-label">@Model.DepartmentName (@Model.department.ToUpper())</label>
+                <input type="hidden" value="@Model.department" id="department" />
+            }
+            else
+            {
+                @Html.DropDownList("department", ViewBag.department_code as SelectList, "Select Department", htmlAttributes: new { @class = "form-control" })
+                <span id="department_error" class="text-danger"></span>
+            }
+
+
+
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Factory <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View User" || ViewBag.Title == "Your Personal Profile")
+            {
+                <label class="col-form-label">@Model.FactoryName (@Model.factory.ToUpper())</label>
+                <input type="hidden" value="@Model.factory" id="factory" />
+            }
+            else
+            {
+                @Html.DropDownList("factory", ViewBag.factory_id as SelectList, "Select Factory",
+               htmlAttributes: new
+               {
+                   @class = "form-control",
+                        
+                   onChange = "getLocation(this)"
+               })
+                <span id="factory_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Location <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View User" || ViewBag.Title == "Your Personal Profile")
+            {
+                <label class="col-form-label">@Model.LocationName (@Model.location.ToUpper())</label>
+                <input type="hidden" value="@Model.location" id="location" />
+            }
+            else
+            {
+                @Html.DropDownList("location", ViewBag.location_code as SelectList, "Select Location",
+               htmlAttributes: new
+               {
+                   @class = "form-control",
+                        onKeypress = Model != null ? "if(event.keyCode === 13) { funcAddorEdit('Edit') }" : "if(event.keyCode === 13) { funcAddorEdit('Create') }"
+               })
+                <span id="location_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+
+        <div class="form-group row">
+        <label class="col-sm-2 col-form-label">TimeZone <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View User" || ViewBag.Title == "Your Personal Profile")
+            {
+            <label class="col-form-label">
+                @(Model.timezone == "M" ? "Malaysia / Singapore / China" : Model.timezone == "V" ? "Vietnam / Cambodia" : "Jordan")
+
+            </label>
+            }
+            else
+            {
+                @Html.DropDownList("timezone", new List<SelectListItem>
+                   {
+                       new SelectListItem { Text = "Select Timezone"},
+                       new SelectListItem { Text = "Malaysia / Singapore / China", Value = "M", Selected = Model?.timezone == "M" },
+                       new SelectListItem { Text = "Vietnam / Cambodia", Value = "V", Selected = Model?.timezone == "V" },
+                       new SelectListItem { Text = "Jordan", Value = "J", Selected = Model?.timezone == "J" }
+
+                   }, new { @class = "form-control", id = "timezone" })
+                <span id="timezone_error" class="text-danger"></span>
+            }
+
+
+        </div>
+    </div>
+
+
+}
+
+<div class="form-group row">
+    
+    <div class="col-sm-2">
+        @if (ViewBag.Title == "Add User" && ViewBag.ErrorMessage == null)
+        {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary " data-style="zoom-in" onclick="funcAddorEdit('Create')">Add</button>
+            </section>
+        }
+        else if ((ViewBag.Title == "Edit User" || ViewBag.Title == "Your Personal Profile") && ViewBag.ErrorMessage == null)
+        {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary " data-style="zoom-in" onclick="funcAddorEdit('Edit')">Update</button>
+            </section>
+        }
+
+    </div>
+</div>
+
+
+@Scripts.Render("~/main")
+<script>
+
+
+    $(document).ready(function () {
+        Ladda.bind('.progress-demo .ladda-button', {
+            callback: function (instance) {
+
+                var interval = setInterval(function () {
+
+                    if (returnMessage != "") {
+                        instance.stop();
+                        clearInterval(interval);
+                        returnMessage = "";
+                    }
+                }, 200);
+            }
+        });
+    });
+
+
+    function funcAddorEdit(action) {
+
+
+        var urlParams = new URLSearchParams(window.location.search);
+        // Get the value of 'userProfile' from the query string
+        var userProfileValue = urlParams.get('userProfile');
+
+        var isValid = true; // Flag to check overall form validity
+
+        if (!validateField("staff_no", "User ID field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateField("name", "Name field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateField("email", "Email field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateField("password", "Password field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateDropdown("department", "Select Department")) {
+            isValid = false;
+        }
+
+        if (!validateDropdown("role", "Select Role")) {
+            isValid = false;
+        }
+
+        if (!validateDropdown("factory", "Select Factory")) {
+            isValid = false;
+        }
+
+        if (!validateDropdown("location", "Select Location")) {
+            isValid = false;
+        }
+
+        if (!validateDropdown("timezone", "Select Timezone")) {
+            isValid = false;
+        }
+        if ($("#staff_no").val().includes("admin") || $("#name").val().includes("admin") || $("#staff_no").val().includes("administrator")
+            || $("#name").val().includes("administrator")) {
+            errorMessage("You are not allow to use 'admin' or 'administrator' as your name or staff no !");
+            returnMessage = "You are not allow to use 'admin' or 'administrator' as your name or staff no !";
+            return;
+        }
+        // Add more validation for other fields as needed
+
+        if (!isValid) {
+            errorMessage("Please make sure all required fields is filled");
+            returnMessage = "Please make sure all required fields is filled";
+            return;
+        }
+        var userData = {
+            staff_no: $("#staff_no").val(),
+            name: $("#name").val(),
+            password: $("#password").val(),
+            email: $("#email").val(),
+            department: $("#department").val(),
+            role: $("#role").val(),
+            location: $("#location").val(),
+            factory: $("#factory").val(),
+            timezone: $("#timezone").val()
+        };
+
+        // Serialize the object into a JSON string
+        var jsonData = JSON.stringify(userData);
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/User/"+action, // Replace with the actual URL
+            data: jsonData,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    if (userProfileValue) {
+                         window.location.href = '@Url.Action("MainForm", "User", new { userProfile = "yes" })' ;
+                    } else {
+                         window.location.href = '@Url.Action("MainForm", "User", new { id = "" })' +"/"+ userData.staff_no;
+                    }
+
+
+                } else {
+                    errorMessage(data.error_message);
+
+                    returnMessage = data.error_message;
+                    if (data.idError) {
+                        $("#staff_no").parent().addClass("has-error");
+                    } else {
+                        $("#staff_no").parent().removeClass("has-error");
+                    }
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+    function getLocation(factory) {
+
+        $.ajax({
+            type: 'POST',
+            url: '/User/GetLocation', // Replace with your controller and action
+            data: { factory_id: factory.value }, // Send the department ID to add to the database
+            success: function (data) {
+                if (data.success) {
+                    @*successMessage(data.message);*@
+                    if (data.activeLocation) {
+                        $('#location').empty();
+                        var defaultOption = $('<option>', {
+                            value: 'null',
+                            text: 'Select an option',
+                            disabled: true,
+                            selected: true
+                        });
+
+                        $('#location').append(defaultOption);
+
+
+                        data.activeLocation.forEach(function (location) {
+                            // Create a new option element
+                            var newLocation = $('<option>', {
+                                value: location.location_code,
+                                text: location.factory + "-" + location.name
+                            });
+
+                            // Append the new option to the select element
+                            $('#location').append(newLocation);
+                        });
+
+                    }
+                    // Department added successfully to the database
+                } else {
+                    errorMessage(data.error_message);
+
+                }
+
+
+
+
+
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+
+            }
+        });
+    }
+</script>

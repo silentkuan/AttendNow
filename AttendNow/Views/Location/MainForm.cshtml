@@ -1,0 +1,378 @@
+﻿@model AttendNow.Models.SP_GetLocations_Result
+@using AttendNow.Models
+@{
+
+    var locationAccess = ViewBag.locationAccess as sys_setting_role_permission;
+
+
+    if (ViewBag.Title == "Add Location")
+    {
+        if (locationAccess?.status != true || (locationAccess?.addFunction != true))
+        {
+
+            <script>
+                    window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+    else
+    {
+        if (locationAccess?.status != true || (locationAccess?.editFunction != true && locationAccess?.viewFunction != true))
+        {
+
+            <script>
+                     window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+
+
+
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Location Management</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a>Location</a>
+            </li>
+            <li class=" breadcrumb-item">
+
+                <strong>@ViewBag.Title</strong>
+
+            </li>
+        </ol>
+        <!-- Add a primary button -->
+        <a class="btn-sm btn btn-primary mt-2" href="@Url.Action("Index", "Location")">Location List</a>
+        @if ((locationAccess?.status == true && locationAccess?.addFunction == true))
+        {
+            <a class="btn-sm btn btn-primary mt-2" href="/Location/Mainform">Add New Location</a>
+        }
+
+    </div>
+</div>
+@if (ViewBag.ErrorMessage == null)
+{
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>@ViewBag.Title</h5>
+
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div id="formPartial">
+                            @Html.Partial("_Form")
+                        </div>
+
+
+                        @if (ViewBag.Title != "Add Location" && ViewBag.ErrorMessage == null)
+
+                        {
+                            <hr />
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Created Date <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <label class="col-form-label" id="createDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.createDate)</label>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Created By <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <label class="col-form-label">@Model.CreateByName (@Model.createBy.ToUpper())</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Edited Date </label>
+                                <div class="col-sm-10">
+                                    @if (Model.editDate != null)
+                                    {
+                                        <label class="col-form-label" id="editDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.editDate)</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="text-danger col-form-label" id="editDate">No Data</label>
+                                    }
+
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Edited By </label>
+                                <div class="col-sm-10">
+                                    @if (Model.editBy != null && !string.IsNullOrEmpty(Model.editBy.ToUpper()))
+                                    {
+                                        <label class="col-form-label" id="editBy">@Model.EditByName (@Model.editBy)</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="text-danger col-form-label" id="editBy">No Data</label>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            if ((locationAccess?.status == true && locationAccess?.editFunction == true)
+                           || (locationAccess?.status == true && locationAccess?.viewFunction == true))
+                            {
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Connect Factory </label>
+                                    <div class="col-sm-10 ">
+
+
+                                        @if (locationAccess?.editFunction == true)
+                                        {
+                                            <input id="factory-tags" class="tagsinput " type="text" />
+                                            <button class="btn-danger btn border-0 btn-sm" type="button" onclick="removeFactory('removeAll', '@(Model?.location_code)');">Remove All</button>
+                                            <select id="factory-dropdown" class="form-control" onchange="addFactory(this, '@(Model?.location_code)');">
+                                                <option value="null" disabled selected>Select an option</option>
+                                                <option value="selectAll">Select All</option>
+                                                @foreach (var factory in ViewBag.FactoryList)
+                                                {
+
+                                                    <option value="@factory.factory_id">@factory.name</option>
+
+                                                }
+
+
+
+                                            </select>
+
+                                        }
+                                        else
+                                        {
+                                            <input id="factory-tags" class="tagsinput " type="text" disabled />
+                                        }
+
+
+                                    </div>
+                                </div>
+                            }
+                            if ((locationAccess?.status == true && locationAccess?.deleteFunction == true))
+                            {
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Status </label>
+                                    <div class="col-sm-10">
+
+                                        <label class="mt-1">
+                                            <input type="checkbox" id="statusCheckbox" @(Model?.status == "A" ? "checked" : "") class="js-switch" data-switchery="true" onchange="updateStatusWithChecked('Location','@Model.location_code',this,'','@Session["timezone"].ToString()')" />
+                                        </label><br />
+
+                                        <label class="p-xs label @(Model?.status == "A" ? "label-primary" : (Model.status == "D" ? "label-success" : "label-danger"))" id="statusText">
+                                            @(Model.status == "A" ? "Active" : "Inactive")
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <a href="@Url.Action("Index", "Location")" class="btn btn-white"><i class="fa fa-arrow-left"></i> Back</a>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @Html.Partial("~/Views/Home/_Error.cshtml")
+}
+
+
+@Styles.Render("~/plugins/switcheryStyles")
+@Styles.Render("~/plugins/tagInputsStyles")
+@Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+@Styles.Render("~/plugins/laddaStyles")
+@section Scripts {
+
+    @Scripts.Render("~/plugins/ladda")
+    @Scripts.Render("~/plugins/switchery")
+    @Scripts.Render("~/plugins/tagInputs")
+    @Scripts.Render("~/main")
+    @Scripts.Render("~/plugins/iCheck")
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+
+     $('.tagsinput').tagsinput({
+    tagClass: 'label label-primary',
+            itemValue: 'value'
+        });
+    var initialFactoryValues = '@Html.Raw(ViewBag.FactoryValues)';
+
+    var factoryValuesArray = initialFactoryValues.split(',');
+
+    if (initialFactoryValues != null && initialFactoryValues !== "") {
+        factoryValuesArray.forEach(function (factory) {
+                $('#factory-tags').tagsinput('add', { value: factory });
+        });
+    }
+
+
+    function removeFactory(value, location) {
+
+        if (value == "removeAll") {
+            $('#factory-tags').tagsinput('removeAll');
+            var allElement = $('#factory-dropdown').find('option').map(function () {
+                if ($(this).val() != "null" && $(this).val() != "selectAll")
+                    return {
+                        value: $(this).val(),
+                        text: $(this).text()
+                    };
+            }).get();
+
+
+
+
+
+            var model = allElement.map(function (element) {
+                return element.value;
+            });
+
+        } else {
+            var model = [
+
+            ]
+            model.push(value);
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/Location/RemoveFactory', // Replace with your controller and action
+            contentType: 'application/json', // Set the content type to JSON
+            data: JSON.stringify({ model: model, location: location }),
+            success: function (data) {
+                if (data.success) {
+                    successMessage(data.message);
+
+                    $('#editDate').text(data.userEditDate);
+                    $('#editBy').text(data.userEditBy);
+                    $('#editBy').removeClass('text-danger');
+                    $('#editBy').addClass('text-black');
+                    $('#editDate').removeClass('text-danger');
+                    $('#editDate').addClass('text-black');
+                } else {
+                    errorMessage(data.error_message);
+
+
+                }
+
+
+            },
+            error: function () {
+                errorMessage(data.error_message);
+
+
+            }
+        });
+
+    }
+
+
+    function addFactory(element, location) {
+
+        var allElement = []
+
+        if (element.value == "selectAll") {
+            $('#factory-tags').tagsinput('removeAll');
+            allElement = $('#factory-dropdown').find('option').map(function () {
+                if ($(this).val() != "null" && $(this).val() != "selectAll")
+                    return {
+                        value: $(this).val(),
+                        text: $(this).text()
+                    };
+            }).get();
+
+
+            var model = allElement.map(function (element) {
+                return element.value;
+            });
+
+        } else {
+            var model = [
+
+            ]
+            model.push(element.value);
+
+            allElement.push({
+                "value": element.value,
+                "text": element.options[element.selectedIndex].text
+
+            });
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/Location/AddFactory', // Replace with your controller and action
+            contentType: 'application/json', // Set the content type to JSON
+            data: JSON.stringify({ model: model, location: location }),
+            success: function (data) {
+
+                if (data.success) {
+
+                    $('#factory-dropdown').val("null");
+                    successMessage(data.message);
+                    allElement.forEach(function (data) {
+
+                        $('#factory-tags').tagsinput('add', { value: data.text + " (" + data.value.toUpperCase() + ")" });
+                    });
+                    $('#editDate').text(data.userEditDate);
+                    $('#editBy').text(data.userEditBy);
+                    $('#editBy').removeClass('text-danger');
+                    $('#editBy').addClass('text-black');
+                    $('#editDate').removeClass('text-danger');
+                    $('#editDate').addClass('text-black');
+
+                } else {
+                    errorMessage(data.error_message);
+
+
+                }
+
+
+
+            },
+            error: function () {
+                errorMessage(data.error_message);
+
+
+            }
+        });
+
+    }
+    $(document).ready(function () {
+
+         $('#factory-tags').on('beforeItemRemove', function (event) {
+
+            var value = (event.item.value).match(/\(([^)]+)\)/)[1];
+
+                removeFactory(value, '@(Model?.location_code)' );
+
+
+         });
+         convertTimeZoneGeneral('@Session["timezone"].ToString()');
+
+        successMessage('@TempData["SuccessMessage"]');
+        errorMessage('@ViewBag.ErrorMessage');
+
+        });
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
+
+        var elem = document.querySelector('.js-switch');
+        var switchery = new Switchery(elem, { color: '#1AB394' });
+</script>
+
+
+
+    }

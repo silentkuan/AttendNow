@@ -1,0 +1,562 @@
+﻿
+
+@model AttendNow.Models.SP_GetMeetings_Result
+@{
+    Layout = null;
+    ViewBag.Title = "Join Meeting";
+}
+@Html.Partial("~/Views/Shared/_Header.cshtml")
+<body class="gray-bg">
+    <div id="informMessage" class="alert alert-success animated bounceInRight" style="display:none;"></div>
+    <div id="errorMessage" class="alert alert-danger animated shake" style="display:none;"></div>
+    @if (ViewBag.ErrorMessage == null)
+    {
+        <div class="modal fade" id="rapidly-register-model" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="confirmationModalLabel">Swiftly Fill Your Information</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tabs-container">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li><a class="nav-link active" data-toggle="tab" href="#tab-1">Login</a></li>
+                                <li><a class="nav-link" data-toggle="tab" href="#tab-2">Register</a></li>
+                                <li><a class="nav-link" data-toggle="tab" href="#tab-3">Forget / Change Password</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" id="tab-1" class="tab-pane active">
+                                    <form>
+                                        <div class="panel-body">
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Staff No. <span class="text-danger">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input id="staff_no_login" type="text" class="form-control" placeholder="Enter Staff No." autofocus="">
+                                                    <span id="staff_no_login_error" class="text-danger"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Password <span class="text-danger">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group" id="show_hide_password">
+                                                        <input id="password_login" type="password" class="form-control" placeholder="Enter Password" onkeypress="if(event.keyCode === 13){funcLogin()}">
+                                                        <div class="input-group-addon">
+                                                            <a id="showPassword"><i id="showPassword-icon" class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <span id="password_login_error" class="text-danger"></span>
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </form>
+                                    <section class="progress-demo">
+                                        <button class="btn btn-primary ladda-button block full-width" data-style="zoom-in" onclick="loginInformation()">Login</button>
+                                    </section>
+                                   
+                                </div>
+                                <div role="tabpanel" id="tab-2" class="tab-pane">
+                                    <form>
+                                        <div class="panel-body">
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Staff No. <span class="text-danger">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input id="staff_no_register" type="text" class="form-control" placeholder="Enter Staff No." autofocus="">
+                                                    <span id="staff_no_register_error" class="text-danger"></span>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Password <span class="text-danger">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group" id="show_hide_password">
+                                                        <input id="password_register" type="password" class="form-control" placeholder="Enter Password" onkeypress="if(event.keyCode === 13){funcLogin()}">
+                                                        <div class="input-group-addon">
+                                                            <a id="showPassword"><i id="showPassword-icon" class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <span id="password_register_error" class="text-danger"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Name <span class="text-danger">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="name_register" />
+                                                    <span id="name_register_error" class="text-danger"></span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Email</label>
+                                                <div class="col-sm-8">
+
+                                                    <input type="text" class="form-control" id="email_register" />
+
+                                                    <span id="email_register_error" class="text-danger"></span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Department <span class="text-danger">*</span></label>
+                                                <div class="col-sm-8">
+                                                    @if (ViewBag.Title == "View Participant")
+                                                    {
+                                    <label class="col-form-label">@Model.DepartmentName (@Model.department.ToUpper())</label> }
+                                else
+                                {
+                                @Html.DropDownList("participant_department_register", ViewBag.department_code as SelectList, "Select Department", htmlAttributes: new { @class = "form-control" })
+                                                    <span id="participant_department_register_error" class="text-danger"></span>}
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Factory <span class="text-danger">*</span></label>
+                                                <div class="col-sm-8">
+                                                    @if (ViewBag.Title == "View User")
+                                                    {
+                                    <label class="col-form-label">@Model.factoryName (@Model.factory.ToUpper())</label> }
+                                else
+                                {
+                                @Html.DropDownList("participant_factory_register", ViewBag.factory_id as SelectList, "Select Factory",
+                                         htmlAttributes: new
+                                         {
+                                             @class = "form-control",
+                                             onChange = "getLocation(this,'register')"
+                                         })
+                                                    <span id="participant_factory_register_error" class="text-danger"></span>}
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Location <span class="text-danger">*</span></label>
+
+                                                <div class="col-sm-8">
+                                                    @if (ViewBag.Title == "View Participant")
+                                                    {
+                                    <label class="col-form-label">@Model.LocationName (@Model.location.ToUpper())</label> }
+                                else
+                                {
+                                @Html.DropDownList("participant_location_register", ViewBag.location_code as SelectList, "Select Location", htmlAttributes: new { @class = "form-control" })
+                                                    <span id="participant_location_register_error" class="text-danger"></span>}
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                    <section class="progress-demo">
+                                        <button class="btn btn-primary ladda-button block full-width" data-style="zoom-in" onclick="registerInformation()">Register</button>
+                                    </section>
+                                  
+                                </div>
+                                <div role="tabpanel" id="tab-3" class="tab-pane">
+                                    <form>
+                                        <div class="panel-body">
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Staff No. <span class="text-danger">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input id="staff_no_password" type="text" class="form-control" placeholder="Enter Staff No." autofocus="">
+                                                    <span id="staff_no_password_error" class="text-danger"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Email</label>
+                                                <div class="col-sm-8">
+
+                                                    <input type="text" class="form-control" id="email_password" />
+
+                                                    <span id="email_password_error" class="text-danger"></span>
+
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </form>
+                                    <section class="progress-demo">
+                                        <button class="btn btn-primary ladda-button block full-width" data-style="zoom-in" onclick="changePassword()">Change / Forget Password</button>
+                                    </section>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div class="wrapper wrapper-content  animated fadeInRight article">
+
+            <div class="row justify-content-md-center">
+
+                <div class="col-lg-10">
+                    <div class="ibox">
+
+                        <div class="ibox-content ">
+
+
+
+
+                            <div class="text-left  ">
+
+
+                                <h2>
+                                    <img src="~/Content/logo.png" alt="Your Logo" class="pb-3 " style="width:100px;">
+                                    <span class="pl-3">Welcome ! We are inviting you to join our @(Model.meeting_type == "M" ? "meeting / discussion" : Model.meeting_type == "E" ? "event" : "training").</span>
+                                </h2>
+                            </div>
+
+                            <div id="formPartial">
+
+
+                                @if (Model.type == false || TempData[Model.meeting_code]?.ToString() == "true")
+
+                                {
+
+                                    @Html.Partial("_JoinMeetingForm")
+                                }
+                                else
+                                {
+                                    @Html.Partial("_MeetingPrivateForm")
+                                }
+
+
+                                @if (Session["user_id"] != null)
+                                {
+                                    <a href="@Url.Action("MainForm", "Meeting",new { id = Model.meeting_code })" class="btn btn-white mt-2 noprint"><i class="fa fa-arrow-left"></i> Back</a>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    }
+    else
+    {
+        @Html.Partial("~/Views/Home/_Error.cshtml")
+    }
+</body>
+
+
+@Styles.Render("~/plugins/summernoteStyles")
+@Scripts.Render("~/plugins/summernote")
+@Scripts.Render("~/bundles/bootstrap")
+@Styles.Render("~/Content/css")
+
+
+<script>
+
+     $(document).ready(function () {
+     //timezone checking
+     changeTimezone('@Model.startDate', '@Model.endDate');
+
+     //meeting timezone
+     checkTimeZone('@Model.meeting_timezone', '@Model.startDate', '@Model.endDate');
+
+
+        Ladda.bind('.progress-demo .ladda-button', {
+            callback: function (instance) {
+
+                var interval = setInterval(function () {
+                    console.log(returnMessage);
+
+                    if (returnMessage!="") {
+                        instance.stop();
+                        clearInterval(interval);
+                        returnMessage = "";
+                    }
+                }, 200);
+            }
+        });
+    });
+    $('#showPassword').click(function () {
+        var passwordField = $('#password');
+        var passwordError = $('#password_error');
+
+        if (passwordField.attr('type') === 'password') {
+            passwordField.attr('type', 'text');
+            passwordError.text(''); // Clear any error message
+            $('#showPassword-icon').addClass("fa-eye");
+            $('#showPassword-icon').removeClass("fa-eye-slash");
+        } else {
+            passwordField.attr('type', 'password');
+            $('#showPassword-icon').addClass("fa-eye-slash");
+            $('#showPassword-icon').removeClass("fa-eye");
+        }
+    });
+
+
+
+
+    function registerInformation() {
+
+
+
+        var isValid = true; // Flag to check overall form validity
+
+        if (!validateField("staff_no_register", "Staff No. field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateField("name_register", "Name field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateField("password_register", "Password field is required.")) {
+            isValid = false;
+        }
+        if (!validateField("email_register", "Email field is required.")) {
+            isValid = false;
+        }
+        if (!validateDropdown("participant_department_register", "Select Department")) {
+            isValid = false;
+        }
+
+
+
+        if (!validateDropdown("participant_factory_register", "Select Factory")) {
+            isValid = false;
+        }
+
+        if (!validateDropdown("participant_location_register", "Select Location")) {
+            isValid = false;
+        }
+
+        // Add more validation for other fields as needed
+
+        if (!isValid) {
+            errorMessage("Please make sure all required fields is filled");
+            returnMessage = "Please make sure all required fields is filled";
+            return;
+        }
+        var userData = {
+            staff_no: $("#staff_no_register").val(),
+            name: $("#name_register").val(),
+            password: $("#password_register").val(),
+            email: $("#email_register").val(),
+            department: $("#participant_department_register").val(),
+            remark: $("#remark_register").val(),
+            location: $("#participant_location_register").val(),
+            factory_id: $("#participant_factory_register").val()
+        };
+
+        // Serialize the object into a JSON string
+        var jsonData = JSON.stringify(userData);
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Participant/RegisterInformation", // Replace with the actual URL
+            data: jsonData,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    successMessage(data.message);
+                    if (data.particpant) {
+
+                        $('#staff_no').val(data.particpant.staff_no);
+                        $('#name').val(data.particpant.name);
+                        $('#email').val(data.particpant.email);
+                        $('#participant_department').val(data.particpant.department);
+                        $('#participant_factory').val(data.particpant.factory_id);
+                        $('#participant_location').val(data.particpant.location);
+
+
+                    }
+                    $('html, body').animate({
+                        scrollTop: $('#registerForm').offset().top
+                    }, 1000);
+
+                    $('#rapidly-register-model').modal('hide');
+                } else {
+                    errorMessage(data.error_message);
+
+                    returnMessage = data.error_message;
+                    if (data.idError) {
+                        $("#staff_no").parent().addClass("has-error");
+                    } else {
+                        $("#staff_no").parent().removeClass("has-error");
+                    }
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+
+
+
+    function loginInformation() {
+
+
+
+        var isValid = true; // Flag to check overall form validity
+
+        if (!validateField("staff_no_login", "Staff No. field is required.")) {
+            isValid = false;
+        }
+
+
+        if (!validateField("password_login", "Password field is required.")) {
+            isValid = false;
+        }
+
+
+
+        // Add more validation for other fields as needed
+
+        if (!isValid) {
+            errorMessage("Please make sure all required fields is filled");
+            returnMessage = "Please make sure all required fields is filled";
+            return;
+        }
+        var userData = {
+            staff_no: $("#staff_no_login").val(),
+            password: $("#password_login").val(),
+
+        };
+
+        // Serialize the object into a JSON string
+        var jsonData = JSON.stringify(userData);
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Participant/LoginNFillInformation", // Replace with the actual URL
+            data: jsonData,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    successMessage(data.message);
+                    returnMessage = data.message;
+                    if (data.particpant) {
+
+                        $('#staff_no').val(data.particpant.staff_no);
+                        $('#name').val(data.particpant.name);
+                        $('#email').val(data.particpant.email);
+                        $('#participant_department').val(data.particpant.department);
+                        $('#participant_factory').val(data.particpant.factory_id);
+                        $('#participant_location').val(data.particpant.location);
+
+
+                    }
+                    $('html, body').animate({
+                        scrollTop: $('#registerForm').offset().top
+                    }, 1000);
+
+                    $('#rapidly-register-model').modal('hide');
+                } else {
+                    errorMessage(data.error_message);
+
+                    returnMessage = data.error_message;
+                    if (data.idError) {
+                        $("#staff_no").parent().addClass("has-error");
+                    } else {
+                        $("#staff_no").parent().removeClass("has-error");
+                    }
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+
+
+    function changePassword() {
+
+
+
+        var isValid = true; // Flag to check overall form validity
+
+        if (!validateField("staff_no_password", "Staff No. field is required.")) {
+            isValid = false;
+        }
+
+
+        if (!validateField("email_password", "Email field is required.")) {
+            isValid = false;
+        }
+
+
+
+        // Add more validation for other fields as needed
+
+        if (!isValid) {
+            errorMessage("Please make sure all required fields is filled");
+            returnMessage = "Please make sure all required fields is filled";
+            return;
+        }
+        var userData = {
+            staff_no: $("#staff_no_password").val(),
+            email: $("#email_password").val(),
+            model:"P" //MODEL PARTICIPANT
+
+        };
+
+        // Serialize the object into a JSON string
+        var jsonData = JSON.stringify(userData);
+
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Home/SendEmailForChangePassword", // Replace with the actual URL
+            data: jsonData,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+                    successMessage(data.message);
+                    returnMessage = data.message;
+
+                    $('#rapidly-register-model').modal('hide');
+                } else {
+                    errorMessage(data.error_message);
+
+                    returnMessage = data.error_message;
+
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+</script>

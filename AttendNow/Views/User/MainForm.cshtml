@@ -1,0 +1,638 @@
+﻿@model AttendNow.Models.SP_GetUserProfiles_Result
+@using AttendNow.Models
+@{
+
+    var userAccess = ViewBag.userAccess as sys_setting_role_permission;
+
+
+    if (ViewBag.Title == "Add User")
+    {
+        if (userAccess?.status != true || (userAccess?.addFunction != true))
+        {
+
+            <script>
+                    window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+    else
+    {
+        if (userAccess?.status != true || (userAccess?.editFunction != true && userAccess?.viewFunction != true))
+        {
+
+            <script>
+                     window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        @if (ViewBag.Title != "Your Personal Profile")
+        {
+            <h2>User Management</h2>
+        }
+        else
+        {
+            <h2>User Profile</h2>
+        }
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a>User</a>
+            </li>
+            <li class="breadcrumb-item">
+                <strong>@ViewBag.Title</strong>
+            </li>
+        </ol>
+        <!-- Add a primary button -->
+        @if (ViewBag.Title != "Your Personal Profile")
+        {
+            <a class="btn-sm btn btn-primary mt-2" href="@Url.Action("Index", "User")">User List</a>
+        }
+        @if (userAccess?.status == true && userAccess?.addFunction == true && ViewBag.Title != "Your Personal Profile")
+        {
+            <a class="btn-sm btn btn-primary mt-2" href="/User/Mainform">Add New User</a>
+        }
+
+    </div>
+</div>
+@if (ViewBag.ErrorMessage == null)
+{
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>@ViewBag.Title</h5>
+
+
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div id="formPartial">
+                            @Html.Partial("_Form")
+                        </div>
+
+
+                        @if (ViewBag.Title != "Add User" && ViewBag.ErrorMessage == null)
+
+                        {
+                            <hr />
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Created Date <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <label class="col-form-label" id="createDate">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.createDate)</label>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Created By <span class="text-danger">*</span></label>
+                                <div class="col-sm-10">
+                                    <label class="col-form-label">@Model.CreateByName (@Model.createBy.ToUpper())</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Edited Date </label>
+                                <div class="col-sm-10">
+                                    @if (Model.editDate != null)
+                                    {
+                                        <label id="editDate" class="col-form-label">@string.Format("{0:dd/MM/yyyy hh:mm:ss tt}", Model.editDate)</label>
+                                    }
+                                    else
+                                    {
+                                        <label id="editDate" class="text-danger col-form-label">No Data</label>
+                                    }
+
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Edited By </label>
+                                <div class="col-sm-10">
+                                    @if (Model.editBy != null && !string.IsNullOrEmpty(Model.editBy))
+                                    {
+                                        <label id="editBy" class="col-form-label">@Model.EditByName (@Model.editBy.ToUpper())</label>
+                                    }
+                                    else
+                                    {
+                                        <label id="editBy" class="text-danger col-form-label">No Data</label>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            if ((userAccess?.status == true && userAccess?.editFunction == true)
+                           || (userAccess?.status == true && userAccess?.viewFunction == true))
+                            {
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">View Department </label>
+                                    <div class="col-sm-10 ">
+
+
+                                        @if (userAccess?.editFunction == true && ViewBag.Title != "Your Personal Profile")
+                                        {
+                                            <input id="department-tags" class="tagsinput " type="text" />
+                                            <button class="btn-danger btn border-0 btn-sm" type="button" onclick="removeView('removeAll', '@(Model?.staff_no)', 'department');">Remove All</button>
+                                            <select id="department-dropdown" class="form-control" onchange="addView(this, '@(Model?.staff_no)', 'department');">
+                                                <option value="null" disabled selected>Select an option</option>
+                                                <option value="A">Get All</option>
+                                                <option value="selectAll">Select All</option>
+                                                @foreach (var department in ViewBag.DepartmentList)
+                                                {
+
+                                                    <option value="@department.department_code">@department.name</option>
+
+                                                }
+
+
+
+                                            </select>
+                                          
+                                        }
+                                        else
+                                        {
+                                            <input id="department-tags" class="tagsinput " type="text" disabled />
+                                        }
+
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">View Factory ID</label>
+                                    <div class="col-sm-10 ">
+                                        @if (userAccess?.editFunction == true && ViewBag.Title != "Your Personal Profile")
+                                        {
+
+                                            <input id="factory-tags" class="tagsinput " type="text" />
+                                            <button class="btn-danger btn border-0 btn-sm" type="button" onclick="removeView('removeAll', '@(Model?.staff_no)', 'factory');">Remove All</button>
+                                            <select id="factory-dropdown" class="form-control" onchange="addView(this, '@(Model?.staff_no)', 'factory');">
+                                                <option value="null" disabled selected>Select an option</option>
+                                                <option value="A">Get All</option>
+                                                <option value="selectAll">Select All</option>
+                                                @foreach (var factory in ViewBag.FactoryList)
+                                                {
+
+                                                    <option value="@factory.factory_id">@factory.name</option>
+
+                                                }
+                                            </select>
+                                          }
+                                        else
+                                        {
+                                            <input id="factory-tags" class="tagsinput" type="text" disabled />
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">View Location</label>
+                                    <div class="col-sm-10 ">
+                                        @if (userAccess?.editFunction == true && ViewBag.Title != "Your Personal Profile")
+                                        {
+
+                                            <input id="location-tags" class="tagsinput " type="text" />
+                                            <button class="btn-danger btn border-0 btn-sm" type="button" onclick="removeView('removeAll', '@(Model?.staff_no)', 'location');">Remove All</button>
+                                            <select id="location-dropdown" class="form-control" onchange="addView(this, '@(Model?.staff_no)', 'location');">
+                                                <option value="null" disabled selected>Select an option</option>
+                                                @if (ViewBag.FactoryValues == "Get All")
+                                                {
+                                                    <option value="A">Get All</option>
+                                                }
+
+                                                <option value="selectAll">Select All</option>
+                                                @foreach (var location in ViewBag.LocationList)
+                                                {
+
+                                                    <option value="@location.factory-@location.location_code">@location.factory-@location.name</option>
+
+                                                }
+                                            </select>
+
+                                        }
+                                        else
+                                        {
+                                            <input id = "location-tags" class="tagsinput" type="text" disabled />
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            if ((userAccess?.status == true && userAccess?.deleteFunction == true) && ViewBag.Title != "Your Personal Profile")
+                            {
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Status </label>
+                                    <div class="col-sm-10">
+
+                                        <label class="mt-1">
+                                            <input type="checkbox" id="statusCheckbox" @(Model?.status == "A" ? "checked" : "") class="js-switch" data-switchery="true" onchange="updateStatusWithChecked('User','@Model.staff_no',this,'','@Session["timezone"].ToString()')" />
+                                        </label><br />
+
+                                        <label class="p-xs label @(Model?.status == "A" ? "label-primary" : (Model.status == "D" ? "label-success" : "label-danger"))" id="statusText">
+                                            @(Model.status == "A" ? "Active" : "Inactive")
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <a href="@Url.Action("Index", "User")" class="btn btn-white"><i class="fa fa-arrow-left"></i> Back</a>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @Html.Partial("~/Views/Home/_Error.cshtml")
+}
+
+@section Styles {
+
+    @Styles.Render("~/plugins/switcheryStyles")
+    @Styles.Render("~/plugins/tagInputsStyles")
+    @Styles.Render("~/plugins/laddaStyles")
+    
+}
+
+@section Scripts {
+   
+    @Scripts.Render("~/plugins/switchery")
+    @Scripts.Render("~/plugins/tagInputs")
+    @Scripts.Render("~/plugins/ladda")
+
+<script type="text/javascript">
+
+
+
+        $('.tagsinput').tagsinput({
+    tagClass: 'label label-primary',
+            itemValue: 'value'
+        });
+    var initialDepartmentValues = '@Html.Raw(ViewBag.DepartmentValues)';
+    var initialFactoryValues = '@Html.Raw(ViewBag.FactoryValues)';
+
+    var initialLocationValues = '@Html.Raw(ViewBag.LocationValues)';
+
+    var departmentValuesArray = initialDepartmentValues.split(',');
+    var factoryValuesArray = initialFactoryValues.split(',');
+
+    var locationValuesArray = initialLocationValues.split(',');
+
+    if (initialDepartmentValues != null && initialDepartmentValues !== "") {
+        console.log(initialDepartmentValues);
+        departmentValuesArray.forEach(function (department) {
+                $('#department-tags').tagsinput('add', { value: department });
+        });
+    }
+
+    if (initialFactoryValues != null && initialFactoryValues !== "") {
+        factoryValuesArray.forEach(function (factory) {
+            $('#factory-tags').tagsinput('add', { value: factory });
+        });
+    }
+
+    if (initialLocationValues != null && initialLocationValues !== "") {
+        locationValuesArray.forEach(function (location) {
+                $('#location-tags').tagsinput('add', { value: location });
+        });
+        }
+
+
+
+        $(document).ready(function () {
+        successMessage('@TempData["SuccessMessage"]');
+            errorMessage('@ViewBag.ErrorMessage');
+            convertTimeZoneGeneral('@Session["timezone"].ToString()');
+              // Handle tag removal when clicking the remove icon
+            $('#department-tags, #location-tags,#factory-tags').on('beforeItemRemove', function (event) {
+                var action;
+                var value = '';
+                
+                if (event.item.value != "Get All") {
+                    value = (event.item.value).match(/\(([^)]+)\)/)[1];
+                } else {
+                    value = event.item.value;
+                }
+           
+            var elementId = $(this).attr('id'); // Get the ID of the element that triggered the event
+
+            if (elementId === 'department-tags') {
+                type = "department";
+            } else if (elementId === 'location-tags') {
+                type = "location";
+            } else if (elementId === 'factory-tags') {
+                type = "factory";
+            }
+
+
+                removeView(value, '@(Model?.staff_no)', type );
+
+
+        });
+
+
+
+        });
+
+
+
+    function removeView(value , user_id,type) {
+
+        if (value == "removeAll") {
+            switch (type) {
+                case "factory":
+                    $('#factory-tags').tagsinput('removeAll');
+                    var allElement =$('#factory-dropdown').find('option').map(function () {
+                        if ($(this).val() != "null" && $(this).val()!="selectAll")
+                            return {
+                                value: $(this).val(),
+                                text: $(this).text()
+                            };
+                    }).get();
+
+                    var tag_code = "factory_id";
+                    break;
+                case "location":
+                    $('#location-tags').tagsinput('removeAll');
+                    var allElement =$('#location-dropdown').find('option').map(function () {
+                        if ($(this).val() != "null" && $(this).val()!="selectAll")
+                            return {
+                                value: $(this).val(),
+                                text: $(this).text()
+                            };
+                    }).get();
+
+                    var tag_code = "location_code";
+                    break;
+                case "department":
+                    $('#department-tags').tagsinput('removeAll');
+                    var allElement = $('#department-dropdown').find('option').map(function () {
+                        if ($(this).val() != "null" && $(this).val()!="selectAll")
+                            return {
+                                value: $(this).val(),
+                                text: $(this).text()
+                            };
+                    }).get();
+
+                    var tag_code = "department_code";
+                    break;
+            }
+
+
+            var model = allElement.map(function (element) {
+                return element.value;
+            });
+
+        } else {
+            var model = [
+
+            ]
+            model.push(value);
+        }
+
+            $.ajax({
+                type: 'POST',
+                url: '/User/RemoveView', // Replace with your controller and action
+                contentType: 'application/json', // Set the content type to JSON
+                data: JSON.stringify({ model: model, staff_no: user_id, type: type }),
+                    success: function (data) {
+                        if (data.success) {
+                            successMessage(data.message);
+
+                            $('#editDate').text(data.userEditDate);
+                            $('#editBy').text(data.userEditBy);
+                            $('#editBy').removeClass('text-danger');
+                            $('#editBy').addClass('text-black');
+                            $('#editDate').removeClass('text-danger');
+                            $('#editDate').addClass('text-black');
+                            if (data.activeLocation) {
+                                $('#location-dropdown').empty();
+                                var defaultOption = $('<option>', {
+                                    value: 'null',
+                                    text: 'Select an option',
+                                    disabled: true,
+                                    selected: true
+                                });
+                                var selectAll = $('<option>', {
+                                    value: 'selectAll',
+                                    text: 'Select All',
+
+                                });
+                                $('#location-dropdown').append(defaultOption);
+                                // Assuming your dropdown has the ID 'myDropdown'
+                                $('#location-dropdown').append(selectAll);
+
+                                data.activeLocation.forEach(function (location) {
+                                    // Create a new option element
+                                    var newLocation = $('<option>', {
+                                        value: location.location_code,
+                                        text: location.name
+                                    });
+
+                                    // Append the new option to the select element
+                                    $('#location-dropdown').append(newLocation);
+                                });
+                            }
+
+                            if (data.userLocation) {
+                                $('#location-tags').tagsinput('removeAll');
+                                data.userLocation.forEach(function (location) {
+                                    $('#location-tags').tagsinput('add', { value: location });
+                                });
+                            }
+                        } else {
+                            errorMessage(data.error_message);
+
+
+                        }
+
+
+                    },
+                    error: function () {
+                        errorMessage(data.error_message);
+
+
+                    }
+                });
+
+    }
+
+
+    function addView(element, user_id, type) {
+        
+         var tag = "";
+         var allElement = []
+          switch (type) {
+                case "factory":
+                  tag = "factory-tags";
+                  tag_code = "factory_id";
+
+                    break;
+                case "location":
+                  tag = "location-tags";
+                  tag_code = "location_code";
+
+                    break;
+                case "department":
+                  tag = "department-tags";
+                  tag_code = "department_code";
+
+                    break;
+            }
+        if (element.value == "selectAll") {
+            switch (type) {
+                case "factory":
+                    $('#factory-tags').tagsinput('removeAll');
+                     allElement = $('#factory-dropdown').find('option').map(function () {
+                         if ($(this).val() != "null" && $(this).val() != "selectAll" && $(this).val() != "A")
+                            return {
+                                value: $(this).val(),
+                                text: $(this).text()
+                            };
+                    }).get();
+
+                    break;
+                case "location":
+                    $('#location-tags').tagsinput('removeAll');
+                    allElement = $('#location-dropdown').find('option').map(function () {
+                        if ($(this).val() != "null" && $(this).val() != "selectAll" && $(this).val() != "A")
+                            return {
+                                value: $(this).val(),
+                                text: $(this).text()
+                            };
+                    }).get();
+
+                    break;
+                case "department":
+                    $('#department-tags').tagsinput('removeAll');
+                     allElement = $('#department-dropdown').find('option').map(function () {
+                         if ($(this).val() != "null" && $(this).val() != "selectAll" && $(this).val() != "A")
+                            return {
+                                value: $(this).val(),
+                                text: $(this).text()
+                            };
+                    }).get();
+                    break;
+            }
+
+
+            var model = allElement.map(function (element) {
+                return element.value;
+            });
+
+        } else {
+
+            var model = [
+
+            ]
+            model.push(element.value);
+
+            allElement.push({
+                "value": element.value,
+                "text": element.options[element.selectedIndex].text
+
+            });
+         }
+            $.ajax({
+                type: 'POST',
+                url: '/User/AddView', // Replace with your controller and action
+                contentType: 'application/json', // Set the content type to JSON
+                data: JSON.stringify({ model: model, staff_no: user_id, type: type }),
+                success: function (data) {
+
+                    if (data.success) {
+                        $('#department-dropdown').val("null");
+                        $('#location-dropdown').val("null");
+                        $('#factory-dropdown').val("null");
+                        successMessage(data.message);
+                        console.log(element.value);
+                        if (data.addType == "A") {
+                            $('#' + tag).tagsinput('removeAll');
+                            $('#' + tag).tagsinput('add', { value: "Get All" });
+                        } else {
+                            allElement.forEach(function (data) {
+
+                                $('#' + tag).tagsinput('add', { value: data.text + " (" + data.value.toUpperCase() + ")" });
+                            });
+                        }
+                            
+                        $('#editDate').text(data.userEditDate);
+                        $('#editBy').text(data.userEditBy);
+                        $('#editBy').removeClass('text-danger');
+                        $('#editBy').addClass('text-black');
+                        $('#editDate').removeClass('text-danger');
+                        $('#editDate').addClass('text-black');
+                            if (data.activeLocation) {
+                                $('#location-dropdown').empty();
+                                var defaultOption = $('<option>', {
+                                    value: 'null',
+                                    text: 'Select an option',
+                                    disabled: true,
+                                    selected: true
+                                });
+                                var selectAll = $('<option>', {
+                                    value: 'selectAll',
+                                    text: 'Select All',
+
+                                });
+                                var getAll = $('<option>', {
+                                    value: 'A',
+                                    text: 'Get All',
+
+                                });
+                                
+                                $('#location-dropdown').append(defaultOption);
+                                if (data.addType == "A") {
+                                    $('#location-dropdown').append(getAll);
+                                }
+                                // Assuming your dropdown has the ID 'myDropdown'
+                                $('#location-dropdown').append(selectAll);
+                                
+                                data.activeLocation.forEach(function (location) {
+                                    // Create a new option element
+                                    var newLocation = $('<option>', {
+                                        value: location.factory + "-" + location.location_code,
+                                        text: location.factory + "-" + location.name
+                                    });
+
+                                    // Append the new option to the select element
+                                    $('#location-dropdown').append(newLocation);
+                                });
+                            }
+
+                        } else {
+                            errorMessage(data.error_message);
+
+
+                        }
+
+
+
+                    },
+                    error: function () {
+                        errorMessage(data.error_message);
+
+
+                    }
+                });
+
+    }
+
+
+
+
+        var elem = document.querySelector('.js-switch');
+        var switchery = new Switchery(elem, { color: '#1AB394' });
+</script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,2274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AttendNow_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="LOG_sys_setting_role_permission">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="change_type" Type="varchar" MaxLength="50" />
+          <Property Name="change_date" Type="datetime" />
+          <Property Name="change_by" Type="varchar" MaxLength="50" />
+          <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="module" Type="varchar" MaxLength="50" />
+          <Property Name="viewFunction" Type="bit" />
+          <Property Name="editFunction" Type="bit" />
+          <Property Name="deleteFunction" Type="bit" />
+          <Property Name="addFunction" Type="bit" />
+          <Property Name="status" Type="bit" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_meeting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="change_type" Type="varchar" MaxLength="50" />
+          <Property Name="change_date" Type="datetime" />
+          <Property Name="change_by" Type="varchar" MaxLength="50" />
+          <Property Name="meeting_code" Type="varchar" MaxLength="50" />
+          <Property Name="title" Type="varchar" MaxLength="50" />
+          <Property Name="detail" Type="varchar(max)" />
+          <Property Name="startDate" Type="datetime" />
+          <Property Name="endDate" Type="datetime" />
+          <Property Name="organizer" Type="varchar" MaxLength="50" />
+          <Property Name="remark" Type="varchar(max)" />
+          <Property Name="place" Type="varchar" MaxLength="50" />
+          <Property Name="link" Type="varchar(max)" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="type" Type="bit" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="condition" Type="varchar" MaxLength="50" />
+          <Property Name="certificate" Type="bit" />
+          <Property Name="factory_id" Type="varchar" MaxLength="50" />
+          <Property Name="mode" Type="varchar" MaxLength="50" />
+          <Property Name="meeting_type" Type="varchar" MaxLength="50" />
+          <Property Name="limit" Type="int" />
+          <Property Name="limit_status" Type="bit" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="change_type" Type="varchar" MaxLength="50" />
+          <Property Name="change_date" Type="datetime" />
+          <Property Name="change_by" Type="varchar" MaxLength="50" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="factory" Type="varchar" MaxLength="50" />
+          <Property Name="role" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="timezone" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_view_department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="change_type" Type="varchar" MaxLength="50" />
+          <Property Name="change_date" Type="datetime" />
+          <Property Name="change_by" Type="varchar" MaxLength="50" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_view_factory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="change_type" Type="varchar" MaxLength="50" />
+          <Property Name="change_date" Type="datetime" />
+          <Property Name="change_by" Type="varchar" MaxLength="50" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" />
+          <Property Name="factory_id" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_view_location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="change_type" Type="varchar" MaxLength="50" />
+          <Property Name="change_date" Type="datetime" />
+          <Property Name="change_by" Type="varchar" MaxLength="50" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="factory" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sys_setting_define_table">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="module" Type="varchar" MaxLength="50" />
+          <Property Name="field" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="sys_setting_role_permission">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="role" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="module" Type="varchar" MaxLength="50" />
+          <Property Name="viewFunction" Type="bit" />
+          <Property Name="editFunction" Type="bit" />
+          <Property Name="deleteFunction" Type="bit" />
+          <Property Name="addFunction" Type="bit" />
+          <Property Name="status" Type="bit" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="sys_setting_running_num">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="module" Type="varchar" MaxLength="50" />
+          <Property Name="running_num" Type="varchar" MaxLength="50" />
+          <Property Name="prefix" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tbl_department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="department_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_factory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="factory_id" Type="varchar" MaxLength="50" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tbl_location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="location_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tbl_LocationFactory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="factory" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_meeting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="meeting_code" Type="varchar" MaxLength="50" />
+          <Property Name="meeting_type" Type="varchar" MaxLength="50" />
+          <Property Name="title" Type="varchar" MaxLength="50" />
+          <Property Name="detail" Type="varchar(max)" />
+          <Property Name="startDate" Type="datetime" />
+          <Property Name="endDate" Type="datetime" />
+          <Property Name="organizer" Type="varchar" MaxLength="50" />
+          <Property Name="remark" Type="varchar(max)" />
+          <Property Name="place" Type="varchar" MaxLength="50" />
+          <Property Name="link" Type="varchar(max)" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="type" Type="bit" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="condition" Type="varchar" MaxLength="1" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="certificate" Type="bit" />
+          <Property Name="factory_id" Type="varchar" MaxLength="50" />
+          <Property Name="mode" Type="varchar" MaxLength="1" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="limit" Type="int" />
+          <Property Name="limit_status" Type="bit" />
+        </EntityType>
+        <EntityType Name="tbl_meeting_gallery">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="path" Type="varchar" MaxLength="50" />
+          <Property Name="filename" Type="varchar(max)" />
+          <Property Name="format" Type="varchar" MaxLength="50" />
+          <Property Name="meeting_code" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tbl_participant">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="factory_id" Type="varchar" MaxLength="50" />
+          <Property Name="meeting" Type="varchar" MaxLength="50" />
+          <Property Name="mobile" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="remark" Type="text" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="certificate_no" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tbl_place">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="place_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tbl_PlaceFactory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="place" Type="varchar" MaxLength="50" />
+          <Property Name="factory" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="role_code" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="factory" Type="varchar" MaxLength="50" />
+          <Property Name="role" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="timezone" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_view_department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_view_factory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" />
+          <Property Name="factory_id" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_view_location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+          <Property Name="createBy" Type="varchar" MaxLength="50" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="factory" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tmp_participant">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="location" Type="varchar" MaxLength="50" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="mobile" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="createDate" Type="datetime" />
+          <Property Name="editBy" Type="varchar" MaxLength="50" />
+          <Property Name="editDate" Type="datetime" />
+          <Property Name="remark" Type="text" />
+          <Property Name="factory_id" Type="varchar" MaxLength="50" />
+          <Property Name="staff_no" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar(max)" />
+          <Property Name="status" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Function Name="SP_CheckUserCredentials" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="varchar" Mode="In" />
+          <Parameter Name="EncryptedPassword" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetDepartments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DepartmentCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetEmailNotificationData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingCode" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetFactorys" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Factory_id" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetLocations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetLocationsWithFactory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="ControlBy" Type="nvarchar" Mode="In" />
+          <Parameter Name="FactoryID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetMeetingGallery" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingCode" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetMeetings" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="MeetingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ConditionOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="TypeOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="MeetingType" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingStartDate" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingEndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetMeetingsForCalander" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+          <Parameter Name="Place" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetMeetingsReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="MeetingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ConditionOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="TypeOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="MeetingType" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingStartDate" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingEndDate" Type="datetime" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+          <Parameter Name="BasedDate" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetParticipants" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CertificateNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="MeetingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="ControlBy" Type="nvarchar" Mode="In" />
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingStartDate" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingEndDate" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingCondition" Type="nvarchar" Mode="In" />
+          <Parameter Name="Notification" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetParticipantsReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="ControlBy" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+          <Parameter Name="BasedDate" Type="nvarchar" Mode="In" />
+          <Parameter Name="MeetingStartDate" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingEndDate" Type="datetime" Mode="In" />
+          <Parameter Name="ConditionOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="TypeOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="MeetingType" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SP_GetPlace" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlaceCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="ControlBy" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetPlaceRecord" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Place" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetPlaceWithFactory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlaceCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="FactoryID" Type="nvarchar" Mode="In" />
+          <Parameter Name="ControlBy" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetRoles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RoleCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetUserProfiles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusOptions" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Criteria" Type="nvarchar" Mode="In" />
+          <Parameter Name="Text" Type="nvarchar" Mode="In" />
+          <Parameter Name="DateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_GetViewDepartments" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetViewFactorys" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetViewLocations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StaffNo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_LocationConnectFactory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationCode" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_PlaceConnectFactory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlaceCode" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="AttendNow_DBModelStoreContainer">
+          <EntitySet Name="LOG_sys_setting_role_permission" EntityType="Self.LOG_sys_setting_role_permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOG_tbl_meeting" EntityType="Self.LOG_tbl_meeting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOG_tbl_user" EntityType="Self.LOG_tbl_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOG_tbl_view_department" EntityType="Self.LOG_tbl_view_department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOG_tbl_view_factory" EntityType="Self.LOG_tbl_view_factory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOG_tbl_view_location" EntityType="Self.LOG_tbl_view_location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sys_setting_define_table" EntityType="Self.sys_setting_define_table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sys_setting_role_permission" EntityType="Self.sys_setting_role_permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sys_setting_running_num" EntityType="Self.sys_setting_running_num" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_department" EntityType="Self.tbl_department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_factory" EntityType="Self.tbl_factory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_location" EntityType="Self.tbl_location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_LocationFactory" EntityType="Self.tbl_LocationFactory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_meeting" EntityType="Self.tbl_meeting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_meeting_gallery" EntityType="Self.tbl_meeting_gallery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_participant" EntityType="Self.tbl_participant" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_place" EntityType="Self.tbl_place" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_PlaceFactory" EntityType="Self.tbl_PlaceFactory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_role" EntityType="Self.tbl_role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_user" EntityType="Self.tbl_user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_view_department" EntityType="Self.tbl_view_department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_view_factory" EntityType="Self.tbl_view_factory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_view_location" EntityType="Self.tbl_view_location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tmp_participant" EntityType="Self.tmp_participant" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AttendNow_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="LOG_sys_setting_role_permission">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="change_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="change_date" Type="DateTime" Precision="3" />
+          <Property Name="change_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="module" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="viewFunction" Type="Boolean" />
+          <Property Name="editFunction" Type="Boolean" />
+          <Property Name="deleteFunction" Type="Boolean" />
+          <Property Name="addFunction" Type="Boolean" />
+          <Property Name="status" Type="Boolean" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_meeting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="change_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="change_date" Type="DateTime" Precision="3" />
+          <Property Name="change_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="meeting_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="startDate" Type="DateTime" Precision="3" />
+          <Property Name="endDate" Type="DateTime" Precision="3" />
+          <Property Name="organizer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="place" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="Boolean" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="condition" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="certificate" Type="Boolean" />
+          <Property Name="factory_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="meeting_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="limit" Type="Int32" />
+          <Property Name="limit_status" Type="Boolean" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="change_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="change_date" Type="DateTime" Precision="3" />
+          <Property Name="change_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="factory" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="timezone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_view_department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="change_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="change_date" Type="DateTime" Precision="3" />
+          <Property Name="change_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_view_factory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="change_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="change_date" Type="DateTime" Precision="3" />
+          <Property Name="change_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="factory_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LOG_tbl_view_location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="change_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="change_date" Type="DateTime" Precision="3" />
+          <Property Name="change_by" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="factory" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="sys_setting_define_table">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="module" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="field" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="sys_setting_role_permission">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="module" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="viewFunction" Type="Boolean" />
+          <Property Name="editFunction" Type="Boolean" />
+          <Property Name="deleteFunction" Type="Boolean" />
+          <Property Name="addFunction" Type="Boolean" />
+          <Property Name="status" Type="Boolean" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="sys_setting_running_num">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="module" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="running_num" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="prefix" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="department_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_factory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="factory_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="location_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_LocationFactory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="factory" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_meeting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="meeting_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="meeting_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="startDate" Type="DateTime" Precision="3" />
+          <Property Name="endDate" Type="DateTime" Precision="3" />
+          <Property Name="organizer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="place" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="type" Type="Boolean" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="condition" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="certificate" Type="Boolean" />
+          <Property Name="factory_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mode" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="limit" Type="Int32" />
+          <Property Name="limit_status" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="tbl_meeting_gallery">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="path" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="filename" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="format" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="meeting_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_participant">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="factory_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="meeting" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="certificate_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_place">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="place_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tbl_PlaceFactory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="place" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="factory" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="factory" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="timezone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_view_department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_view_factory">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="factory_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_view_location">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="factory" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tmp_participant">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="createDate" Type="DateTime" Precision="3" />
+          <Property Name="editBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="editDate" Type="DateTime" Precision="3" />
+          <Property Name="remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="factory_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="staff_no" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="AttendNow_DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="LOG_sys_setting_role_permission" EntityType="Self.LOG_sys_setting_role_permission" />
+          <EntitySet Name="LOG_tbl_meeting" EntityType="Self.LOG_tbl_meeting" />
+          <EntitySet Name="LOG_tbl_user" EntityType="Self.LOG_tbl_user" />
+          <EntitySet Name="LOG_tbl_view_department" EntityType="Self.LOG_tbl_view_department" />
+          <EntitySet Name="LOG_tbl_view_factory" EntityType="Self.LOG_tbl_view_factory" />
+          <EntitySet Name="LOG_tbl_view_location" EntityType="Self.LOG_tbl_view_location" />
+          <EntitySet Name="sys_setting_define_table" EntityType="Self.sys_setting_define_table" />
+          <EntitySet Name="sys_setting_role_permission" EntityType="Self.sys_setting_role_permission" />
+          <EntitySet Name="sys_setting_running_num" EntityType="Self.sys_setting_running_num" />
+          <EntitySet Name="tbl_department" EntityType="Self.tbl_department" />
+          <EntitySet Name="tbl_factory" EntityType="Self.tbl_factory" />
+          <EntitySet Name="tbl_location" EntityType="Self.tbl_location" />
+          <EntitySet Name="tbl_LocationFactory" EntityType="Self.tbl_LocationFactory" />
+          <EntitySet Name="tbl_meeting" EntityType="Self.tbl_meeting" />
+          <EntitySet Name="tbl_meeting_gallery" EntityType="Self.tbl_meeting_gallery" />
+          <EntitySet Name="tbl_participant" EntityType="Self.tbl_participant" />
+          <EntitySet Name="tbl_place" EntityType="Self.tbl_place" />
+          <EntitySet Name="tbl_PlaceFactory" EntityType="Self.tbl_PlaceFactory" />
+          <EntitySet Name="tbl_role" EntityType="Self.tbl_role" />
+          <EntitySet Name="tbl_user" EntityType="Self.tbl_user" />
+          <EntitySet Name="tbl_view_department" EntityType="Self.tbl_view_department" />
+          <EntitySet Name="tbl_view_factory" EntityType="Self.tbl_view_factory" />
+          <EntitySet Name="tbl_view_location" EntityType="Self.tbl_view_location" />
+          <EntitySet Name="tmp_participant" EntityType="Self.tmp_participant" />
+          <FunctionImport Name="SP_CheckUserCredentials" ReturnType="Collection(AttendNow_DBModel.SP_CheckUserCredentials_Result)">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="EncryptedPassword" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetDepartments" ReturnType="Collection(AttendNow_DBModel.SP_GetDepartments_Result)">
+            <Parameter Name="DepartmentCode" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetEmailNotificationData" ReturnType="Collection(AttendNow_DBModel.SP_GetEmailNotificationData_Result)">
+            <Parameter Name="MeetingCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetFactorys" ReturnType="Collection(AttendNow_DBModel.SP_GetFactorys_Result)">
+            <Parameter Name="Factory_id" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetLocations" ReturnType="Collection(AttendNow_DBModel.SP_GetLocations_Result)">
+            <Parameter Name="LocationCode" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetLocationsWithFactory" ReturnType="Collection(AttendNow_DBModel.SP_GetLocationsWithFactory_Result)">
+            <Parameter Name="LocationCode" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="ControlBy" Mode="In" Type="String" />
+            <Parameter Name="FactoryID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetMeetingGallery" ReturnType="Collection(AttendNow_DBModel.SP_GetMeetingGallery_Result)">
+            <Parameter Name="MeetingCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetMeetings" ReturnType="Collection(AttendNow_DBModel.SP_GetMeetings_Result)">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="MeetingCode" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="ConditionOptions" Mode="In" Type="String" />
+            <Parameter Name="TypeOptions" Mode="In" Type="String" />
+            <Parameter Name="MeetingType" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingEndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetMeetingsForCalander" ReturnType="Collection(AttendNow_DBModel.SP_GetMeetingsForCalander_Result)">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="Place" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetMeetingsReport">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="MeetingCode" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="ConditionOptions" Mode="In" Type="String" />
+            <Parameter Name="TypeOptions" Mode="In" Type="String" />
+            <Parameter Name="MeetingType" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingEndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="BasedDate" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetParticipants" ReturnType="Collection(AttendNow_DBModel.SP_GetParticipants_Result)">
+            <Parameter Name="CertificateNo" Mode="In" Type="String" />
+            <Parameter Name="MeetingCode" Mode="In" Type="String" />
+            <Parameter Name="ControlBy" Mode="In" Type="String" />
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingEndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingCondition" Mode="In" Type="String" />
+            <Parameter Name="Notification" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetParticipantsReport">
+            <Parameter Name="MeetingCode" Mode="In" Type="String" />
+            <Parameter Name="ControlBy" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+            <Parameter Name="BasedDate" Mode="In" Type="String" />
+            <Parameter Name="MeetingStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingEndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ConditionOptions" Mode="In" Type="String" />
+            <Parameter Name="TypeOptions" Mode="In" Type="String" />
+            <Parameter Name="MeetingType" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetPlace" ReturnType="Collection(AttendNow_DBModel.SP_GetPlace_Result)">
+            <Parameter Name="PlaceCode" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="ControlBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetPlaceRecord" ReturnType="Collection(AttendNow_DBModel.SP_GetPlaceRecord_Result)">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="Place" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetPlaceWithFactory" ReturnType="Collection(AttendNow_DBModel.SP_GetPlaceWithFactory_Result)">
+            <Parameter Name="PlaceCode" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="FactoryID" Mode="In" Type="String" />
+            <Parameter Name="ControlBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetRoles" ReturnType="Collection(AttendNow_DBModel.SP_GetRoles_Result)">
+            <Parameter Name="RoleCode" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetUserProfiles" ReturnType="Collection(AttendNow_DBModel.SP_GetUserProfiles_Result)">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+            <Parameter Name="StatusOptions" Mode="In" Type="String" />
+            <Parameter Name="Criteria" Mode="In" Type="String" />
+            <Parameter Name="Text" Mode="In" Type="String" />
+            <Parameter Name="DateType" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetViewDepartments" ReturnType="Collection(String)">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetViewFactorys" ReturnType="Collection(String)">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetViewLocations" ReturnType="Collection(String)">
+            <Parameter Name="StaffNo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_LocationConnectFactory" ReturnType="Collection(String)">
+            <Parameter Name="LocationCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_PlaceConnectFactory" ReturnType="Collection(String)">
+            <Parameter Name="PlaceCode" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SP_CheckUserCredentials_Result">
+          <Property Type="String" Name="staff_no" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="department" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="location" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="role" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="timezone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="LocationName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RoleName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="module" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="viewFunction" Nullable="true" />
+          <Property Type="Boolean" Name="editFunction" Nullable="true" />
+          <Property Type="Boolean" Name="deleteFunction" Nullable="true" />
+          <Property Type="Boolean" Name="addFunction" Nullable="true" />
+          <Property Type="Boolean" Name="role_permission_status" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_GetDepartments_Result">
+          <Property Type="String" Name="department_code" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetEmailNotificationData_Result">
+          <Property Type="String" Name="certificate_no" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="staff_no" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="department" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="location" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="factory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="mobile" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="remark" Nullable="true" MaxLength="Max" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="LocationName" Nullable="true" MaxLength="101" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FactoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_title" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_detail" Nullable="true" />
+          <Property Type="DateTime" Name="meeting_startDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="meeting_endDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="meeting_remark" Nullable="true" />
+          <Property Type="String" Name="meeting_department" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_location" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_organizer" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_place" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_link" Nullable="true" />
+          <Property Type="Boolean" Name="meeting_limit_status" Nullable="true" />
+          <Property Type="Boolean" Name="type" Nullable="true" />
+          <Property Type="String" Name="meeting_type" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="meeting_certificate" Nullable="true" />
+          <Property Type="String" Name="meeting_status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_condition" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="meeting_DepartmentName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="meeting_LocationName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_FactoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_PlaceName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetFactorys_Result">
+          <Property Type="String" Name="factory_id" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetLocations_Result">
+          <Property Type="String" Name="location_code" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetLocationsWithFactory_Result">
+          <Property Type="String" Name="location_code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="factory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="factoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetMeetingGallery_Result">
+          <Property Type="String" Name="path" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="filename" Nullable="true" />
+          <Property Type="String" Name="format" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_code" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetMeetings_Result">
+          <Property Type="String" Name="meeting_code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="title" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_type" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="detail" Nullable="true" />
+          <Property Type="DateTime" Name="startDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="endDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="remark" Nullable="true" />
+          <Property Type="String" Name="department" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="location" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="certificate" Nullable="true" />
+          <Property Type="String" Name="organizer" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="place" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="link" Nullable="true" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="type" Nullable="true" />
+          <Property Type="String" Name="password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="condition" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="factory" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="limit_status" Nullable="true" />
+          <Property Type="Int32" Name="limit" Nullable="true" />
+          <Property Type="String" Name="factoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="LocationName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_timezone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="placeName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetMeetingsForCalander_Result">
+          <Property Type="String" Name="meeting_code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="title" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="start" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="end" Nullable="true" Precision="23" />
+          <Property Type="String" Name="body" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetParticipants_Result">
+          <Property Type="String" Name="certificate_no" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="staff_no" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="department" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="location" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="factory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="mobile" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="remark" Nullable="true" MaxLength="Max" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="LocationName" Nullable="true" MaxLength="101" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FactoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_title" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_detail" Nullable="true" />
+          <Property Type="DateTime" Name="meeting_startDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="meeting_endDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="meeting_remark" Nullable="true" />
+          <Property Type="String" Name="meeting_department" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_location" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_organizer" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_place" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_link" Nullable="true" />
+          <Property Type="Boolean" Name="meeting_limit_status" Nullable="true" />
+          <Property Type="Boolean" Name="meeting_type" Nullable="true" />
+          <Property Type="Boolean" Name="meeting_certificate" Nullable="true" />
+          <Property Type="String" Name="meeting_status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_condition" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="meeting_timezone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_DepartmentName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="meeting_LocationName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_FactoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="meeting_PlaceName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetPlace_Result">
+          <Property Type="String" Name="place_code" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetPlaceRecord_Result">
+          <Property Type="String" Name="placeName" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="startDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="endDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="title" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="organizer" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetPlaceWithFactory_Result">
+          <Property Type="String" Name="place_code" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="factory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="factoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetRoles_Result">
+          <Property Type="String" Name="role_code" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_GetUserProfiles_Result">
+          <Property Type="String" Name="staff_no" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="department" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="location" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="factory" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="role" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="createBy" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="editBy" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="createDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="editDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="status" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="email" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="password" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="timezone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="LocationName" Nullable="true" MaxLength="101" />
+          <Property Type="String" Name="RoleName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FactoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CreateByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EditByName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AttendNow_DBModelStoreContainer" CdmEntityContainer="AttendNow_DBEntities">
+          <EntitySetMapping Name="LOG_sys_setting_role_permission">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.LOG_sys_setting_role_permission">
+              <MappingFragment StoreEntitySet="LOG_sys_setting_role_permission">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="change_type" ColumnName="change_type" />
+                <ScalarProperty Name="change_date" ColumnName="change_date" />
+                <ScalarProperty Name="change_by" ColumnName="change_by" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="module" ColumnName="module" />
+                <ScalarProperty Name="viewFunction" ColumnName="viewFunction" />
+                <ScalarProperty Name="editFunction" ColumnName="editFunction" />
+                <ScalarProperty Name="deleteFunction" ColumnName="deleteFunction" />
+                <ScalarProperty Name="addFunction" ColumnName="addFunction" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOG_tbl_meeting">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.LOG_tbl_meeting">
+              <MappingFragment StoreEntitySet="LOG_tbl_meeting">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="change_type" ColumnName="change_type" />
+                <ScalarProperty Name="change_date" ColumnName="change_date" />
+                <ScalarProperty Name="change_by" ColumnName="change_by" />
+                <ScalarProperty Name="meeting_code" ColumnName="meeting_code" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="detail" ColumnName="detail" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="organizer" ColumnName="organizer" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="place" ColumnName="place" />
+                <ScalarProperty Name="link" ColumnName="link" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="condition" ColumnName="condition" />
+                <ScalarProperty Name="certificate" ColumnName="certificate" />
+                <ScalarProperty Name="factory_id" ColumnName="factory_id" />
+                <ScalarProperty Name="mode" ColumnName="mode" />
+                <ScalarProperty Name="meeting_type" ColumnName="meeting_type" />
+                <ScalarProperty Name="limit" ColumnName="limit" />
+                <ScalarProperty Name="limit_status" ColumnName="limit_status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOG_tbl_user">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.LOG_tbl_user">
+              <MappingFragment StoreEntitySet="LOG_tbl_user">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="change_type" ColumnName="change_type" />
+                <ScalarProperty Name="change_date" ColumnName="change_date" />
+                <ScalarProperty Name="change_by" ColumnName="change_by" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOG_tbl_view_department">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.LOG_tbl_view_department">
+              <MappingFragment StoreEntitySet="LOG_tbl_view_department">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="change_type" ColumnName="change_type" />
+                <ScalarProperty Name="change_date" ColumnName="change_date" />
+                <ScalarProperty Name="change_by" ColumnName="change_by" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOG_tbl_view_factory">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.LOG_tbl_view_factory">
+              <MappingFragment StoreEntitySet="LOG_tbl_view_factory">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="change_type" ColumnName="change_type" />
+                <ScalarProperty Name="change_date" ColumnName="change_date" />
+                <ScalarProperty Name="change_by" ColumnName="change_by" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="factory_id" ColumnName="factory_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOG_tbl_view_location">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.LOG_tbl_view_location">
+              <MappingFragment StoreEntitySet="LOG_tbl_view_location">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="change_type" ColumnName="change_type" />
+                <ScalarProperty Name="change_date" ColumnName="change_date" />
+                <ScalarProperty Name="change_by" ColumnName="change_by" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sys_setting_define_table">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.sys_setting_define_table">
+              <MappingFragment StoreEntitySet="sys_setting_define_table">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="module" ColumnName="module" />
+                <ScalarProperty Name="field" ColumnName="field" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sys_setting_role_permission">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.sys_setting_role_permission">
+              <MappingFragment StoreEntitySet="sys_setting_role_permission">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="module" ColumnName="module" />
+                <ScalarProperty Name="viewFunction" ColumnName="viewFunction" />
+                <ScalarProperty Name="editFunction" ColumnName="editFunction" />
+                <ScalarProperty Name="deleteFunction" ColumnName="deleteFunction" />
+                <ScalarProperty Name="addFunction" ColumnName="addFunction" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sys_setting_running_num">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.sys_setting_running_num">
+              <MappingFragment StoreEntitySet="sys_setting_running_num">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="module" ColumnName="module" />
+                <ScalarProperty Name="running_num" ColumnName="running_num" />
+                <ScalarProperty Name="prefix" ColumnName="prefix" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_department">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_department">
+              <MappingFragment StoreEntitySet="tbl_department">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="department_code" ColumnName="department_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_factory">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_factory">
+              <MappingFragment StoreEntitySet="tbl_factory">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="factory_id" ColumnName="factory_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_location">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_location">
+              <MappingFragment StoreEntitySet="tbl_location">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="location_code" ColumnName="location_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_LocationFactory">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_LocationFactory">
+              <MappingFragment StoreEntitySet="tbl_LocationFactory">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_meeting">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_meeting">
+              <MappingFragment StoreEntitySet="tbl_meeting">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="meeting_code" ColumnName="meeting_code" />
+                <ScalarProperty Name="meeting_type" ColumnName="meeting_type" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="detail" ColumnName="detail" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="organizer" ColumnName="organizer" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="place" ColumnName="place" />
+                <ScalarProperty Name="link" ColumnName="link" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="condition" ColumnName="condition" />
+                <ScalarProperty Name="certificate" ColumnName="certificate" />
+                <ScalarProperty Name="factory_id" ColumnName="factory_id" />
+                <ScalarProperty Name="mode" ColumnName="mode" />
+                <ScalarProperty Name="limit" ColumnName="limit" />
+                <ScalarProperty Name="limit_status" ColumnName="limit_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_meeting_gallery">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_meeting_gallery">
+              <MappingFragment StoreEntitySet="tbl_meeting_gallery">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="filename" ColumnName="filename" />
+                <ScalarProperty Name="format" ColumnName="format" />
+                <ScalarProperty Name="meeting_code" ColumnName="meeting_code" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_participant">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_participant">
+              <MappingFragment StoreEntitySet="tbl_participant">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="factory_id" ColumnName="factory_id" />
+                <ScalarProperty Name="meeting" ColumnName="meeting" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="certificate_no" ColumnName="certificate_no" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_place">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_place">
+              <MappingFragment StoreEntitySet="tbl_place">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="place_code" ColumnName="place_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_PlaceFactory">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_PlaceFactory">
+              <MappingFragment StoreEntitySet="tbl_PlaceFactory">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="place" ColumnName="place" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_role">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_role">
+              <MappingFragment StoreEntitySet="tbl_role">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="role_code" ColumnName="role_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_user">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_user">
+              <MappingFragment StoreEntitySet="tbl_user">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_view_department">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_view_department">
+              <MappingFragment StoreEntitySet="tbl_view_department">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_view_factory">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_view_factory">
+              <MappingFragment StoreEntitySet="tbl_view_factory">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="factory_id" ColumnName="factory_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_view_location">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tbl_view_location">
+              <MappingFragment StoreEntitySet="tbl_view_location">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tmp_participant">
+            <EntityTypeMapping TypeName="AttendNow_DBModel.tmp_participant">
+              <MappingFragment StoreEntitySet="tmp_participant">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="factory_id" ColumnName="factory_id" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_CheckUserCredentials" FunctionName="AttendNow_DBModel.Store.SP_CheckUserCredentials">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_CheckUserCredentials_Result">
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="module" ColumnName="module" />
+                <ScalarProperty Name="viewFunction" ColumnName="viewFunction" />
+                <ScalarProperty Name="editFunction" ColumnName="editFunction" />
+                <ScalarProperty Name="deleteFunction" ColumnName="deleteFunction" />
+                <ScalarProperty Name="addFunction" ColumnName="addFunction" />
+                <ScalarProperty Name="role_permission_status" ColumnName="role_permission_status" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetDepartments" FunctionName="AttendNow_DBModel.Store.SP_GetDepartments">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetDepartments_Result">
+                <ScalarProperty Name="department_code" ColumnName="department_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetEmailNotificationData" FunctionName="AttendNow_DBModel.Store.SP_GetEmailNotificationData">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetEmailNotificationData_Result">
+                <ScalarProperty Name="certificate_no" ColumnName="certificate_no" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="meeting" ColumnName="meeting" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+                <ScalarProperty Name="FactoryName" ColumnName="FactoryName" />
+                <ScalarProperty Name="meeting_code" ColumnName="meeting_code" />
+                <ScalarProperty Name="meeting_title" ColumnName="meeting_title" />
+                <ScalarProperty Name="meeting_detail" ColumnName="meeting_detail" />
+                <ScalarProperty Name="meeting_startDate" ColumnName="meeting_startDate" />
+                <ScalarProperty Name="meeting_endDate" ColumnName="meeting_endDate" />
+                <ScalarProperty Name="meeting_remark" ColumnName="meeting_remark" />
+                <ScalarProperty Name="meeting_department" ColumnName="meeting_department" />
+                <ScalarProperty Name="meeting_location" ColumnName="meeting_location" />
+                <ScalarProperty Name="meeting_organizer" ColumnName="meeting_organizer" />
+                <ScalarProperty Name="meeting_place" ColumnName="meeting_place" />
+                <ScalarProperty Name="meeting_link" ColumnName="meeting_link" />
+                <ScalarProperty Name="meeting_limit_status" ColumnName="meeting_limit_status" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="meeting_type" ColumnName="meeting_type" />
+                <ScalarProperty Name="meeting_certificate" ColumnName="meeting_certificate" />
+                <ScalarProperty Name="meeting_status" ColumnName="meeting_status" />
+                <ScalarProperty Name="meeting_condition" ColumnName="meeting_condition" />
+                <ScalarProperty Name="meeting_DepartmentName" ColumnName="meeting_DepartmentName" />
+                <ScalarProperty Name="meeting_LocationName" ColumnName="meeting_LocationName" />
+                <ScalarProperty Name="meeting_FactoryName" ColumnName="meeting_FactoryName" />
+                <ScalarProperty Name="meeting_PlaceName" ColumnName="meeting_PlaceName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetFactorys" FunctionName="AttendNow_DBModel.Store.SP_GetFactorys">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetFactorys_Result">
+                <ScalarProperty Name="factory_id" ColumnName="factory_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetLocations" FunctionName="AttendNow_DBModel.Store.SP_GetLocations">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetLocations_Result">
+                <ScalarProperty Name="location_code" ColumnName="location_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetLocationsWithFactory" FunctionName="AttendNow_DBModel.Store.SP_GetLocationsWithFactory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetLocationsWithFactory_Result">
+                <ScalarProperty Name="location_code" ColumnName="location_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="factoryName" ColumnName="factoryName" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetMeetingGallery" FunctionName="AttendNow_DBModel.Store.SP_GetMeetingGallery">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetMeetingGallery_Result">
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="filename" ColumnName="filename" />
+                <ScalarProperty Name="format" ColumnName="format" />
+                <ScalarProperty Name="meeting_code" ColumnName="meeting_code" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetMeetings" FunctionName="AttendNow_DBModel.Store.SP_GetMeetings">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetMeetings_Result">
+                <ScalarProperty Name="meeting_code" ColumnName="meeting_code" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="meeting_type" ColumnName="meeting_type" />
+                <ScalarProperty Name="detail" ColumnName="detail" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="certificate" ColumnName="certificate" />
+                <ScalarProperty Name="organizer" ColumnName="organizer" />
+                <ScalarProperty Name="place" ColumnName="place" />
+                <ScalarProperty Name="link" ColumnName="link" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="condition" ColumnName="condition" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="limit_status" ColumnName="limit_status" />
+                <ScalarProperty Name="limit" ColumnName="limit" />
+                <ScalarProperty Name="factoryName" ColumnName="factoryName" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="meeting_timezone" ColumnName="meeting_timezone" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+                <ScalarProperty Name="placeName" ColumnName="placeName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetMeetingsForCalander" FunctionName="AttendNow_DBModel.Store.SP_GetMeetingsForCalander">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetMeetingsForCalander_Result">
+                <ScalarProperty Name="meeting_code" ColumnName="meeting_code" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="start" ColumnName="start" />
+                <ScalarProperty Name="end" ColumnName="end" />
+                <ScalarProperty Name="body" ColumnName="body" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetMeetingsReport" FunctionName="AttendNow_DBModel.Store.SP_GetMeetingsReport" />
+          <FunctionImportMapping FunctionImportName="SP_GetParticipants" FunctionName="AttendNow_DBModel.Store.SP_GetParticipants">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetParticipants_Result">
+                <ScalarProperty Name="certificate_no" ColumnName="certificate_no" />
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="meeting" ColumnName="meeting" />
+                <ScalarProperty Name="remark" ColumnName="remark" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+                <ScalarProperty Name="FactoryName" ColumnName="FactoryName" />
+                <ScalarProperty Name="meeting_code" ColumnName="meeting_code" />
+                <ScalarProperty Name="meeting_title" ColumnName="meeting_title" />
+                <ScalarProperty Name="meeting_detail" ColumnName="meeting_detail" />
+                <ScalarProperty Name="meeting_startDate" ColumnName="meeting_startDate" />
+                <ScalarProperty Name="meeting_endDate" ColumnName="meeting_endDate" />
+                <ScalarProperty Name="meeting_remark" ColumnName="meeting_remark" />
+                <ScalarProperty Name="meeting_department" ColumnName="meeting_department" />
+                <ScalarProperty Name="meeting_location" ColumnName="meeting_location" />
+                <ScalarProperty Name="meeting_organizer" ColumnName="meeting_organizer" />
+                <ScalarProperty Name="meeting_place" ColumnName="meeting_place" />
+                <ScalarProperty Name="meeting_link" ColumnName="meeting_link" />
+                <ScalarProperty Name="meeting_limit_status" ColumnName="meeting_limit_status" />
+                <ScalarProperty Name="meeting_type" ColumnName="meeting_type" />
+                <ScalarProperty Name="meeting_certificate" ColumnName="meeting_certificate" />
+                <ScalarProperty Name="meeting_status" ColumnName="meeting_status" />
+                <ScalarProperty Name="meeting_condition" ColumnName="meeting_condition" />
+                <ScalarProperty Name="meeting_timezone" ColumnName="meeting_timezone" />
+                <ScalarProperty Name="meeting_DepartmentName" ColumnName="meeting_DepartmentName" />
+                <ScalarProperty Name="meeting_LocationName" ColumnName="meeting_LocationName" />
+                <ScalarProperty Name="meeting_FactoryName" ColumnName="meeting_FactoryName" />
+                <ScalarProperty Name="meeting_PlaceName" ColumnName="meeting_PlaceName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetParticipantsReport" FunctionName="AttendNow_DBModel.Store.SP_GetParticipantsReport" />
+          <FunctionImportMapping FunctionImportName="SP_GetPlace" FunctionName="AttendNow_DBModel.Store.SP_GetPlace">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetPlace_Result">
+                <ScalarProperty Name="place_code" ColumnName="place_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetPlaceRecord" FunctionName="AttendNow_DBModel.Store.SP_GetPlaceRecord">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetPlaceRecord_Result">
+                <ScalarProperty Name="placeName" ColumnName="placeName" />
+                <ScalarProperty Name="startDate" ColumnName="startDate" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="organizer" ColumnName="organizer" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetPlaceWithFactory" FunctionName="AttendNow_DBModel.Store.SP_GetPlaceWithFactory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetPlaceWithFactory_Result">
+                <ScalarProperty Name="place_code" ColumnName="place_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="factoryName" ColumnName="factoryName" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetRoles" FunctionName="AttendNow_DBModel.Store.SP_GetRoles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetRoles_Result">
+                <ScalarProperty Name="role_code" ColumnName="role_code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetUserProfiles" FunctionName="AttendNow_DBModel.Store.SP_GetUserProfiles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AttendNow_DBModel.SP_GetUserProfiles_Result">
+                <ScalarProperty Name="staff_no" ColumnName="staff_no" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="factory" ColumnName="factory" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="createBy" ColumnName="createBy" />
+                <ScalarProperty Name="editBy" ColumnName="editBy" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="editDate" ColumnName="editDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="FactoryName" ColumnName="FactoryName" />
+                <ScalarProperty Name="CreateByName" ColumnName="CreateByName" />
+                <ScalarProperty Name="EditByName" ColumnName="EditByName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetViewDepartments" FunctionName="AttendNow_DBModel.Store.SP_GetViewDepartments" />
+          <FunctionImportMapping FunctionImportName="SP_GetViewFactorys" FunctionName="AttendNow_DBModel.Store.SP_GetViewFactorys" />
+          <FunctionImportMapping FunctionImportName="SP_GetViewLocations" FunctionName="AttendNow_DBModel.Store.SP_GetViewLocations" />
+          <FunctionImportMapping FunctionImportName="SP_LocationConnectFactory" FunctionName="AttendNow_DBModel.Store.SP_LocationConnectFactory" />
+          <FunctionImportMapping FunctionImportName="SP_PlaceConnectFactory" FunctionName="AttendNow_DBModel.Store.SP_PlaceConnectFactory" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,239 @@
+﻿
+@model List<SP_CheckUserCredentials_Result>
+
+@using AttendNow.Models
+
+@{
+    var userAccess = Model.SingleOrDefault(rp => rp.module == "user");
+
+    var roleAccess = Model.SingleOrDefault(rp => rp.module == "role");
+    var locationAccess = Model.SingleOrDefault(rp => rp.module == "location");
+    var departmentAccess = Model.SingleOrDefault(rp => rp.module == "department");
+    var meetingAccess = Model.SingleOrDefault(rp => rp.module == "meeting");
+    var participantAccess = Model.SingleOrDefault(rp => rp.module == "participant");
+    var factoryAccess = Model.SingleOrDefault(rp => rp.module == "factory");
+
+}
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a href="@Url.Action("MainForm", "User", new { userProfile = "yes" })">
+                        <img alt="image" class="rounded-circle" src="~/Images/profile.png" />
+                    </a>
+                    <a href="@Url.Action("MainForm", "User", new { userProfile = "yes" })">
+                        <span class="block m-t-xs font-bold">@Model.FirstOrDefault().name (@Model.FirstOrDefault().staff_no.ToUpper())</span>
+                        <span class="text-muted text-xs block">@Model.FirstOrDefault().DepartmentName </span>
+                        <span class="text-muted text-xs block">@Model.FirstOrDefault().LocationName </span>
+                        <label class=" label label-primary">
+                            @Model.FirstOrDefault().RoleName
+                        </label>
+                    </a><br>
+                    <b class="text-warning">
+                <i class="fa fa-clock-o"></i>
+                @(Session["timezone"].ToString() == "M" ? "Malaysia / Singapore / China" : Session["timezone"].ToString() ==
+            "V" ? "Vietnam / Thailand"
+            : "Jordan")
+            </b>
+                </div>
+
+            </li>
+            <li class="@((TempData["page"] == "dashboard") ? "active" : "")">
+                <a href="@Url.Action("Index", "Home" )">
+                    <i class="fa fa-dashboard"></i>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+            </li>
+            @if (userAccess?.role_permission_status == true)
+            {
+
+        <li class="@((TempData["page"] == "adduser"||TempData["page"] == "userlist") ? "active" : "")">
+            <a href="@Url.Action("Index", "User")">
+                <i class="fa fa-user"></i>
+                <span class="nav-label">User</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse " class="@((TempData["page"] == "adduser"||TempData["page"] == "userlist") ? "in" : "")">
+                @if (userAccess?.addFunction == true)
+                {
+        <li class="@((TempData["page"] == "adduser") ? "active" : "")">
+            <a href="/User/Mainform">Add New User</a>
+
+        </li>}
+
+                <li class="@((TempData["page"] == "userlist") ? "active" : "")">
+                    <a href="@Url.Action("Index", "User")">User List</a>
+                </li>
+
+            </ul>
+        </li>            }
+
+
+            @if (roleAccess?.role_permission_status == true)
+            {
+        <li class="@((TempData["page"] == "addrole"||TempData["page"] == "rolelist") ? "active" : "")">
+            <a href="@Url.Action("Index", "Role")">
+                <i class="fa fa-address-card"></i>
+                <span class="nav-label">Role</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse " class="@((TempData["page"] == "addrole"||TempData["page"] == "rolelist") ? "in" : "")">
+                @if (roleAccess?.addFunction == true)
+                {
+        <li class="@((TempData["page"] == "addrole") ? "active" : "")">
+            <a href="/Role/Mainform">Add New Role</a>
+        </li>}
+
+
+                <li class="@((TempData["page"] == "rolelist") ? "active" : "")">
+                    <a href="@Url.Action("Index", "Role")">Role List</a>
+                </li>
+
+
+            </ul>
+        </li>            }
+            @if (factoryAccess?.role_permission_status == true)
+            {
+        <li class="@((TempData["page"] == "addfactory"||TempData["page"] == "factorylist") ? "active" : "")">
+            <a href="@Url.Action("Index", "Factory")">
+                <i class="fa fa-bank"></i>
+                <span class="nav-label">Factory</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse " class="@((TempData["page"] == "addfactory"||TempData["page"] == "factorylist") ? "in" : "")">
+                @if (factoryAccess?.addFunction == true)
+                {
+        <li class="@((TempData["page"] == "addfactory") ? "active" : "")">
+            <a href="/Factory/Mainform">Add New Factory</a>
+        </li>}
+
+                <li class="@((TempData["page"] == "factorylist") ? "active" : "")">
+                    <a href="@Url.Action("Index", "Factory")">Factory List</a>
+                </li>
+
+            </ul>
+        </li>            }
+
+            @if (locationAccess?.role_permission_status == true)
+            {
+        <li class="@((TempData["page"] == "addlocation"||TempData["page"] == "locationlist") ? "active" : "")">
+            <a href="@Url.Action("Index", "Location")">
+                <i class="fa fa-industry"></i>
+                <span class="nav-label">Location</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse " class="@((TempData["page"] == "addlocation"||TempData["page"] == "locationlist") ? "in" : "")">
+                @if (locationAccess?.addFunction == true)
+                {
+        <li class="@((TempData["page"] == "addlocation") ? "active" : "")">
+            <a href="/Location/Mainform">Add New Location</a>
+        </li>}
+
+                <li class="@((TempData["page"] == "locationlist") ? "active" : "")">
+                    <a href="@Url.Action("Index", "Location")">Location List</a>
+                </li>
+
+            </ul>
+        </li>            }
+            @if (departmentAccess?.role_permission_status == true)
+            {
+        <li class="@((TempData["page"] == "adddepartment"||TempData["page"] == "departmentlist") ? "active" : "")">
+            <a href="@Url.Action("Index", "Department")">
+                <i class="fa fa-building"></i>
+                <span class="nav-label">Department</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse " class="@((TempData["page"] == "adddepartment"||TempData["page"] == "departmentlist") ? "in" : "")">
+                @if (departmentAccess?.addFunction == true)
+                {
+        <li class="@((TempData["page"] == "adddepartment") ? "active" : "")">
+            <a href="/Department/Mainform">Add New Department</a>
+        </li>}
+
+                <li class="@((TempData["page"] == "departmentlist") ? "active" : "")">
+                    <a href="@Url.Action("Index", "Department")">Department List</a>
+                </li>
+
+
+            </ul>
+        </li>            }
+
+            @if (meetingAccess?.role_permission_status == true)
+            {
+        <li class="@((TempData["page"] == "addplace"||TempData["page"] == "placelist") ? "active" : "")">
+            <a href="@Url.Action("Index", "Place")">
+                <i class="fa fa-thumb-tack"></i>
+                <span class="nav-label">Venue</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse " class="@((TempData["page"] == "addplace"||TempData["page"] == "placelist") ? "in" : "")">
+                @if (meetingAccess?.addFunction == true)
+                {
+        <li class="@((TempData["page"] == "addplace") ? "active" : "")">
+            <a href="/Place/Mainform">Add New Venue</a>
+        </li>}
+
+                <li class="@((TempData["page"] == "placelist") ? "active" : "")">
+                    <a href="@Url.Action("Index", "Place")">Venue List</a>
+                </li>
+
+            </ul>
+        </li>            }
+            @if (meetingAccess?.role_permission_status == true)
+            {
+        <li class="@((TempData["page"] == "addmeeting"||TempData["page"] == "meetinglist") ? "active" : "")">
+            <a href="@Url.Action("Index", "Meeting")">
+                <i class="fa fa-users"></i>
+                <span class="nav-label">Activity</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse " class="@((TempData["page"] == "addmeeting"||TempData["page"] == "meetinglist") ? "in" : "")">
+                @if (meetingAccess?.addFunction == true)
+                {
+        <li class="@((TempData["page"] == "addmeeting") ? "active" : "")">
+            <a href="/Meeting/Mainform">Add New Activity</a>
+        </li>}
+
+                <li class="@((TempData["page"] == "meetinglist") ? "active" : "")">
+                    <a href="@Url.Action("Index", "Meeting")">Activity List</a>
+                </li>
+
+            </ul>
+        </li>            }
+
+            @if (participantAccess?.role_permission_status == true)
+            {
+        <li class="@((TempData["page"] == "addparticipant"||TempData["page"] == "participantlist") ? "active" : "")">
+            <a href="@Url.Action("Index", "Participant")">
+                <i class="fa fa-user-plus"></i>
+                <span class="nav-label">Participant</span>
+                <span class="fa arrow"></span>
+            </a>
+            <ul class="nav nav-second-level collapse " class="@((TempData["page"] == "addparticipant"||TempData["page"] == "participantlist") ? "in" : "")">
+                @if (participantAccess?.addFunction == true)
+                {
+        <li class="@((TempData["page"] == "addparticipant") ? "active" : "")">
+            <a href="/Participant/Mainform">Add New Participant</a>
+        </li>}
+
+                <li class="@((TempData["page"] == "participantlist") ? "active" : "")">
+                    <a href="/Participant/Index">Participant List</a>
+                </li>
+
+            </ul>
+        </li>            }
+            @if (meetingAccess?.role_permission_status == true)
+            {
+       
+                        <li class="@((TempData["page"] == "calander") ? "active" : "")">
+                            <a href="@Url.Action("Calendar", "Home" )">
+                                <i class="fa fa-calendar"></i>
+                                <span class="nav-label">Calendar</span>
+                            </a>
+                        </li>            }
+
+        </ul>
+    </div>
+</nav>

@@ -1,0 +1,414 @@
+﻿
+
+@model AttendNow.Models.SP_GetParticipants_Result
+@using AttendNow.Models
+@{
+    var participantAccess = ViewBag.participantAccess as sys_setting_role_permission;
+
+    if (ViewBag.Title == "Add Participant")
+    {
+        if (participantAccess?.status != true || (participantAccess?.addFunction != true))
+        {
+
+            <script>
+                    window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+    else
+    {
+        if (participantAccess?.status != true || (participantAccess?.editFunction != true && participantAccess?.viewFunction != true))
+        {
+
+            <script>
+                     window.location.href = '@Url.Action("Logout", "User")';
+            </script>
+        }
+    }
+
+
+}
+@using (Html.BeginForm("", "", FormMethod.Post))
+{
+    <div class="form-group  row">
+        <label class="col-sm-2 col-form-label">Staff No. <span class="text-danger">*</span></label>
+
+
+        <div class="col-sm-10">
+            @if ((ViewBag.Title == "View Participant" || ViewBag.Title == "Edit Participant") && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label "><b><a class="text-black" href="@Url.Action("ParticipantDetail", "Participant", new { id = Model.factory+"-"+Model.staff_no})">@Model.staff_no.ToUpper()</a></b></label>
+
+
+                @Html.EditorFor(model => model.staff_no, new { htmlAttributes = new { @class = "form-control", id = "staff_no", type = "hidden" } })
+            }
+            else
+            {
+                @Html.EditorFor(model => model.staff_no, new { htmlAttributes = new { @class = "form-control", id = "staff_no" } })
+                <span id="staff_no_error" class="text-danger"></span>
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Name <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Participant" && ViewBag.ErrorMessage == null)
+            {
+                <label class="col-form-label">@Model.name</label>
+            }
+            else
+            {
+                @Html.EditorFor(model => model.name, new
+           {
+               htmlAttributes = new
+               {
+                   @class = "form-control",
+                   id = "name"
+               }
+           })
+                <span id="name_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Email </label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Participant" && ViewBag.ErrorMessage == null)
+            {
+                if (Model.email != null && !string.IsNullOrEmpty(Model.email))
+                {
+                    <label class="col-form-label">@Model.email</label>
+                }
+                else
+                {
+                    <span class="text-danger">No Data</span>
+                }
+            }
+            else
+            {
+                @Html.EditorFor(model => model.email, new
+           {
+               htmlAttributes = new
+               {
+                   @class = "form-control",
+                   id = "email"
+               }
+           })
+                <span id="email_error" class="text-danger"></span>
+            }
+
+
+
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Mobile </label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Participant" && ViewBag.ErrorMessage == null)
+            {
+                if (Model.mobile != null && !string.IsNullOrEmpty(Model.mobile))
+                {
+                    <label class="col-form-label">@Model.mobile</label>
+                }
+                else
+                {
+                    <span class="text-danger">No Data</span>
+                }
+            }
+            else
+            {
+                @Html.EditorFor(model => model.mobile, new
+           {
+               htmlAttributes = new
+               {
+                   @class = "form-control",
+                   id = "mobile"
+               }
+           })
+
+            }
+
+        </div>
+    </div>
+
+
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Participant's<br /> Department <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Participant")
+            {
+                <label class="col-form-label">@Model.DepartmentName (@Model.department.ToUpper())</label>
+            }
+            else
+            {
+                @Html.DropDownList("department", ViewBag.department_code as SelectList, "Select Department", htmlAttributes: new { @class = "form-control" })
+                <span id="department_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Participant's<br />Factory <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Participant")
+            {
+                <label class="col-form-label">@Model.FactoryName (@Model.factory.ToUpper())</label>
+                <input type="hidden" value="@Model.factory" id="factory" />
+            }
+            else
+            {
+                @Html.DropDownList("factory", ViewBag.factory_id as SelectList, "Select Factory",
+               htmlAttributes: new
+               {
+                   @class = "form-control",
+
+                   onChange = "getLocation(this)"
+               })
+                <span id="factory_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Participant's<br /> Location <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Participant")
+            {
+                <label class="col-form-label">@Model.LocationName (@Model.location.ToUpper())</label>
+            }
+            else
+            {
+                @Html.DropDownList("location", ViewBag.location_code as SelectList, "Select Location", htmlAttributes: new { @class = "form-control" })
+                <span id="location_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Joining Activity <span class="text-danger">*</span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Participant")
+            {
+                <label class="col-form-label">@Model.meeting_title</label>
+            }
+            else
+            {
+                @Html.DropDownList("meeting", ViewBag.meeting_code as SelectList, "Select Activity", htmlAttributes: new { @class = "form-control" })
+                <span id="meeting_error" class="text-danger"></span>
+            }
+
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Remark <span class="text-danger"></span></label>
+        <div class="col-sm-10">
+            @if (ViewBag.Title == "View Participant")
+            {
+
+                if (Model.remark != null && !string.IsNullOrEmpty(Model.remark))
+                {
+                    <div class="bg-muted p-2">@Html.Raw(Model.remark)</div>
+
+                }
+                else
+                {
+                    <span class="text-danger">No Data</span>
+                }
+
+
+            }
+            else
+            {
+                @Html.TextAreaFor(model => model.remark, new { @class = "summernote form-control", id = "remark" })
+
+            }
+
+
+        </div>
+    </div>
+
+
+
+}
+
+<div class="form-group row">
+    <div class="col-sm-4 col-sm-offset-2">
+        @if (ViewBag.Title == "Add Participant" && ViewBag.ErrorMessage == null)
+        {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary noprint" data-style="zoom-in" onclick="funcAddorEdit('Create')">Add</button>
+            </section>
+        }
+        else if (ViewBag.Title == "Edit Participant" && ViewBag.ErrorMessage == null)
+        {
+            <section class="progress-demo">
+                <button class="ladda-button btn btn-primary noprint" data-style="zoom-in" onclick="funcAddorEdit('Edit')">Update</button>
+            </section>
+        }
+
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/main")
+
+<script>
+
+    $(document).ready(function () {
+        $('.summernote').summernote();
+
+    });
+    function funcAddorEdit(action) {
+
+        var isValid = true; // Flag to check overall form validity
+
+        if (!validateField("staff_no", "Staff No field is required.")) {
+            isValid = false;
+        }
+
+        if (!validateField("name", "Name field is required.")) {
+            isValid = false;
+        }
+        if (!validateField("email", "Email field is required.")) {
+            isValid = false;
+        } else {
+            if (!validateEmail("email", "Invalid Email Format.")) {
+                isValid = false;
+            }
+        }
+
+        
+
+        if (!validateDropdown("department", "Select Department")) {
+            isValid = false;
+        }
+
+
+        if (!validateDropdown("location", "Select Location")) {
+            isValid = false;
+        }
+
+        if (!validateDropdown("meeting", "Select Activity")) {
+            isValid = false;
+        }
+
+        if (!validateDropdown("factory", "Select Factory")) {
+            isValid = false;
+        }
+
+        // Add more validation for other fields as needed
+        if ($("#staff_no").val().includes("admin") || $("#name").val().includes("admin") || $("#staff_no").val().includes("administrator")
+            || $("#name").val().includes("administrator")) {
+            errorMessage("You are not allow to use 'admin' or 'administrator' as your name or staff no !");
+            returnMessage = "You are not allow to use 'admin' or 'administrator' as your name or staff no !";
+            return;
+        }
+        if (!isValid) {
+            errorMessage("Please make sure all required fields is filled");
+            returnMessage = "Please make sure all required fields is filled";
+            return;
+        }
+        var userData = {
+            staff_no: $("#staff_no").val(),
+            name: $("#name").val(),
+            email: $("#email").val(),
+            mobile: $("#mobile").val(),
+            department: $("#department").val(),
+            location: $("#location").val(),
+            factory_id: $("#factory").val(),
+            meeting: $("#meeting").val(),
+            remark: $("#remark").val(),
+            certificate_no: '@ViewBag.CertificateNo'
+        };
+
+        // Serialize the object into a JSON string
+        var jsonData = JSON.stringify(userData);
+        console.log("sas");
+        // Make an AJAX request
+        $.ajax({
+            type: "POST",
+            url: "/Participant/"+action, // Replace with the actual URL
+            data: jsonData,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data.success) {
+
+                    window.location.href = '@Url.Action("MainForm", "Participant", new { id = "" })' + "/" + data.id;
+
+                } else {
+                    errorMessage(data.error_message);
+                    returnMessage = data.error_message;
+                    if (data.idError) {
+                        $("#staff_no").parent().addClass("has-error");
+                        $("#factory").parent().addClass("has-error");
+                    } else {
+                        $("#staff_no").parent().removeClass("has-error");
+                        $("#factory").parent().removeClass("has-error");
+                    }
+                }
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+                returnMessage = data.error_message;
+            }
+        });
+    }
+    function getLocation(factory) {
+
+        $.ajax({
+            type: 'POST',
+            url: '/Participant/GetLocation', // Replace with your controller and action
+            data: { factory_id: factory.value }, // Send the department ID to add to the database
+            success: function (data) {
+                if (data.success) {
+                   @* successMessage(data.message);*@
+                    if (data.activeLocation) {
+                        $('#location').empty();
+                        var defaultOption = $('<option>', {
+                            value: 'null',
+                            text: 'Select an option',
+                            disabled: true,
+                            selected: true
+                        });
+
+                        $('#location').append(defaultOption);
+
+
+                        data.activeLocation.forEach(function (location) {
+                            // Create a new option element
+                            var newLocation = $('<option>', {
+                                value: location.location_code,
+                                text: location.factory + "-" + location.name
+                            });
+
+                            // Append the new option to the select element
+                            $('#location').append(newLocation);
+                        });
+
+                    }
+                    // Department added successfully to the database
+                } else {
+                    errorMessage(data.error_message);
+
+                }
+
+
+
+
+
+            },
+            error: function (data) {
+                errorMessage(data.error_message);
+
+            }
+        });
+    }
+</script>
